@@ -7,7 +7,7 @@ import { colors } from '../styles/GlobalStyles';
 
 const Tab = createBottomTabNavigator();
 
-function BottomTabs() {
+const BottomTabs = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -22,6 +22,6 @@ function BottomTabs() {
       <Tab.Screen name="Request" component={RequestScreen} />
     </Tab.Navigator>
   );
-}
+};
 
 export default BottomTabs;

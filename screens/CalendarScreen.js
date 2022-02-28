@@ -5,7 +5,7 @@ import {
 import SafeAreaView from 'react-native-safe-area-view';
 import { fonts } from '../styles/GlobalStyles';
 
-const CalendarScreen = () =>  {
+const CalendarScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -13,7 +13,7 @@ const CalendarScreen = () =>  {
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
