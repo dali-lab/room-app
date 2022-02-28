@@ -42,20 +42,11 @@ module.exports = {
     'class-methods-use-this': 0,
     'no-use-before-define': [2, { variables: false }],
     'import/no-extraneous-dependencies': 0,
-    'prefer-arrow-functions/prefer-arrow-functions': [
-      'warn',
-      {
-        classPropertiesAllowed: false,
-        disallowPrototype: false,
-        returnStyle: 'unchanged',
-        singleReturnOnly: false,
-      },
-    ],
+    'react/function-component-definition': [2, { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' }],
   },
   plugins: [
     'react',
     'react-native',
-    'prefer-arrow-function',
   ],
   parserOptions: {
     ecmaFeatures: {
