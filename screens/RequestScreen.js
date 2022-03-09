@@ -1,15 +1,41 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text,
+  StyleSheet, View,
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { fonts } from '../styles/GlobalStyles';
+import RequestItem from '../components/RequestItem';
+
+const testRequests = [
+  {
+    description: 'Request 1',
+    user: 'Kaylie',
+    completed: false,
+  },
+  {
+    description: 'Request 2',
+    user: 'Claire',
+    completed: false,
+  },
+  {
+    description: 'Request 3',
+    user: 'Chelsea',
+    completed: false,
+  },
+  {
+    description: 'Request 4',
+    user: 'Jorie',
+    completed: false,
+  },
+];
 
 const RequestScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Text style={styles.text}>Welcome to the Request Screen</Text>
+        {testRequests.map(({ user, description, completed }) => {
+          return <RequestItem key={description} user={user} description={description} completed={completed} />;
+        })}
       </View>
     </SafeAreaView>
   );
