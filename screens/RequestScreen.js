@@ -1,8 +1,7 @@
 import React from 'react';
 import {
-  StyleSheet, View,
+  StyleSheet, ScrollView, SafeAreaView,
 } from 'react-native';
-import SafeAreaView from 'react-native-safe-area-view';
 import { fonts } from '../styles/GlobalStyles';
 import RequestItem from '../components/RequestItem';
 
@@ -32,11 +31,11 @@ const testRequests = [
 const RequestScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      <ScrollView>
         {testRequests.map(({ user, description, completed }) => {
           return <RequestItem key={description} user={user} description={description} completed={completed} />;
         })}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

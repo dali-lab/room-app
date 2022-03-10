@@ -1,16 +1,14 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text,
+  StyleSheet, SafeAreaView,
 } from 'react-native';
-import SafeAreaView from 'react-native-safe-area-view';
 import { fonts } from '../styles/GlobalStyles';
+import HomeCircles from '../components/HomeCircles';
 
 const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.text}>Welcome to the Home Screen</Text>
-      </View>
+      <HomeCircles />
     </SafeAreaView>
   );
 };
@@ -18,7 +16,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     fontSize: fonts.largeText,
