@@ -1,8 +1,7 @@
 import React from 'react';
 import {
-  StyleSheet, View,
+  StyleSheet, ScrollView, SafeAreaView,
 } from 'react-native';
-import SafeAreaView from 'react-native-safe-area-view';
 import CalendarItem from '../components/CalendarItem';
 import { fonts } from '../styles/GlobalStyles';
 
@@ -36,11 +35,11 @@ const testEvents = [
 const CalendarScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      <ScrollView>
         {testEvents.map(({
           title, user, startTime, endTime,
         }) => <CalendarItem key={title} title={title} user={user} startTime={startTime} endTime={endTime} />)}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
