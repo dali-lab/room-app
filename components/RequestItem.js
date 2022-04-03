@@ -9,6 +9,9 @@ const RequestItem = ({
 }) => {
   return (
     <View style={styles.container}>
+      <View style={styles.authorCircle}>
+        <Text style={styles.authorText}>{user}</Text>
+      </View>
       <Text style={styles.description}>{description}</Text>
       <View style={styles.completed}>
         <View style={styles.checkbox} />
@@ -29,12 +32,12 @@ const styles = StyleSheet.create({
   description: {
     fontSize: fonts.largeText,
     fontWeight: '600',
-    marginLeft: 20,
+    marginLeft: 70,
   },
   completed: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 20,
+    marginLeft: 70,
     marginTop: 5,
   },
   checkbox: {
@@ -47,6 +50,19 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     color: colors.indigo700,
     marginLeft: 20,
+  },
+  authorCircle: {
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    backgroundColor: colors.primarySageGreen,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: -50,
+  },
+  authorText: {
+    fontSize: fonts.large24,
+    color: colors.indigo700,
   },
 });
 
