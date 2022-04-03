@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: fonts.smallText,
-    color: colors.darkSageGreen,
+    color: 'white',
     marginLeft: 20,
   },
 });
