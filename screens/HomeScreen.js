@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import {
   StyleSheet, SafeAreaView,
 } from 'react-native';
-import { fonts } from '../styles/GlobalStyles';
+import { getAllUsers } from '../store/actions';
+import { fonts } from '../constants/GlobalStyles';
 import HomeCircles from '../components/HomeCircles';
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
+  const { allUsers, getUsers } = props;
+  useEffect(() => {
+    getUsers();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <SafeAreaView style={styles.container}>
-      <HomeCircles />
+      <HomeCircles users={allUsers} />
     </SafeAreaView>
   );
 };
@@ -24,4 +31,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+// testing
+const mapStateToProps = (state) => {
+  return {
+    users: state.user.allUsers,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUsers: () => {
+      dispatch(getAllUsers());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

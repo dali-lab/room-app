@@ -3,7 +3,7 @@ import {
   StyleSheet, ScrollView, SafeAreaView,
 } from 'react-native';
 import CalendarItem from '../components/CalendarItem';
-import { fonts } from '../styles/GlobalStyles';
+import { fonts } from '../constants/GlobalStyles';
 
 const testEvents = [
   {

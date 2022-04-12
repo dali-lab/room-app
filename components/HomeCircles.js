@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
-import { fonts, colors } from '../styles/GlobalStyles';
+import { fonts, colors } from '../constants/GlobalStyles';
 
 const testUsers = [
   {
@@ -27,7 +27,9 @@ const testUsers = [
   },
 ];
 
-const HomeCircles = () => {
+const HomeCircles = ({ users }) => {
+  // replace testUsers with users
+  console.log(users);
   return (
     <View style={styles.container}>
       <TouchableOpacity

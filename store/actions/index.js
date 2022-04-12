@@ -5,7 +5,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
-} from './users';
+} from './user';
 
 // Combine all action types
 const ActionTypes = {

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, ScrollView, SafeAreaView, Text, TouchableOpacity,
 } from 'react-native';
-import { fonts, colors } from '../styles/GlobalStyles';
+import { fonts, colors } from '../constants/GlobalStyles';
 import RequestItem from '../components/RequestItem';
 
 const testRequests = [

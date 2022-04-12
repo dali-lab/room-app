@@ -13,6 +13,17 @@ export const getAllUsers = async () => {
     throw new Error(error);
   }
 };
+// get all users with room code
+
+export const getAllUsersWithCode = async (roomcode) => {
+  try {
+    const { data } = await axios.get(`${URL}/room/${roomcode}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 
 export const getUser = async (id) => {
   try {
