@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View, Text,
 } from 'react-native';
-import { fonts, dimensions, colors } from '../styles/GlobalStyles';
+import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 
 const CalendarItem = ({
   title, user, startTime, endTime,

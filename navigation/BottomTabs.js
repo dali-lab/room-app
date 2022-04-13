@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import CalendarScreen from '../screens/CalendarScreen';
 import RequestScreen from '../screens/RequestScreen';
-import { colors } from '../styles/GlobalStyles';
+import { colors } from '../constants/GlobalStyles';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +24,7 @@ const tabBarIcon = (route, focused, color, size) => {
       ? require('../assets/active-request.png')
       : require('../assets/inactive-request.png');
   }
-  console.log(iconSource);
+  // console.log(iconSource);
   return <Image source={iconSource} />;
 };
   // console.log(route);
