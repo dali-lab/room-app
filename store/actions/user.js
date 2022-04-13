@@ -6,10 +6,10 @@ export const ActionTypes = {
   API_ERROR: 'API_ERROR',
 };
 
-export const getAllUsers = () => {
+export const getAllUsers = (roomcode) => {
   return async (dispatch) => {
     try {
-      const users = await userService.getAllUsers();
+      const users = await userService.getAllUsers(roomcode);
       dispatch({ type: ActionTypes.SET_USERS, payload: users });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });

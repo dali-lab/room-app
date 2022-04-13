@@ -4,32 +4,9 @@ import {
 } from 'react-native';
 import { fonts, colors } from '../constants/GlobalStyles';
 
-const testUsers = [
-  {
-    firstName: 'Jorie',
-    lastName: 'MacDonald',
-    home: true,
-  },
-  {
-    firstName: 'Claire',
-    lastName: 'Green',
-    home: false,
-  },
-  {
-    firstName: 'Chelsea',
-    lastName: 'Joe',
-    home: true,
-  },
-  {
-    firstName: 'Kaylie',
-    lastName: 'Sampson',
-    home: false,
-  },
-];
+const HomeCircles = (props) => {
+  const { users } = props;
 
-const HomeCircles = ({ users }) => {
-  // replace testUsers with users
-  console.log(users);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -37,8 +14,8 @@ const HomeCircles = ({ users }) => {
         onPress={() => console.log('pressed home')}
       >
         <Text style={styles.homeText}>home</Text>
-        {testUsers.map(({ firstName, lastName, home }) => {
-          if (home) {
+        {users?.map(({ firstName, lastName, isHome }) => {
+          if (isHome) {
             return <Text key={firstName}>{`${firstName[0]}${lastName[0]}`}</Text>;
           } else return null;
         })}
@@ -48,8 +25,8 @@ const HomeCircles = ({ users }) => {
         onPress={() => console.log('pressed away')}
       >
         <Text style={styles.awayText}>away</Text>
-        {testUsers.map(({ firstName, lastName, home }) => {
-          if (!home) {
+        {users?.map(({ firstName, lastName, isHome }) => {
+          if (!isHome) {
             return <Text key={firstName}>{`${firstName[0]}${lastName[0]}`}</Text>;
           } else return null;
         })}

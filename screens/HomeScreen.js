@@ -8,15 +8,14 @@ import { fonts } from '../constants/GlobalStyles';
 import HomeCircles from '../components/HomeCircles';
 
 const HomeScreen = (props) => {
-  const { allUsers, getUsers, users } = props;
-  console.log(users);
+  const { getUsers, users } = props;
   useEffect(() => {
-    getUsers();
+    getUsers('123abc');
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <SafeAreaView style={styles.container}>
-      <HomeCircles users={allUsers} />
+      <HomeCircles users={users} />
     </SafeAreaView>
   );
 };
@@ -41,8 +40,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUsers: () => {
-      dispatch(getAllUsers());
+    getUsers: (roomcode) => {
+      dispatch(getAllUsers(roomcode));
     },
   };
 };

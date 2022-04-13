@@ -4,7 +4,6 @@ import { API_URL } from '../constants';
 
 const URL = `${API_URL}/users`;
 
-// get all users with room code
 export const getAllUsers = async (roomcode) => {
   try {
     const { data } = await axios.get(URL, { params: { roomCode: roomcode } });
