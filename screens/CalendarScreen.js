@@ -1,44 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet, ScrollView, SafeAreaView,
 } from 'react-native';
+import { connect } from 'react-redux';
 import CalendarItem from '../components/CalendarItem';
+import { getAllCalendarEvents } from '../store/actions';
 import { fonts } from '../constants/GlobalStyles';
 
-const testEvents = [
-  {
-    title: 'Event 1',
-    user: 'Kaylie',
-    startTime: '10:00 am',
-    endTime: '10:30 am',
-  },
-  {
-    title: 'Event 2',
-    user: 'Chelsea',
-    startTime: '1:00 pm',
-    endTime: '2:00 pm',
-  },
-  {
-    title: 'Event 3',
-    user: 'Jorie',
-    startTime: '9:00 am',
-    endTime: '10:30 am',
-  },
-  {
-    title: 'Event 4',
-    user: 'Claire',
-    startTime: '4:00 pm',
-    endTime: '5:00 pm',
-  },
-];
+const CalendarScreen = (props) => {
+  const { getCalendarEvents, calendarEvents } = props;
 
-const CalendarScreen = () => {
+  // Fetch all calendarEvents when the component first loads
+  useEffect(() => {
+    getCalendarEvents(['624eefbcfb7a79a5eadd6edb', '624f00380a0fc0aaff99396f']);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  console.log(calendarEvents);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {testEvents.map(({
-          title, user, startTime, endTime,
-        }) => <CalendarItem key={title} title={title} user={user} startTime={startTime} endTime={endTime} />)}
+        {calendarEvents?.map(({
+          id, title, start, end, author,
+        }) => <CalendarItem key={id} title={title} start={start} end={end} author={author} />)}
       </ScrollView>
     </SafeAreaView>
   );
@@ -55,4 +39,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CalendarScreen;
+const mapStateToProps = (state) => {
+  return {
+    calendarEvents: state.calendarEvent.allCalendarEvents,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getCalendarEvents: (users) => {
+      dispatch(getAllCalendarEvents(users));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarScreen);
