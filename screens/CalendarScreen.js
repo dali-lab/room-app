@@ -42,7 +42,7 @@ const CalendarScreen = (props) => {
     getCalendarEvents('123abc');
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // console.log(calendarEvents);
+  console.log(calendarEvents);
 
   return (
     <SafeAreaView style={styles.container}>
