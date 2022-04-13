@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { API_URL } from '../constants';
 
-const URL = `${API_URL}/calendarEvents`;
+const URL = `${API_URL}/events`;
 
 export const createCalendarEvent = async (calendarEvent) => {
   try {
@@ -45,9 +45,12 @@ export const deleteCalendarEvent = async (id) => {
   }
 };
 
-export const getAllCalendarEvents = async (roomCode) => {
+export const getAllCalendarEvents = async (users) => {
   try {
-    const { data } = await axios.get(URL, { params: { roomCode } });
+    const { data } = await axios.get(`${URL}?${users.map(
+      (n, index) => `userIds[${index}]=${n}`,
+    ).join('&')
+    }`);
     return data;
   } catch (error) {
     console.log(error);

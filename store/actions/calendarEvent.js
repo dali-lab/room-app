@@ -6,10 +6,10 @@ export const ActionTypes = {
   API_ERROR: 'API_ERROR',
 };
 
-export const getAllCalendarEvents = (roomCode) => {
+export const getAllCalendarEvents = (users) => {
   return async (dispatch) => {
     try {
-      const calendarEvents = await calendarEventService.getAllCalendarEvents(roomCode);
+      const calendarEvents = await calendarEventService.getAllCalendarEvents(users);
       dispatch({ type: ActionTypes.SET_CALENDAR_EVENTS, payload: calendarEvents });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
@@ -32,7 +32,6 @@ export const createCalendarEvent = (calendarEvent) => {
   return async (dispatch) => {
     try {
       await calendarEventService.createCalendarEvent(calendarEvent);
-      // need a roomcode for this get all?
       const calendarEvents = await calendarEventService.getAllCalendarEvents();
       dispatch({ type: ActionTypes.SET_CALENDAR_EVENTS, payload: calendarEvents });
     } catch (error) {
@@ -45,7 +44,6 @@ export const updateCalendarEvent = (id, calendarEvent) => {
   return async (dispatch) => {
     try {
       await calendarEventService.updateCalendarEvent(id, calendarEvent);
-      // need roomcode for this getall?
       const calendarEvents = await calendarEventService.getAllCalendarEvents();
       dispatch({ type: ActionTypes.SET_CALENDAR_EVENTS, payload: calendarEvents });
     } catch (error) {
@@ -58,7 +56,6 @@ export const deleteCalendarEvent = (id) => {
   return async (dispatch) => {
     try {
       await calendarEventService.deleteCalendarEvent(id);
-      // need roomcode?
       const calendarEvents = await calendarEventService.getAllCalendarEvents();
       dispatch({ type: ActionTypes.SET_CALENDAR_EVENTS, payload: calendarEvents });
     } catch (error) {

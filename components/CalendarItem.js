@@ -5,20 +5,18 @@ import {
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 
 const CalendarItem = (props) => {
-  const { calendarEvents } = props;
+  const {
+    title, start, end, author,
+  } = props;
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.icon}>{`${user} icon`}</Text>
+      <Text style={styles.icon}>{`${author} icon`}</Text>
       <View style={styles.description}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.text}>{`${startTime} - ${endTime}`}</Text>
+        <Text style={styles.text}>{`${start} - ${end}`}</Text>
       </View>
-      <Text style={styles.text}># of Likes</Text> */}
-      {/* <Text style={styles.title}>{title}</Text> */}
-      {calendarEvents?.map(({ title, start, end }) => {
-        return <Text style={styles.text}>{`${start} - ${end}`}</Text>;
-      })}
+      <Text style={styles.text}># of Likes</Text>
     </View>
   );
 };

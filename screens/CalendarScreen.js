@@ -7,39 +7,12 @@ import CalendarItem from '../components/CalendarItem';
 import { getAllCalendarEvents } from '../store/actions';
 import { fonts } from '../constants/GlobalStyles';
 
-// const testEvents = [
-//   {
-//     title: 'Event 1',
-//     user: 'Kaylie',
-//     startTime: '10:00 am',
-//     endTime: '10:30 am',
-//   },
-//   {
-//     title: 'Event 2',
-//     user: 'Chelsea',
-//     startTime: '1:00 pm',
-//     endTime: '2:00 pm',
-//   },
-//   {
-//     title: 'Event 3',
-//     user: 'Jorie',
-//     startTime: '9:00 am',
-//     endTime: '10:30 am',
-//   },
-//   {
-//     title: 'Event 4',
-//     user: 'Claire',
-//     startTime: '4:00 pm',
-//     endTime: '5:00 pm',
-//   },
-// ];
-
 const CalendarScreen = (props) => {
   const { getCalendarEvents, calendarEvents } = props;
 
   // Fetch all calendarEvents when the component first loads
   useEffect(() => {
-    getCalendarEvents('123abc');
+    getCalendarEvents(['624eefbcfb7a79a5eadd6edb', '624f00380a0fc0aaff99396f']);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   console.log(calendarEvents);
@@ -47,10 +20,9 @@ const CalendarScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {/* {calendarEvents.map(({
-          title, start, end,
-        }) => <CalendarItem key={title} title={title} start={start} end={end} />)} */}
-        <CalendarItem calendarEvents={calendarEvents} />
+        {calendarEvents?.map(({
+          id, title, start, end, author,
+        }) => <CalendarItem key={id} title={title} start={start} end={end} author={author} />)}
       </ScrollView>
     </SafeAreaView>
   );
@@ -75,8 +47,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCalendarEvents: (roomCode) => {
-      dispatch(getAllCalendarEvents(roomCode));
+    getCalendarEvents: (users) => {
+      dispatch(getAllCalendarEvents(users));
     },
   };
 };
