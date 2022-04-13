@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, SafeAreaView,
 } from 'react-native';
-import { fonts } from '../styles/GlobalStyles';
+import { fonts } from '../constants/GlobalStyles';
 import HomeCircles from '../components/HomeCircles';
 
 const HomeScreen = () => {

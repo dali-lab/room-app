@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
-import { fonts, colors } from '../styles/GlobalStyles';
+import { fonts, colors } from '../constants/GlobalStyles';
 
 const testUsers = [
   {

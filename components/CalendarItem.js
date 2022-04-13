@@ -2,19 +2,23 @@ import React from 'react';
 import {
   StyleSheet, View, Text,
 } from 'react-native';
-import { fonts, dimensions, colors } from '../styles/GlobalStyles';
+import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 
-const CalendarItem = ({
-  title, user, startTime, endTime,
-}) => {
+const CalendarItem = (props) => {
+  const { calendarEvents } = props;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>{`${user} icon`}</Text>
+      {/* <Text style={styles.icon}>{`${user} icon`}</Text>
       <View style={styles.description}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.text}>{`${startTime} - ${endTime}`}</Text>
       </View>
-      <Text style={styles.text}># of Likes</Text>
+      <Text style={styles.text}># of Likes</Text> */}
+      {/* <Text style={styles.title}>{title}</Text> */}
+      {calendarEvents?.map(({ title, start, end }) => {
+        return <Text style={styles.text}>{`${start} - ${end}`}</Text>;
+      })}
     </View>
   );
 };
@@ -25,18 +29,7 @@ const styles = StyleSheet.create({
     height: 80,
     backgroundColor: colors.backgroundSageGreen,
     margin: 20,
-    padding: 5,
-    borderColor: colors.darkSageGreen,
-    borderLeftWidth: 5,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  description: {
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    height: 60,
-    width: 200,
+    padding: 10,
   },
   title: {
     fontSize: fonts.largeText,
@@ -47,12 +40,6 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     color: colors.darkSageGreen,
     marginLeft: 20,
-  },
-  icon: {
-    fontSize: 10,
-    fontWeight: '300',
-    marginLeft: 20,
-    width: 35,
   },
 });
 
