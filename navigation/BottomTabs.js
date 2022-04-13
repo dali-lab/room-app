@@ -5,6 +5,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import CalendarScreen from '../screens/CalendarScreen';
 import RequestScreen from '../screens/RequestScreen';
+// login
+import LoginScreen from '../screens/LoginScreen';
+
 import { colors } from '../constants/GlobalStyles';
 
 const Tab = createBottomTabNavigator();
@@ -24,8 +27,12 @@ const tabBarIcon = (route, focused, color, size) => {
       ? require('../assets/active-request.png')
       : require('../assets/inactive-request.png');
   }
+  console.log(iconSource);
   return <Image source={iconSource} />;
 };
+  // console.log(route);
+  // return null;
+  // // if else based on route, return image
 
 const BottomTabs = () => {
   return (
@@ -50,6 +57,9 @@ const BottomTabs = () => {
         // },
       })}
     >
+      {/* login bc I need a way to see if it works, delete this later */}
+      <Tab.Screen name="Login" component={LoginScreen} />
+
       <Tab.Screen name="Calendar" component={CalendarScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Request" component={RequestScreen} />
