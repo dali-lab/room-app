@@ -24,7 +24,7 @@ const tabBarIcon = (route, focused, color, size) => {
       ? require('../assets/active-request.png')
       : require('../assets/inactive-request.png');
   }
-  console.log(iconSource);
+  // console.log(iconSource);
   return <Image source={iconSource} />;
 };
   // console.log(route);

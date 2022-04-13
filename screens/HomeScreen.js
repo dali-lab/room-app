@@ -8,7 +8,8 @@ import { fonts } from '../constants/GlobalStyles';
 import HomeCircles from '../components/HomeCircles';
 
 const HomeScreen = (props) => {
-  const { allUsers, getUsers } = props;
+  const { allUsers, getUsers, users } = props;
+  console.log(users);
   useEffect(() => {
     getUsers();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

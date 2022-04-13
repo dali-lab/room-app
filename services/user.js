@@ -4,20 +4,10 @@ import { API_URL } from '../constants';
 
 const URL = `${API_URL}/users`;
 
-export const getAllUsers = async () => {
-  try {
-    const { data } = await axios.get(URL);
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw new Error(error);
-  }
-};
 // get all users with room code
-
-export const getAllUsersWithCode = async (roomcode) => {
+export const getAllUsers = async (roomcode) => {
   try {
-    const { data } = await axios.get(`${URL}/room/${roomcode}`);
+    const { data } = await axios.get(URL, { params: { roomCode: roomcode } });
     return data;
   } catch (error) {
     console.log(error);
