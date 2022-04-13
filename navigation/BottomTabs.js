@@ -26,9 +26,6 @@ const tabBarIcon = (route, focused, color, size) => {
   }
   return <Image source={iconSource} />;
 };
-  // console.log(route);
-  // return null;
-  // // if else based on route, return image
 
 const BottomTabs = () => {
   return (

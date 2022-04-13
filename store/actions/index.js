@@ -6,10 +6,19 @@ import {
   updateCalendarEvent,
   deleteCalendarEvent,
 } from './calendarEvent';
+import {
+  ActionTypes as userActionTypes,
+  getAllUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
+} from './user';
 
 // Combine all action types
 const ActionTypes = {
   ...calendarEventActionTypes,
+  ...userActionTypes,
 };
 
 // Export all action types and actions in one object
@@ -20,4 +29,9 @@ export {
   createCalendarEvent,
   updateCalendarEvent,
   deleteCalendarEvent,
+  getAllUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
 };
