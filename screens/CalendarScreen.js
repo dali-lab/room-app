@@ -15,7 +15,7 @@ const CalendarScreen = (props) => {
     getCalendarEvents(['624eefbcfb7a79a5eadd6edb', '624f00380a0fc0aaff99396f']);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log(calendarEvents);
+  // console.log(calendarEvents);
 
   return (
     <SafeAreaView style={styles.container}>

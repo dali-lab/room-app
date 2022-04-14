@@ -1,26 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet, SafeAreaView, Text, TouchableOpacity, TextInput,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { fonts, colors } from '../constants/GlobalStyles';
+import { signInUser } from '../store/actions';
 
-const LoginScreen = () => {
-  const [email, onChangeEmail] = React.useState(null);
-  const [pw, onChangePw] = React.useState(null);
+const LoginScreen = (props) => {
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  const { login } = props;
+  const handleLogin = (e) => {
+    if (email && pw) {
+      login(email.toLowerCase(), pw);
+    }
+  };
   return (
     <SafeAreaView>
       <Text style={styles.title}>Login</Text>
       <Text style={styles.text}>Email</Text>
       <TextInput
         style={styles.input}
-        onChangeText={onChangeEmail}
+        onChangeText={(text) => setEmail(text)}
         value={email}
         placeholder="Type your email"
       />
       <Text style={styles.text}>Password</Text>
       <TextInput
         style={styles.input}
-        onChangeText={onChangePw}
+        onChangeText={(text) => setPw(text)}
         value={pw}
         placeholder="Type your password"
       />
@@ -32,7 +40,7 @@ const LoginScreen = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={() => console.log('login')}
+        onPress={handleLogin}
       >
         <Text style={styles.buttonText}>Log in</Text>
       </TouchableOpacity>
@@ -116,4 +124,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (email, password) => {
+      dispatch(signInUser(email, password));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(LoginScreen);

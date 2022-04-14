@@ -53,3 +53,25 @@ export const deleteUser = async (id) => {
     throw new Error(error);
   }
 };
+
+export const signInUser = async (email, password) => {
+  try {
+    const { data } = await axios.post(`${URL}/signin`, { email, password });
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const signUpUser = async (email, password, firstName, lastName, roomCode) => {
+  try {
+    const { data } = await axios.post(`${URL}/signup`, {
+      email, password, firstName, lastName, roomCode,
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};

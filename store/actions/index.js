@@ -13,6 +13,9 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  signInUser,
+  signUpUser,
+  signInFromStorage,
 } from './user';
 
 // Combine all action types
@@ -34,4 +37,7 @@ export {
   createUser,
   updateUser,
   deleteUser,
+  signInUser,
+  signUpUser,
+  signInFromStorage,
 };
