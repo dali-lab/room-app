@@ -25,6 +25,11 @@ const testUsers = [
     lastName: 'Sampson',
     home: false,
   },
+  {
+    firstName: 'Sofia',
+    lastName: 'YslfjgldgdfgWfsdlghgg',
+    home: false,
+  },
 ];
 
 const HomeCircles = () => {
