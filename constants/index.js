@@ -4,7 +4,6 @@ const SERVER_ENDPOINTS = {
   LOCAL: 'http://localhost:9090',
 };
 
-// remember to change this back
 const API_URL = SERVER_ENDPOINTS.PROD;
 
 export {
