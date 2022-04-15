@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import CalendarScreen from '../screens/CalendarScreen';
 import RequestScreen from '../screens/RequestScreen';
+
 import { colors } from '../constants/GlobalStyles';
 
 const Tab = createBottomTabNavigator();
@@ -24,6 +25,7 @@ const tabBarIcon = (route, focused, color, size) => {
       ? require('../assets/active-request.png')
       : require('../assets/inactive-request.png');
   }
+
   return <Image source={iconSource} />;
 };
 
@@ -37,17 +39,6 @@ const BottomTabs = () => {
         tabBarLabelStyle: { fontSize: 16 },
         tabBarStyle: { marginTop: 10 },
         tabBarIcon: ({ focused, color, size }) => tabBarIcon(route, focused, color, size),
-        // tabBarIcon: ({ focused, color, size }) => {
-        //   let iconSource;
-
-        //   if (route.name === 'Home') {
-        //     iconSource = focused
-        //       ? require('../assets/active-calendar.svg')
-        //       : require('../assets/active-calendar.svg');
-        //   } else iconSource = 'foo';
-
-        //   return <Image source={iconSource} />;
-        // },
       })}
     >
       <Tab.Screen name="Calendar" component={CalendarScreen} />
