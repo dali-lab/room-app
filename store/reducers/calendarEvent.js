@@ -14,8 +14,8 @@ const CalendarEventReducer = (state = initialState, action) => {
       return { ...state, allCalendarEvents: action.payload };
     case ActionTypes.SET_CALENDAR_EVENT:
       return { ...state, calendarEvent: action.payload };
-    // case ActionTypes.LOGOUT:
-    //   return { ...initialState };
+    case ActionTypes.LOGOUT:
+      return { ...initialState };
     default:
       return state;
   }

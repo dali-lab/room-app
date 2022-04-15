@@ -16,6 +16,7 @@ import {
   signInUser,
   signUpUser,
   signInFromStorage,
+  signOutUser,
 } from './user';
 
 // Combine all action types
@@ -40,4 +41,5 @@ export {
   signInUser,
   signUpUser,
   signInFromStorage,
+  signOutUser,
 };

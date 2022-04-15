@@ -15,8 +15,8 @@ const UserReducer = (state = initialState, action) => {
       return { ...state, user: action.payload };
     case ActionTypes.AUTHENTICATE:
       return { ...state, authenticated: true };
-    // case ActionTypes.LOGOUT:
-    //   return { ...initialState };
+    case ActionTypes.LOGOUT:
+      return { ...initialState };
     default:
       return state;
   }
