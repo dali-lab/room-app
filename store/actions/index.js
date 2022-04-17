@@ -13,6 +13,10 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  signInUser,
+  signUpUser,
+  signInFromStorage,
+  signOutUser,
 } from './user';
 import {
   ActionTypes as calendarEventActionTypes,
@@ -48,4 +52,8 @@ export {
   createUser,
   updateUser,
   deleteUser,
+  signInUser,
+  signUpUser,
+  signInFromStorage,
+  signOutUser,
 };
