@@ -1,34 +1,21 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import {
-  StyleSheet, ScrollView, SafeAreaView, Text, TouchableOpacity,
+  StyleSheet, Text, SafeAreaView, TouchableOpacity, ScrollView,
 } from 'react-native';
-import { fonts, colors } from '../constants/GlobalStyles';
+import { connect } from 'react-redux';
 import RequestItem from '../components/RequestItem';
+import { getForUser } from '../store/actions';
+import { fonts, colors } from '../constants/GlobalStyles';
 
-const testRequests = [
-  {
-    description: 'Request 1',
-    user: 'KS',
-    completed: false,
-  },
-  {
-    description: 'Request 2',
-    user: 'CG',
-    completed: false,
-  },
-  {
-    description: 'Request 3',
-    user: 'CJ',
-    completed: false,
-  },
-  {
-    description: 'Request 4',
-    user: 'JM',
-    completed: false,
-  },
-];
+const RequestScreen = (props) => {
+  const { requests, getRequests, user } = props;
 
-const RequestScreen = () => {
+  // Fetch all requests when the component first loads
+  useEffect(() => {
+    getRequests(user.id);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Requests</Text>
@@ -40,8 +27,8 @@ const RequestScreen = () => {
         <Text style={styles.plus}>+</Text>
       </TouchableOpacity>
       <ScrollView>
-        {testRequests.map(({ user, description, completed }) => {
-          return <RequestItem key={description} user={user} description={description} completed={completed} />;
+        {requests?.map(({ author, description, completed }) => {
+          return <RequestItem key={description} author={author} description={description} completed={completed} />;
         })}
       </ScrollView>
     </SafeAreaView>
@@ -90,4 +77,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RequestScreen;
+const mapStateToProps = (state) => {
+  return {
+    requests: state.request.allRequests,
+    user: state.user.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getRequests: (userID) => {
+      dispatch(getForUser(userID));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequestScreen);

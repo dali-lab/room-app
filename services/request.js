@@ -1,12 +1,13 @@
 import axios from 'axios';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../constants';
 
-const URL = `${API_URL}/parties`;
+const URL = `${API_URL}/requests`;
 
 export const getAllRequests = async () => {
   try {
-    const { data } = await axios.get(URL);
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.get(URL, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -16,8 +17,10 @@ export const getAllRequests = async () => {
 
 // get all requests for user
 export const getForUser = async (userID) => {
+  console.log(userID);
   try {
-    const { data } = await axios.get(`${URL}//${userID}`);
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.get(`${URL}/${userID}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -27,7 +30,8 @@ export const getForUser = async (userID) => {
 
 export const getRequest = async (userID, id) => {
   try {
-    const { data } = await axios.get(`${URL}//${userID}/${id}`);
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.get(`${URL}/${userID}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -37,7 +41,8 @@ export const getRequest = async (userID, id) => {
 
 export const createRequest = async (request) => {
   try {
-    const { data } = await axios.post(`${URL}`, { request });
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.get(`${URL}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -47,7 +52,8 @@ export const createRequest = async (request) => {
 
 export const updateRequest = async (id, request) => {
   try {
-    const { data } = await axios.put(`${URL}/${id}`, { request });
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.get(`${URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -57,7 +63,8 @@ export const updateRequest = async (id, request) => {
 
 export const deleteRequest = async (id) => {
   try {
-    const { data } = await axios.delete(`${URL}/${id}`);
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.get(`${URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);

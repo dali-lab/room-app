@@ -4,38 +4,8 @@ import {
 } from 'react-native';
 import { fonts, colors } from '../constants/GlobalStyles';
 
-<<<<<<< HEAD
-const testUsers = [
-  {
-    firstName: 'Jorie',
-    lastName: 'MacDonald',
-    home: true,
-  },
-  {
-    firstName: 'Claire',
-    lastName: 'Green',
-    home: false,
-  },
-  {
-    firstName: 'Chelsea',
-    lastName: 'Joe',
-    home: true,
-  },
-  {
-    firstName: 'Kaylie',
-    lastName: 'Sampson',
-    home: false,
-  },
-  {
-    firstName: 'Sofia',
-    lastName: 'YslfjgldgdfgWfsdlghgg',
-    home: false,
-  },
-];
-=======
 const HomeCircles = (props) => {
   const { users } = props;
->>>>>>> 43971ae4a7e33c8e592a57de024fef13d1ff9f1c
 
   return (
     <View style={styles.container}>
