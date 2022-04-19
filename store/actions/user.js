@@ -4,6 +4,10 @@ import * as userService from '../../services/user';
 export const ActionTypes = {
   SET_USERS: 'SET_USERS',
   SET_USER: 'SET_USER',
+  GET_USER: 'GET_USER',
+  CREATE_USER: 'CREATE_USER',
+  UPDATE_USER: 'UPDATE_USER',
+  DELETE_USER: 'DELETE_USER',
   AUTHENTICATE: 'AUTHENTICATE',
   LOGOUT: 'LOGOUT',
   API_ERROR: 'API_ERROR',
@@ -24,7 +28,7 @@ export const getUser = (id) => {
   return async (dispatch) => {
     try {
       const user = await userService.getUser(id);
-      dispatch({ type: ActionTypes.SET_USER, payload: user });
+      dispatch({ type: ActionTypes.GET_USER, payload: user });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }
@@ -36,7 +40,7 @@ export const createUser = (user) => {
     try {
       await userService.createUser(user);
       const users = await userService.getAllUsers();
-      dispatch({ type: ActionTypes.SET_USERS, payload: users });
+      dispatch({ type: ActionTypes.CREATE_USERS, payload: users });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }
@@ -48,7 +52,8 @@ export const updateUser = (id, user) => {
     try {
       await userService.updateUser(id, user);
       const users = await userService.getAllUsers();
-      dispatch({ type: ActionTypes.SET_USERS, payload: users });
+      console.log('update');
+      dispatch({ type: ActionTypes.UPDATE_USERS, payload: users });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }
@@ -60,7 +65,7 @@ export const deleteUser = (id) => {
     try {
       await userService.deleteUser(id);
       const users = await userService.getAllUsers();
-      dispatch({ type: ActionTypes.SET_USERS, payload: users });
+      dispatch({ type: ActionTypes.DELETE_USERS, payload: users });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }

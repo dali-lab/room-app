@@ -3,24 +3,21 @@ import { connect } from 'react-redux';
 import {
   StyleSheet, SafeAreaView, Button,
 } from 'react-native';
-import { getAllUsers, signOutUser } from '../store/actions';
+import { getAllUsers, signOutUser, updateUser } from '../store/actions';
 import { fonts } from '../constants/GlobalStyles';
 import HomeCircles from '../components/HomeCircles';
 
 const HomeScreen = (props) => {
   const {
-    getUsers, users, user, signOut,
+    getUsers, users, user, signOut, updateUsers,
   } = props;
-
-  console.log(user.firstName, user.lastName);
-
   useEffect(() => {
-    getUsers('123abc');
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    getUsers('abc754');
+  }, [users]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <SafeAreaView style={styles.container}>
-      <HomeCircles users={users} />
+      <HomeCircles users={users} updateUsers={updateUsers} user={user} />
       <Button
         onPress={signOut}
         title="Log Out"
@@ -56,6 +53,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     signOut: () => {
       dispatch(signOutUser());
+    },
+
+    // added
+    updateUsers: (roomcode, user) => {
+      dispatch(updateUser(roomcode, user));
     },
   };
 };
