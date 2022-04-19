@@ -6,7 +6,7 @@ import { API_URL } from '../constants';
 
 const URL = `${API_URL}/events`;
 
-export const createCalendarEvent = async (id, calendarEvent) => {
+export const createCalendarEvent = async (calendarEvent) => {
   try {
     const { data } = await axios.post(`${URL}`, { calendarEvent });
     return data;
