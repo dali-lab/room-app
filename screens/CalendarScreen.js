@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import {
-  StyleSheet, ScrollView, SafeAreaView,
+  StyleSheet, ScrollView, SafeAreaView, Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 import CalendarItem from '../components/CalendarItem';
 import { getAllCalendarEvents } from '../store/actions';
-import { fonts } from '../constants/GlobalStyles';
+import { fonts, colors } from '../constants/GlobalStyles';
 
 const CalendarScreen = (props) => {
   const { getCalendarEvents, calendarEvents } = props;
@@ -19,6 +19,8 @@ const CalendarScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Upcoming Events</Text>
+      <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
       <ScrollView>
         {calendarEvents?.map(({
           id, title, start, end, author,
@@ -32,6 +34,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  title: {
+    fontSize: fonts.large24,
+    textAlign: 'left',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  subtitle: {
+    fontSize: fonts.smallText,
+    textAlign: 'left',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginBottom: -15,
   },
   text: {
     fontSize: fonts.largeText,
