@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-unresolved
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { API_URL } from '../constants';
 
@@ -17,7 +18,8 @@ export const createCalendarEvent = async (calendarEvent) => {
 
 export const getCalendarEvent = async (id) => {
   try {
-    const { data } = await axios.get(`${URL}/${id}`);
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.get(`${URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -27,7 +29,8 @@ export const getCalendarEvent = async (id) => {
 
 export const updateCalendarEvent = async (id, calendarEvent) => {
   try {
-    const { data } = await axios.put(`${URL}/${id}`, { calendarEvent });
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.put(`${URL}/${id}`, { calendarEvent }, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -37,7 +40,8 @@ export const updateCalendarEvent = async (id, calendarEvent) => {
 
 export const deleteCalendarEvent = async (id) => {
   try {
-    const { data } = await axios.delete(`${URL}/${id}`);
+    const token = await AsyncStorage.getItem('authToken');
+    const { data } = await axios.delete(`${URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -47,10 +51,11 @@ export const deleteCalendarEvent = async (id) => {
 
 export const getAllCalendarEvents = async (users) => {
   try {
+    const token = await AsyncStorage.getItem('authToken');
     const { data } = await axios.get(`${URL}?${users.map(
       (n, index) => `userIds[${index}]=${n}`,
     ).join('&')
-    }`);
+    }`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
