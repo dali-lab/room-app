@@ -3,31 +3,73 @@ import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
 import { fonts, colors } from '../constants/GlobalStyles';
+import UserIcon from './UserIcon';
 
 const HomeCircles = (props) => {
-  const { users } = props;
+  const { users, user, updateUsers } = props;
+  // console.log(user);
+  // user.isHome = !user.isHome
 
+  const awayCircleClick = () => {
+    console.log('away');
+
+    const newUser = { ...user, isHome: false };
+    console.log('p', newUser.isHome);
+    updateUsers(user.id, newUser);
+  };
+
+  const homeCircleClick = () => {
+    console.log('home');
+
+    const newUser = { ...user, isHome: true };
+    console.log(newUser.isHome);
+
+    updateUsers(user.id, newUser);
+  };
+
+  // const testUsers = [
+  //   {
+  //     firstName: 'Jorie',
+  //     lastName: 'MacDonald',
+  //     isHome: true,
+  //   },
+  //   {
+  //     firstName: 'Claire',
+  //     lastName: 'Green',
+  //     isHome: false,
+  //   },
+  //   {
+  //     firstName: 'Chelsea',
+  //     lastName: 'Joe',
+  //     isHome: true,
+  //   },
+  //   {
+  //     firstName: 'Kaylie',
+  //     lastName: 'Sampson',
+  //     isHome: false,
+  //   },
+  // ];
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.homeCircle}
-        onPress={() => console.log('pressed home')}
+        onPress={() => homeCircleClick()}
       >
         <Text style={styles.homeText}>home</Text>
-        {users?.map(({ firstName, lastName, isHome }) => {
-          if (isHome) {
-            return <Text key={firstName}>{`${firstName[0]}${lastName[0]}`}</Text>;
+        {users?.map((userCurr) => {
+          if (userCurr.isHome) {
+            return <UserIcon users={userCurr}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.awayCircle}
-        onPress={() => console.log('pressed away')}
+        onPress={() => awayCircleClick()}
       >
         <Text style={styles.awayText}>away</Text>
-        {users?.map(({ firstName, lastName, isHome }) => {
-          if (!isHome) {
-            return <Text key={firstName}>{`${firstName[0]}${lastName[0]}`}</Text>;
+        {users?.map((userCurr) => {
+          if (!userCurr.isHome) {
+            return <UserIcon users={userCurr}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
