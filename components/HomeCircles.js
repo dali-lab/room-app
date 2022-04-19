@@ -3,10 +3,37 @@ import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
 import { fonts, colors } from '../constants/GlobalStyles';
+import UserIcon from './UserIcon';
 
 const HomeCircles = (props) => {
-  const { users } = props;
+  const { users, updateUsers } = props;
 
+  // const moveUserCircle = () => {
+  //   updateUsers()
+  // }
+
+  const testUsers = [
+    {
+      firstName: 'Jorie',
+      lastName: 'MacDonald',
+      isHome: true,
+    },
+    {
+      firstName: 'Claire',
+      lastName: 'Green',
+      isHome: false,
+    },
+    {
+      firstName: 'Chelsea',
+      lastName: 'Joe',
+      isHome: true,
+    },
+    {
+      firstName: 'Kaylie',
+      lastName: 'Sampson',
+      isHome: false,
+    },
+  ];
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -14,20 +41,20 @@ const HomeCircles = (props) => {
         onPress={() => console.log('pressed home')}
       >
         <Text style={styles.homeText}>home</Text>
-        {users?.map(({ firstName, lastName, isHome }) => {
-          if (isHome) {
-            return <Text key={firstName}>{`${firstName[0]}${lastName[0]}`}</Text>;
+        {testUsers?.map((user) => {
+          if (user.isHome) {
+            return <UserIcon users={user}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.awayCircle}
-        onPress={() => console.log('pressed away')}
+        onPress={() => updateUser()}
       >
         <Text style={styles.awayText}>away</Text>
-        {users?.map(({ firstName, lastName, isHome }) => {
-          if (!isHome) {
-            return <Text key={firstName}>{`${firstName[0]}${lastName[0]}`}</Text>;
+        {testUsers?.map((user) => {
+          if (!user.isHome) {
+            return <UserIcon users={user}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
