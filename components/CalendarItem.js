@@ -7,12 +7,6 @@ import moment from 'moment';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 
 const LeftActions = (progress, dragX, onPress) => {
-  // eslint-disable-next-line react/destructuring-assignment
-  // const scale = dragX.interpolate({
-  //   inputRange: [0, 100],
-  //   outputRange: [0, 1],
-  //   extrapolate: 'clamp',
-  // });
   return (
     <View style={styles.swipeContainer}>
       <TouchableOpacity style={styles.swipeItem}>
@@ -22,32 +16,6 @@ const LeftActions = (progress, dragX, onPress) => {
         <Text style={styles.swipeItemText}>Delete</Text>
       </TouchableOpacity>
     </View>
-  // <Animated.View style={styles.swipeContainer}>
-  //   <Animated.View style={styles.swipeItem}>
-  //     <Animated.Text
-  //       style={{
-  //         color: 'white',
-  //         paddingHorizontal: 10,
-  //         fontWeight: '600',
-  //         transform: [{ scale }],
-  //       }}
-  //     >
-  //       Edit
-  //     </Animated.Text>
-  //   </Animated.View>
-  //   <Animated.View style={styles.swipeItem}>
-  //     <Animated.Text
-  //       style={{
-  //         color: 'white',
-  //         paddingHorizontal: 5,
-  //         fontWeight: '600',
-  //         transform: [{ scale }],
-  //       }}
-  //     >
-  //       Delete
-  //     </Animated.Text>
-  //   </Animated.View>
-  // </Animated.View>
   );
 };
 
@@ -57,26 +25,38 @@ const CalendarItem = (props) => {
   } = props;
 
   return (
-    <Swipeable renderLeftActions={LeftActions}>
-      <View style={styles.container}>
-        <Text style={styles.icon}>{`${author} icon`}</Text>
-        <View style={styles.description}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+    <View style={styles.container}>
+      <Swipeable renderLeftActions={LeftActions}>
+        <View style={styles.eventContainer}>
+          <Text style={styles.icon}>{`${author} icon`}</Text>
+          <View style={styles.description}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+          </View>
+          <Text style={styles.text}># of Likes</Text>
         </View>
-        <Text style={styles.text}># of Likes</Text>
-      </View>
-    </Swipeable>
+      </Swipeable>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    height: 80,
+    marginTop: 20,
+    marginLeft: 20,
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+  },
+  swipeContainer: {
+    height: 80,
+    flexDirection: 'row',
+    backgroundColor: colors.backgroundSageGreen,
+  },
+  eventContainer: {
     width: dimensions.screenWidth * 0.9,
     height: 80,
     backgroundColor: colors.backgroundSageGreen,
-    margin: 20,
-    padding: 5,
     borderColor: colors.darkSageGreen,
     borderLeftWidth: 5,
     justifyContent: 'flex-start',
@@ -104,13 +84,6 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     marginLeft: 20,
     width: 35,
-  },
-  swipeContainer: {
-    height: 80,
-    marginLeft: 20,
-    marginTop: 20,
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
   },
   swipeItem: {
     backgroundColor: colors.darkSageGreen,

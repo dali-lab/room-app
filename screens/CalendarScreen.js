@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: colors.darkSageGreen,
     marginLeft: 20,
-    marginBottom: -15,
+    marginBottom: 3,
   },
   text: {
     fontSize: fonts.largeText,
