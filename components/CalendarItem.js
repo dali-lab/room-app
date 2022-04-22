@@ -36,9 +36,13 @@ const CalendarItem = (props) => {
         <Text style={styles.text}># of Likes</Text>
       </View>
       <View style={styles.approveContainer}>
-        <TouchableOpacity style={styles.approveButton}>
-          <Text>Approve</Text>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity style={styles.approveButton} onPress={() => console.log('approve')}>
+            <View>
+              <Text>Approve</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity style={styles.letsTalkButton}>
           <Text>Let's Talk</Text>
         </TouchableOpacity>
