@@ -8,11 +8,11 @@ import { getAllCalendarEvents } from '../store/actions';
 import { fonts, colors } from '../constants/GlobalStyles';
 
 const CalendarScreen = (props) => {
-  const { getCalendarEvents, calendarEvents } = props;
+  const { getCalendarEvents, calendarEvents, users } = props;
 
   // Fetch all calendarEvents when the component first loads
   useEffect(() => {
-    getCalendarEvents(['624eefbcfb7a79a5eadd6edb', '624f00380a0fc0aaff99396f']);
+    getCalendarEvents(users);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // console.log(calendarEvents);
@@ -23,8 +23,8 @@ const CalendarScreen = (props) => {
       <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
       <ScrollView>
         {calendarEvents?.map(({
-          id, title, start, end, author,
-        }) => <CalendarItem key={id} title={title} start={start} end={end} author={author} />)}
+          id, title, start, end, author, approvals,
+        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} />)}
       </ScrollView>
     </SafeAreaView>
   );
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     calendarEvents: state.calendarEvent.allCalendarEvents,
+    users: state.user.allUsers,
   };
 };
 

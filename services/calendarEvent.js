@@ -8,7 +8,7 @@ const URL = `${API_URL}/events`;
 
 export const createCalendarEvent = async (calendarEvent) => {
   try {
-    const { data } = await axios.post(`${URL}`, { calendarEvent });
+    const { data } = await axios.post(`${URL}`, calendarEvent);
     return data;
   } catch (error) {
     console.log(error);
@@ -30,7 +30,7 @@ export const getCalendarEvent = async (id) => {
 export const updateCalendarEvent = async (id, calendarEvent) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.put(`${URL}/${id}`, { calendarEvent }, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.put(`${URL}/${id}`, calendarEvent, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
