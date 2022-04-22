@@ -2,53 +2,22 @@ import React from 'react';
 import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { getAllUsers, updateUser } from '../store/actions';
 import { fonts, colors } from '../constants/GlobalStyles';
 import UserIcon from './UserIcon';
 
 const HomeCircles = (props) => {
   const { users, user, updateUsers } = props;
-  // console.log(user);
-  // user.isHome = !user.isHome
 
   const awayCircleClick = () => {
-    console.log('away');
-
-    const newUser = { ...user, isHome: false };
-    console.log('p', newUser.isHome);
-    updateUsers(user.id, newUser);
+    updateUsers(user.id, { isHome: 'false' }, user.roomCode);
   };
 
   const homeCircleClick = () => {
-    console.log('home');
-
-    const newUser = { ...user, isHome: true };
-    console.log(newUser.isHome);
-
-    updateUsers(user.id, newUser);
+    updateUsers(user.id, { isHome: 'true' }, user.roomCode);
   };
 
-  // const testUsers = [
-  //   {
-  //     firstName: 'Jorie',
-  //     lastName: 'MacDonald',
-  //     isHome: true,
-  //   },
-  //   {
-  //     firstName: 'Claire',
-  //     lastName: 'Green',
-  //     isHome: false,
-  //   },
-  //   {
-  //     firstName: 'Chelsea',
-  //     lastName: 'Joe',
-  //     isHome: true,
-  //   },
-  //   {
-  //     firstName: 'Kaylie',
-  //     lastName: 'Sampson',
-  //     isHome: false,
-  //   },
-  // ];
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -58,7 +27,7 @@ const HomeCircles = (props) => {
         <Text style={styles.homeText}>home</Text>
         {users?.map((userCurr) => {
           if (userCurr.isHome) {
-            return <UserIcon users={userCurr}> </UserIcon>;
+            return <UserIcon key={user.id} user={userCurr} size={54}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
@@ -69,7 +38,7 @@ const HomeCircles = (props) => {
         <Text style={styles.awayText}>away</Text>
         {users?.map((userCurr) => {
           if (!userCurr.isHome) {
-            return <UserIcon users={userCurr}> </UserIcon>;
+            return <UserIcon key={user.id} user={userCurr} size={54}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
@@ -110,4 +79,25 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeCircles;
+// testing
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    users: state.user.allUsers,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUsers: (roomcode) => {
+      dispatch(getAllUsers(roomcode));
+    },
+
+    // added
+    updateUsers: (id, user, roomcode) => {
+      dispatch(updateUser(id, user, roomcode));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeCircles);

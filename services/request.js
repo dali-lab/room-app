@@ -42,7 +42,7 @@ export const getRequest = async (userID, id) => {
 export const createRequest = async (request) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(`${URL}`, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.get(`${URL}`, request, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -53,7 +53,7 @@ export const createRequest = async (request) => {
 export const updateRequest = async (id, request) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(`${URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.get(`${URL}/${id}`, request, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
