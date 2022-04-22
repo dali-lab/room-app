@@ -14,7 +14,6 @@ const CalendarItem = (props) => {
     id, title, start, end, author, user, updateEvent, approvals, users,
   } = props;
 
-  console.log(id);
   const handleApprove = () => {
     updateEvent(id, { approvals: [...approvals, user.id] }, users);
   };
