@@ -3,22 +3,8 @@ import React from 'react';
 import {
   StyleSheet, View, Text, TouchableOpacity,
 } from 'react-native';
-// import Swipeable from 'react-native-gesture-handler/Swipeable';
 import moment from 'moment';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
-
-// const LeftActions = () => {
-//   return (
-//     <View style={styles.swipeContainer}>
-//       <TouchableOpacity style={styles.swipeItem}>
-//         <Text style={styles.swipeItemText}>Edit</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity style={styles.swipeItem}>
-//         <Text style={styles.swipeItemText}>Delete</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// };
 
 const CalendarItem = (props) => {
   const {
@@ -36,14 +22,12 @@ const CalendarItem = (props) => {
         <Text style={styles.text}># of Likes</Text>
       </View>
       <View style={styles.approveContainer}>
-        <View>
-          <TouchableOpacity style={styles.approveButton} onPress={() => console.log('approve')}>
-            <View>
-              <Text>Approve</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.letsTalkButton}>
+        <TouchableOpacity style={styles.approveButton} onPress={() => console.log('approve')}>
+          <View>
+            <Text>Approve</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.letsTalkButton} onPress={() => console.log('lets talk')}>
           <Text>Let's Talk</Text>
         </TouchableOpacity>
       </View>
