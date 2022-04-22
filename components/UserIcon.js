@@ -5,20 +5,17 @@ import {
 import { fonts, colors } from '../constants/GlobalStyles';
 
 const UserIcon = (props) => {
-  const { users } = props;
+  const { user, size } = props;
   return (
-    <View style={styles.container}>
-      <Text key={users.firstName}>{`${users.firstName[0]}${users.lastName[0]}`}</Text>
+    <View style={[styles.container, { backgroundColor: user.iconColor, height: size, width: size }]}>
+      <Text key={user.firstName}>{`${user.firstName[0]}${user.lastName[0]}`}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: 54,
-    height: 54,
     borderRadius: 1000,
-    backgroundColor: colors.indigo300,
     alignItems: 'center',
     justifyContent: 'center',
   },
