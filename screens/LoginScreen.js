@@ -3,14 +3,16 @@ import {
   StyleSheet, SafeAreaView, Text, TouchableOpacity, TextInput,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { fonts, colors } from '../constants/GlobalStyles';
 import { signInUser } from '../store/actions';
 
 const LoginScreen = (props) => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const { login } = props;
-  const handleLogin = (e) => {
+  const handleLogin = () => {
     if (email && pw) {
       login(email.toLowerCase(), pw);
     }
@@ -34,7 +36,7 @@ const LoginScreen = (props) => {
       />
       <TouchableOpacity
         style={styles.forgotPw}
-        onPress={() => console.log('Forgot password')}
+        onPress={() => navigation.navigate('ForgotPassword')}
       >
         <Text style={styles.forgotPwText}>Forgot password?</Text>
       </TouchableOpacity>
@@ -46,7 +48,7 @@ const LoginScreen = (props) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.signupButton}
-        onPress={() => console.log('Sign up')}
+        onPress={() => navigation.navigate('Signup')}
       >
         <Text style={styles.bottomText}>
           Don&apos;t have an account?
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
   },
   signupButton: {
     alignItems: 'center',
-    marginTop: 200,
+    marginTop: 100,
   },
 });
 
