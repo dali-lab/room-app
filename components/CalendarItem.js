@@ -5,8 +5,22 @@ import {
   StyleSheet, View, Text, TouchableOpacity, Modal, TextInput,
 } from 'react-native';
 import moment from 'moment';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import { updateCalendarEvent } from '../store/actions/calendarEvent';
+
+const LeftActions = () => {
+  return (
+    <View style={styles.swipeContainer}>
+      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed edit button')}>
+        <Text style={styles.swipeItemText}>Edit</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
+        <Text style={styles.swipeItemText}>Delete</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const CalendarItem = (props) => {
   const [showModal, setShowModal] = useState(false);
@@ -19,59 +33,76 @@ const CalendarItem = (props) => {
   };
 
   return (
-    <View>
-      <View style={styles.container}>
-        <View style={styles.eventContainer}>
-          <Text style={styles.icon}>{`${author} icon`}</Text>
-          <View style={styles.description}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+    <View style={styles.container}>
+      {user.id === author.id
+        ? (
+          <View>
+            <Swipeable renderLeftActions={LeftActions}>
+              <View style={styles.eventContainer}>
+                <Text style={styles.icon}>{`${author} icon`}</Text>
+                <View style={styles.description}>
+                  <Text style={styles.title}>{title}</Text>
+                  <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+                </View>
+                <Text style={styles.text}># of Likes</Text>
+              </View>
+            </Swipeable>
           </View>
-          <Text style={styles.text}># of Likes</Text>
-        </View>
-        <View style={styles.approveContainer}>
-          <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
+        )
+        : (
+          <View style={styles.noswipey}>
+            <View style={styles.eventContainer}>
+              <Text style={styles.icon}>{`${author} icon`}</Text>
+              <View style={styles.description}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+              </View>
+              <Text style={styles.text}># of Likes</Text>
+            </View>
+            <View style={styles.approveContainer}>
+              <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
+                <View>
+                  <Text>Approve</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.letsTalkButton} onPress={() => setShowModal(!showModal)}>
+                <Text>Let's Talk</Text>
+              </TouchableOpacity>
+            </View>
             <View>
-              <Text>Approve</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.letsTalkButton} onPress={() => setShowModal(!showModal)}>
-            <Text>Let's Talk</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View>
-        <Modal
-          animationType="fade"
-          visible={showModal}
-          transparent
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.description}>
-              <Text style={styles.title}>{title}</Text>
-              <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.text}>Message</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Optional"
-              />
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity style={styles.modalButton} onPress={() => setShowModal(!showModal)}>
-                <Text style={{ color: '#FFFFFF' }}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.modalButton} onPress={() => setShowModal(!showModal)}>
-                <Text style={{ color: '#FFFFFF' }}>Send</Text>
-              </TouchableOpacity>
+              <Modal
+                animationType="fade"
+                visible={showModal}
+                transparent
+                onRequestClose={() => {
+                  console.log('Modal has been closed.');
+                }}
+              >
+                <View style={styles.modalContainer}>
+                  <View style={styles.description}>
+                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.text}>Message</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Optional"
+                    />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity style={styles.modalButton} onPress={() => setShowModal(!showModal)}>
+                      <Text style={{ color: '#FFFFFF' }}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.modalButton} onPress={() => setShowModal(!showModal)}>
+                      <Text style={{ color: '#FFFFFF' }}>Send</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
             </View>
           </View>
-        </Modal>
-      </View>
+        )}
     </View>
   );
 };
@@ -164,6 +195,16 @@ const styles = StyleSheet.create({
     width: dimensions.screenWidth * 0.3,
     alignItems: 'center',
     margin: 10,
+  },
+  swipeItem: {
+    backgroundColor: colors.darkSageGreen,
+    justifyContent: 'center',
+    padding: 10,
+    width: 60,
+  },
+  swipeItemText: {
+    fontSize: fonts.smallText,
+    color: '#ffffff',
   },
 });
 
