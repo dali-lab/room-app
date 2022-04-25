@@ -12,7 +12,6 @@ const UserReducer = (state = initialState, action) => {
     case ActionTypes.SET_USERS:
       return { ...state, allUsers: action.payload };
     case ActionTypes.SET_USER:
-      console.log('reducers');
       return { ...state, user: action.payload };
     case ActionTypes.AUTHENTICATE:
       return { ...state, authenticated: true };

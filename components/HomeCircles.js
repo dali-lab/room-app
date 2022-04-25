@@ -27,7 +27,7 @@ const HomeCircles = (props) => {
         <Text style={styles.homeText}>home</Text>
         {users?.map((userCurr) => {
           if (userCurr.isHome) {
-            return <UserIcon key={user.id} user={userCurr} size={54}> </UserIcon>;
+            return <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
@@ -38,7 +38,7 @@ const HomeCircles = (props) => {
         <Text style={styles.awayText}>away</Text>
         {users?.map((userCurr) => {
           if (!userCurr.isHome) {
-            return <UserIcon key={user.id} user={userCurr} size={54}> </UserIcon>;
+            return <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
