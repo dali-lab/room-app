@@ -29,7 +29,7 @@ const CalendarItem = (props) => {
   } = props;
 
   const handleApprove = () => {
-    updateEvent(id, { approvals: [...approvals, user.id] }, users);
+    updateEvent(id, { approvals: [...approvals, user.id] }, users.map(({ usersId }) => usersId));
   };
 
   return (
