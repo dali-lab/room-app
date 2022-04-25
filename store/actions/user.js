@@ -95,14 +95,11 @@ export const signInFromStorage = () => {
 export const signUpUser = (email, password, firstName, lastName, roomCode) => {
   return async (dispatch) => {
     try {
-      const { token, user } = await userService.signUpUser(email, password, firstName, lastName, roomCode);
-      dispatch({ type: ActionTypes.SET_USER, payload: user });
+      const { token, newUser } = await userService.signUpUser(email, password, firstName, lastName, roomCode);
+      dispatch({ type: ActionTypes.SET_USER, payload: newUser });
       await AsyncStorage.setItem('authToken', token);
-      await AsyncStorage.setItem('firstName', firstName);
-      await AsyncStorage.setItem('lastName', lastName);
       await AsyncStorage.setItem('email', email);
       await AsyncStorage.setItem('password', password);
-      await AsyncStorage.setItem('roomCode', roomCode);
       dispatch({ type: ActionTypes.AUTHENTICATE });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });

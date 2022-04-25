@@ -17,8 +17,7 @@ const SignupScreen = (props) => {
   const { signup } = props;
   const handleSignup = () => {
     if (firstName && lastName && email && password && roomCode) {
-      console.log(firstName, lastName, email, password, roomCode);
-      signup(firstName, lastName, email.toLowerCase(), password, roomCode);
+      signup(email.toLowerCase(), password, firstName, lastName, roomCode);
     }
   };
 

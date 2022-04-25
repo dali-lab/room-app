@@ -12,6 +12,11 @@ const HomeScreen = (props) => {
     getUsers, user, signOut,
   } = props;
 
+<<<<<<< HEAD
+=======
+  console.log(user?.firstName, user?.lastName);
+
+>>>>>>> 40185ba (added signup function)
   useEffect(() => {
     getUsers(user.roomCode);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
