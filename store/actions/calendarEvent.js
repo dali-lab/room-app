@@ -28,11 +28,11 @@ export const getCalendarEvent = (id) => {
   };
 };
 
-export const createCalendarEvent = (calendarEvent) => {
+export const createCalendarEvent = (calendarEvent, users) => {
   return async (dispatch) => {
     try {
       await calendarEventService.createCalendarEvent(calendarEvent);
-      const calendarEvents = await calendarEventService.getAllCalendarEvents();
+      const calendarEvents = await calendarEventService.getAllCalendarEvents(users);
       dispatch({ type: ActionTypes.SET_CALENDAR_EVENTS, payload: calendarEvents });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
@@ -40,11 +40,11 @@ export const createCalendarEvent = (calendarEvent) => {
   };
 };
 
-export const updateCalendarEvent = (id, calendarEvent) => {
+export const updateCalendarEvent = (id, calendarEvent, users) => {
   return async (dispatch) => {
     try {
       await calendarEventService.updateCalendarEvent(id, calendarEvent);
-      const calendarEvents = await calendarEventService.getAllCalendarEvents();
+      const calendarEvents = await calendarEventService.getAllCalendarEvents(users);
       dispatch({ type: ActionTypes.SET_CALENDAR_EVENTS, payload: calendarEvents });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
@@ -52,11 +52,11 @@ export const updateCalendarEvent = (id, calendarEvent) => {
   };
 };
 
-export const deleteCalendarEvent = (id) => {
+export const deleteCalendarEvent = (id, users) => {
   return async (dispatch) => {
     try {
       await calendarEventService.deleteCalendarEvent(id);
-      const calendarEvents = await calendarEventService.getAllCalendarEvents();
+      const calendarEvents = await calendarEventService.getAllCalendarEvents(users);
       dispatch({ type: ActionTypes.SET_CALENDAR_EVENTS, payload: calendarEvents });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
