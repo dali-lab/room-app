@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 import axios from 'axios';
 // eslint-disable-next-line import/no-unresolved
 import AsyncStorage from '@react-native-async-storage/async-storage';
