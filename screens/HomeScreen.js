@@ -9,18 +9,16 @@ import HomeCircles from '../components/HomeCircles';
 
 const HomeScreen = (props) => {
   const {
-    getUsers, users, user, signOut,
+    getUsers, user, signOut,
   } = props;
 
-  console.log(user.firstName, user.lastName);
-
   useEffect(() => {
-    getUsers('123abc');
+    getUsers(user.roomCode);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <SafeAreaView style={styles.container}>
-      <HomeCircles users={users} />
+      <HomeCircles />
       <Button
         onPress={signOut}
         title="Log Out"

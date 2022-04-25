@@ -31,23 +31,23 @@ export const getUser = (id) => {
   };
 };
 
-export const createUser = (user) => {
+export const createUser = (user, roomcode) => {
   return async (dispatch) => {
     try {
       await userService.createUser(user);
-      const users = await userService.getAllUsers();
-      dispatch({ type: ActionTypes.SET_USERS, payload: users });
+      const users = await userService.getAllUsers(roomcode);
+      dispatch({ type: ActionTypes.SET_USER, payload: users });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }
   };
 };
 
-export const updateUser = (id, user) => {
+export const updateUser = (id, user, roomcode) => {
   return async (dispatch) => {
     try {
       await userService.updateUser(id, user);
-      const users = await userService.getAllUsers();
+      const users = await userService.getAllUsers(roomcode);
       dispatch({ type: ActionTypes.SET_USERS, payload: users });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
@@ -55,11 +55,11 @@ export const updateUser = (id, user) => {
   };
 };
 
-export const deleteUser = (id) => {
+export const deleteUser = (id, roomcode) => {
   return async (dispatch) => {
     try {
       await userService.deleteUser(id);
-      const users = await userService.getAllUsers();
+      const users = await userService.getAllUsers(roomcode);
       dispatch({ type: ActionTypes.SET_USERS, payload: users });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });

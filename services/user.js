@@ -1,4 +1,5 @@
 import axios from 'axios';
+// eslint-disable-next-line import/no-unresolved
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../constants';
 
@@ -28,7 +29,7 @@ export const getUser = async (id) => {
 
 export const createUser = async (user) => {
   try {
-    const { data } = await axios.post(`${URL}`, { user });
+    const { data } = await axios.post(`${URL}`, user);
     return data;
   } catch (error) {
     console.log(error);
@@ -39,7 +40,7 @@ export const createUser = async (user) => {
 export const updateUser = async (id, user) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.put(`${URL}/${id}`, { user }, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.put(`${URL}/${id}`, user, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);

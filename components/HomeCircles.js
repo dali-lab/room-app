@@ -2,32 +2,43 @@ import React from 'react';
 import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { getAllUsers, updateUser } from '../store/actions';
 import { fonts, colors } from '../constants/GlobalStyles';
+import UserIcon from './UserIcon';
 
 const HomeCircles = (props) => {
-  const { users } = props;
+  const { users, user, updateUsers } = props;
+
+  const awayCircleClick = () => {
+    updateUsers(user.id, { isHome: 'false' }, user.roomCode);
+  };
+
+  const homeCircleClick = () => {
+    updateUsers(user.id, { isHome: 'true' }, user.roomCode);
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.homeCircle}
-        onPress={() => console.log('pressed home')}
+        onPress={() => homeCircleClick()}
       >
         <Text style={styles.homeText}>home</Text>
-        {users?.map(({ firstName, lastName, isHome }) => {
-          if (isHome) {
-            return <Text key={firstName}>{`${firstName[0]}${lastName[0]}`}</Text>;
+        {users?.map((userCurr) => {
+          if (userCurr.isHome) {
+            return <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.awayCircle}
-        onPress={() => console.log('pressed away')}
+        onPress={() => awayCircleClick()}
       >
         <Text style={styles.awayText}>away</Text>
-        {users?.map(({ firstName, lastName, isHome }) => {
-          if (!isHome) {
-            return <Text key={firstName}>{`${firstName[0]}${lastName[0]}`}</Text>;
+        {users?.map((userCurr) => {
+          if (!userCurr.isHome) {
+            return <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>;
           } else return null;
         })}
       </TouchableOpacity>
@@ -68,4 +79,25 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeCircles;
+// testing
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    users: state.user.allUsers,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUsers: (roomcode) => {
+      dispatch(getAllUsers(roomcode));
+    },
+
+    // added
+    updateUsers: (id, user, roomcode) => {
+      dispatch(updateUser(id, user, roomcode));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeCircles);
