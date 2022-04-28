@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
@@ -9,27 +10,25 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import { updateCalendarEvent } from '../store/actions/calendarEvent';
 
-const LeftActions = () => {
-  // const [showEditModal, setshowEditModal] = false;
-  // const setShowModal = () => { !showEditModal; };
-  return (
-    <View style={styles.swipeContainer}>
-      {/* <TouchableOpacity style={styles.swipeItem} onPress={() => setshowEditModal(!showEditModal)}> */}
-      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed edit button')}>
-        <Text style={styles.swipeItemText}>Edit</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
-        <Text style={styles.swipeItemText}>Delete</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
 const CalendarItem = (props) => {
   const [showLetsTalkModal, setshowLetsTalkModal] = useState(false);
+  const [showEditModal, setshowEditModal] = useState(false);
+  // const [showEditModal, setshowEditModal] = useState(false);
   const {
     id, title, start, end, author, user, updateEvent, approvals, users,
   } = props;
+  const LeftActions = () => {
+    return (
+      <View style={styles.swipeContainer}>
+        <TouchableOpacity style={styles.swipeItem} onPress={() => setshowEditModal(!showEditModal)}>
+          <Text style={styles.swipeItemText}>Edit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
+          <Text style={styles.swipeItemText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const handleApprove = () => {
     updateEvent(id, { approvals: [...approvals, user.id] }, users.map(({ usersId }) => usersId));
@@ -72,107 +71,103 @@ const CalendarItem = (props) => {
                 <Text>Let's Talk</Text>
               </TouchableOpacity>
             </View>
-            <View>
-              <Modal
-                animationType="fade"
-                visible={showLetsTalkModal}
-                transparent
-                onRequestClose={() => {
-                  console.log('Modal has been closed.');
-                }}
-              >
-                <View style={styles.swipeModalContainer}>
-                  <TouchableOpacity style={styles.exitButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
-                    <Text style={styles.text}>X</Text>
-                  </TouchableOpacity>
-
-                  <Text style={styles.icon}>INSERT CALENDAR LOGO INSERT CALENDAR LOGO INSERT CALENDAR LOGO</Text>
-                  <View style={styles.description}>
-                    <Text style={styles.title}>EDIT EVENT</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.text}>Title</Text>
-                    <View style={styles.inputContainer}>
-                      <TextInput
-                        style={styles.inputTitle}
-                        defaultValue={`${title}`}
-                      />
-                    </View>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.text}>All-Day</Text>
-                    <View style={styles.inputContainer}>
-                      <Switch />
-                    </View>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.text}>Start</Text>
-                    <View style={styles.inputContainer}>
-                      <TextInput
-                        style={styles.inputTime}
-                        defaultValue={`${moment(start).format('MMM DD')}`}
-                      />
-                      <TextInput
-                        style={styles.inputTime}
-                        defaultValue={`${moment(start).format('h:mm a')}`}
-                      />
-                    </View>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.text}>End</Text>
-                    <View style={styles.inputContainer}>
-                      <TextInput
-                        style={styles.inputTime}
-                        defaultValue={`${moment(end).format('MMM DD')}`}
-                      />
-                      <TextInput
-                        style={styles.inputTime}
-                        defaultValue={`${moment(end).format('h:mm a')}`}
-                      />
-                    </View>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={styles.modalButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
-                      <Text style={{ color: '#FFFFFF' }}>Save</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </Modal>
-            </View>
-            {/* <View>
-              <Modal
-                animationType="fade"
-                visible={showLetsTalkModal}
-                transparent
-                onRequestClose={() => {
-                  console.log('Modal has been closed.');
-                }}
-              >
-                <View style={styles.letsTalkModalContainer}>
-                  <View style={styles.description}>
-                    <Text style={styles.title}>{title}</Text>
-                    <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.text}>Message</Text>
-                    <TextInput
-                      style={styles.inputTitle}
-                      placeholder="Optional"
-                    />
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={styles.modalButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
-                      <Text style={{ color: '#FFFFFF' }}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.modalButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
-                      <Text style={{ color: '#FFFFFF' }}>Send</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </Modal>
-            </View> */}
           </View>
         )}
+      <Modal
+        animationType="fade"
+        visible={showLetsTalkModal}
+        transparent
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+        }}
+      >
+        <View style={styles.letsTalkModalContainer}>
+          <View style={styles.description}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.text}>Message</Text>
+            <TextInput
+              style={styles.inputTitle}
+              placeholder="Optional"
+            />
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity style={styles.modalButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
+              <Text style={{ color: '#FFFFFF' }}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
+              <Text style={{ color: '#FFFFFF' }}>Send</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        visible={showEditModal}
+        transparent
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+        }}
+      >
+        <View style={styles.swipeModalContainer}>
+          <TouchableOpacity style={styles.exitButton} onPress={() => setshowEditModal(!showEditModal)}>
+            <Text style={styles.text}>X</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.icon}>INSERT CALENDAR LOGO INSERT CALENDAR LOGO INSERT CALENDAR LOGO</Text>
+          <View style={styles.description}>
+            <Text style={styles.title}>EDIT EVENT</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.text}>Title</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputTitle}
+                defaultValue={`${title}`}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.text}>All-Day</Text>
+            <View style={styles.inputContainer}>
+              <Switch />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.text}>Start</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputTime}
+                defaultValue={`${moment(start).format('MMM DD')}`}
+              />
+              <TextInput
+                style={styles.inputTime}
+                defaultValue={`${moment(start).format('h:mm a')}`}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.text}>End</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputTime}
+                defaultValue={`${moment(end).format('MMM DD')}`}
+              />
+              <TextInput
+                style={styles.inputTime}
+                defaultValue={`${moment(end).format('h:mm a')}`}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity style={styles.modalButton} onPress={() => setshowEditModal(!showEditModal)}>
+              <Text style={{ color: '#FFFFFF' }}>Save</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
