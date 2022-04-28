@@ -25,7 +25,7 @@ const LeftActions = () => {
 const CalendarItem = (props) => {
   const [showModal, setShowModal] = useState(false);
   const {
-    id, title, start, end, author, user, updateEvent, approvals, users,
+    id, title, start, end, author, user, updateEvent, approvals, users, showButtons,
   } = props;
 
   const handleApprove = () => {
@@ -59,6 +59,8 @@ const CalendarItem = (props) => {
               </View>
               <Text style={styles.text}># of Likes</Text>
             </View>
+            { showButtons
+            && (
             <View style={styles.approveContainer}>
               <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
                 <View>
@@ -68,7 +70,9 @@ const CalendarItem = (props) => {
               <TouchableOpacity style={styles.letsTalkButton} onPress={() => setShowModal(!showModal)}>
                 <Text>Let's Talk</Text>
               </TouchableOpacity>
+
             </View>
+            )}
             <View>
               <Modal
                 animationType="fade"
