@@ -133,15 +133,23 @@ const CalendarScreen = (props) => {
                 onConfirm={handleConfirmStart}
                 onCancel={hideStartDatePicker}
               />
-              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
-                <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={isStartTimePickerVisible}
-                mode="time"
-                onConfirm={handleConfirmStartTime}
-                onCancel={hideStartTimePicker}
-              />
+              {!switchOn
+                ? (
+                  <View>
+                    <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
+                      <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
+                    </TouchableOpacity>
+                    <DateTimePickerModal
+                      isVisible={isStartTimePickerVisible}
+                      mode="time"
+                      onConfirm={handleConfirmStartTime}
+                      onCancel={hideStartTimePicker}
+                    />
+                  </View>
+                )
+                : (
+                  null
+                )}
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
@@ -156,15 +164,23 @@ const CalendarScreen = (props) => {
                 onConfirm={handleConfirmEnd}
                 onCancel={hideEndDatePicker}
               />
-              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndTimePicker}>
-                <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={isEndTimePickerVisible}
-                mode="time"
-                onConfirm={handleConfirmEndTime}
-                onCancel={hideEndTimePicker}
-              />
+              {!switchOn
+                ? (
+                  <View>
+                    <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndTimePicker}>
+                      <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
+                    </TouchableOpacity>
+                    <DateTimePickerModal
+                      isVisible={isEndTimePickerVisible}
+                      mode="time"
+                      onConfirm={handleConfirmEndTime}
+                      onCancel={hideEndTimePicker}
+                    />
+                  </View>
+                )
+                : (
+                  null
+                )}
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
