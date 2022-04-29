@@ -6,6 +6,7 @@ import {
   StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Switch,
 } from 'react-native';
 import moment from 'moment';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import { updateCalendarEvent } from '../store/actions/calendarEvent';
@@ -13,10 +14,60 @@ import { updateCalendarEvent } from '../store/actions/calendarEvent';
 const CalendarItem = (props) => {
   const [showLetsTalkModal, setshowLetsTalkModal] = useState(false);
   const [showEditModal, setshowEditModal] = useState(false);
-  // const [showEditModal, setshowEditModal] = useState(false);
+  const [switchOn, setSwitchOn] = useState(false);
   const {
     id, title, start, end, author, user, updateEvent, approvals, users,
   } = props;
+  const [newStartDate, setnewStartDate] = useState(start);
+  const [newEndDate, setnewEndDate] = useState(end);
+  const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+  const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
+  const [newStartTime, setnewStartTime] = useState(start);
+  const [newEndTime, setnewEndTime] = useState(end);
+  const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
+  const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
+
+  const showStartDatePicker = () => {
+    setStartDatePickerVisibility(true);
+  };
+  const hideStartDatePicker = () => {
+    setStartDatePickerVisibility(false);
+  };
+  const showEndDatePicker = () => {
+    setEndDatePickerVisibility(true);
+  };
+  const hideEndDatePicker = () => {
+    setEndDatePickerVisibility(false);
+  };
+  const showStartTimePicker = () => {
+    setStartTimePickerVisibility(true);
+  };
+  const hideStartTimePicker = () => {
+    setStartTimePickerVisibility(false);
+  };
+  const showEndTimePicker = () => {
+    setEndTimePickerVisibility(true);
+  };
+  const hideEndTimePicker = () => {
+    setEndTimePickerVisibility(false);
+  };
+  const handleConfirmStart = (date) => {
+    setnewStartDate(date);
+    hideStartDatePicker();
+  };
+  const handleConfirmEnd = (date) => {
+    setnewEndDate(date);
+    hideEndDatePicker();
+  };
+  const handleConfirmStartTime = (date) => {
+    setnewStartTime(date);
+    hideStartTimePicker();
+  };
+  const handleConfirmEndTime = (date) => {
+    setnewEndTime(date);
+    hideEndTimePicker();
+  };
+
   const LeftActions = () => {
     return (
       <View style={styles.swipeContainer}>
@@ -132,38 +183,62 @@ const CalendarItem = (props) => {
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.text}>All-Day</Text>
             <View style={styles.inputContainer}>
-              <Switch />
+              <Switch value={switchOn}
+                onValueChange={() => {
+                  setSwitchOn(!switchOn);
+                }}
+              />
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.text}>Start</Text>
             <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputTime}
-                defaultValue={`${moment(start).format('MMM DD')}`}
+              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartDatePicker}>
+                <Text style={styles.text}>{`${moment(newStartDate).format('MMM DD')}`}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isStartDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirmStart}
+                onCancel={hideStartDatePicker}
               />
-              <TextInput
-                style={styles.inputTime}
-                defaultValue={`${moment(start).format('h:mm a')}`}
+              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
+                <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isStartTimePickerVisible}
+                mode="time"
+                onConfirm={handleConfirmStartTime}
+                onCancel={hideStartTimePicker}
               />
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.text}>End</Text>
             <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputTime}
-                defaultValue={`${moment(end).format('MMM DD')}`}
+              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndDatePicker}>
+                <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isEndDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirmEnd}
+                onCancel={hideEndDatePicker}
               />
-              <TextInput
-                style={styles.inputTime}
-                defaultValue={`${moment(end).format('h:mm a')}`}
+              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndTimePicker}>
+                <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isEndTimePickerVisible}
+                mode="time"
+                onConfirm={handleConfirmEndTime}
+                onCancel={hideEndTimePicker}
               />
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={styles.modalButton} onPress={() => setshowEditModal(!showEditModal)}>
-              <Text style={{ color: '#FFFFFF' }}>Save</Text>
+              <Text style={{ color: '#FFFFFF' }}>Done</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -311,6 +386,10 @@ const styles = StyleSheet.create({
     height: dimensions.screenHeight * 0.04,
     marginRight: dimensions.screenWidth * 0.6,
     marginTop: 10,
+  },
+  dateTimePickerButton: {
+    backgroundColor: '#FFFFFF',
+    marginLeft: 18,
   },
 });
 

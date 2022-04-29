@@ -11,9 +11,9 @@ import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 
 const CalendarScreen = (props) => {
   const { getCalendarEvents, calendarEvents, users } = props;
+
   const [showNewModal, setshowNewModal] = useState(false);
   const [newTitle, setnewTitle] = useState('');
-  const [switchOn, setSwitchOn] = useState(false);
   const [newStartDate, setnewStartDate] = useState(new Date());
   const [newEndDate, setnewEndDate] = useState(new Date());
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
@@ -22,6 +22,7 @@ const CalendarScreen = (props) => {
   const [newEndTime, setnewEndTime] = useState(new Date());
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
+  const [switchOn, setSwitchOn] = useState(false);
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -113,14 +114,6 @@ const CalendarScreen = (props) => {
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.text}>All-Day</Text>
             <View style={styles.inputContainer}>
-              {/* <ToggleSwitch
-                isOn={false}
-                onColor="green"
-                offColor="red"
-                labelStyle={{ color: 'black', fontWeight: '900' }}
-                size="large"
-                onToggle={(isOn) => console.log('changed to : ', isOn)}
-              /> */}
               <Switch value={switchOn}
                 onValueChange={() => {
                   setSwitchOn(!switchOn);
