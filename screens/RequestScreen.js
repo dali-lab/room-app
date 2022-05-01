@@ -19,7 +19,7 @@ const RequestScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Requests</Text>
-      <Text style={styles.subtitle}>Swipe left on a request to edit or delete it</Text>
+      <Text style={styles.subtitle}>Swipe left on a request to edit or right delete it</Text>
       <TouchableOpacity
         style={styles.newEvent}
         onPress={() => console.log('create new event')}
