@@ -16,7 +16,7 @@ const CalendarItem = (props) => {
   const [showEditModal, setshowEditModal] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
   const {
-    id, title, start, end, author, user, updateEvent, approvals, users,
+    id, title, start, end, author, user, updateEvent, approvals, users, allDay,
   } = props;
   const [newStartDate, setnewStartDate] = useState(start);
   const [newEndDate, setnewEndDate] = useState(end);
@@ -82,7 +82,16 @@ const CalendarItem = (props) => {
   };
 
   const handleApprove = () => {
-    updateEvent(id, { approvals: [...approvals, user.id] }, users.map(({ usersId }) => usersId));
+    const newEvent = {
+      approvals: [...approvals, user],
+      id,
+      title,
+      start,
+      end,
+      allDay,
+      author,
+    };
+    updateEvent(id, newEvent, users.map(({ usersId }) => usersId));
   };
 
   return (
@@ -202,23 +211,15 @@ const CalendarItem = (props) => {
                 onConfirm={handleConfirmStart}
                 onCancel={hideStartDatePicker}
               />
-              {!switchOn
-                ? (
-                  <View>
-                    <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
-                      <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
-                    </TouchableOpacity>
-                    <DateTimePickerModal
-                      isVisible={isStartTimePickerVisible}
-                      mode="time"
-                      onConfirm={handleConfirmStartTime}
-                      onCancel={hideStartTimePicker}
-                    />
-                  </View>
-                )
-                : (
-                  null
-                )}
+              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
+                <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isStartTimePickerVisible}
+                mode="time"
+                onConfirm={handleConfirmStartTime}
+                onCancel={hideStartTimePicker}
+              />
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>

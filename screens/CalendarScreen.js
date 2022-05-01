@@ -81,8 +81,9 @@ const CalendarScreen = (props) => {
       <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
       <ScrollView>
         {calendarEvents?.map(({
-          id, title, start, end, author, approvals,
-        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} />)}
+          id, title, start, end, author, approvals, allDay,
+        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} />)}
+
       </ScrollView>
       <Modal
         animationType="fade"
