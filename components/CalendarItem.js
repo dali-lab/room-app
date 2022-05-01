@@ -19,12 +19,13 @@ const CalendarItem = (props) => {
   const {
     id, title, start, end, author, user, updateEvent, approvals, users, allDay, deleteEvent,
   } = props;
-  const [newStartDate, setnewStartDate] = useState(start);
-  const [newEndDate, setnewEndDate] = useState(end);
+  const [newTitle, setnewTitle] = useState('');
+  const [newStartDate, setnewStartDate] = useState(new Date(start));
+  const [newEndDate, setnewEndDate] = useState(new Date(end));
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
   const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
-  const [newStartTime, setnewStartTime] = useState(start);
-  const [newEndTime, setnewEndTime] = useState(end);
+  const [newStartTime, setnewStartTime] = useState(new Date(start));
+  const [newEndTime, setnewEndTime] = useState(new Date(end));
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
 
@@ -90,6 +91,18 @@ const CalendarItem = (props) => {
       end,
       allDay,
       author,
+    };
+    updateEvent(id, newEvent, users.map(({ id }) => id));
+  };
+
+  const handleSave = () => {
+    setshowEditModal(!showEditModal);
+    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth())}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
+    const start = moment(startDateTime, 'YYYY-MM-DD-hh-mm');
+    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
+    const end = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
+    const newEvent = {
+      title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn, approvals,
     };
     updateEvent(id, newEvent, users.map(({ id }) => id));
   };
@@ -185,7 +198,9 @@ const CalendarItem = (props) => {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputTitle}
+                value={newTitle}
                 defaultValue={`${title}`}
+                onChangeText={(text) => setnewTitle(text)}
               />
             </View>
           </View>
@@ -211,15 +226,23 @@ const CalendarItem = (props) => {
                 onConfirm={handleConfirmStart}
                 onCancel={hideStartDatePicker}
               />
-              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
-                <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={isStartTimePickerVisible}
-                mode="time"
-                onConfirm={handleConfirmStartTime}
-                onCancel={hideStartTimePicker}
-              />
+              {!switchOn
+                ? (
+                  <View>
+                    <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
+                      <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
+                    </TouchableOpacity>
+                    <DateTimePickerModal
+                      isVisible={isStartTimePickerVisible}
+                      mode="time"
+                      onConfirm={handleConfirmStartTime}
+                      onCancel={hideStartTimePicker}
+                    />
+                  </View>
+                )
+                : (
+                  null
+                )}
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
@@ -254,7 +277,7 @@ const CalendarItem = (props) => {
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.modalButton} onPress={() => setshowEditModal(!showEditModal)}>
+            <TouchableOpacity style={styles.modalButton} onPress={handleSave}>
               <Text style={{ color: '#FFFFFF' }}>Done</Text>
             </TouchableOpacity>
           </View>

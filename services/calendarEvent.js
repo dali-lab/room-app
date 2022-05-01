@@ -29,7 +29,6 @@ export const getCalendarEvent = async (id) => {
 
 export const updateCalendarEvent = async (id, calendarEvent) => {
   try {
-    console.log(calendarEvent);
     const token = await AsyncStorage.getItem('authToken');
     const { data } = await axios.put(`${URL}/${id}`, calendarEvent, { headers: { Authorization: `Bearer ${token}` } });
     return data;
