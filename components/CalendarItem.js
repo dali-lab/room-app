@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
@@ -9,14 +10,14 @@ import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
-import { updateCalendarEvent } from '../store/actions/calendarEvent';
+import { updateCalendarEvent, deleteCalendarEvent } from '../store/actions/calendarEvent';
 
 const CalendarItem = (props) => {
   const [showLetsTalkModal, setshowLetsTalkModal] = useState(false);
   const [showEditModal, setshowEditModal] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
   const {
-    id, title, start, end, author, user, updateEvent, approvals, users, allDay,
+    id, title, start, end, author, user, updateEvent, approvals, users, allDay, deleteEvent,
   } = props;
   const [newStartDate, setnewStartDate] = useState(start);
   const [newEndDate, setnewEndDate] = useState(end);
@@ -74,7 +75,7 @@ const CalendarItem = (props) => {
         <TouchableOpacity style={styles.swipeItem} onPress={() => setshowEditModal(!showEditModal)}>
           <Text style={styles.swipeItemText}>Edit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
+        <TouchableOpacity style={styles.swipeItem} onPress={() => deleteEvent(id, users.map(({ id }) => id))}>
           <Text style={styles.swipeItemText}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -84,14 +85,13 @@ const CalendarItem = (props) => {
   const handleApprove = () => {
     const newEvent = {
       approvals: [...approvals, user],
-      id,
       title,
       start,
       end,
       allDay,
       author,
     };
-    updateEvent(id, newEvent, users.map(({ usersId }) => usersId));
+    updateEvent(id, newEvent, users.map(({ id }) => id));
   };
 
   return (
@@ -422,6 +422,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateEvent: (id, calendarEvent, users) => {
       dispatch(updateCalendarEvent(id, calendarEvent, users));
+    },
+    deleteEvent: (id, users) => {
+      dispatch(deleteCalendarEvent(id, users));
     },
   };
 };

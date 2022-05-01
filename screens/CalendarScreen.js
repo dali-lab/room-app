@@ -6,11 +6,13 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import CalendarItem from '../components/CalendarItem';
-import { getAllCalendarEvents } from '../store/actions';
+import { getAllCalendarEvents, createCalendarEvent } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 
 const CalendarScreen = (props) => {
-  const { getCalendarEvents, calendarEvents, users } = props;
+  const {
+    getCalendarEvents, calendarEvents, users, createEvent, user,
+  } = props;
 
   const [showNewModal, setshowNewModal] = useState(false);
   const [newTitle, setnewTitle] = useState('');
@@ -63,6 +65,18 @@ const CalendarScreen = (props) => {
   const handleConfirmEndTime = (date) => {
     setnewEndTime(date);
     hideEndTimePicker();
+  };
+
+  const handleSave = () => {
+    setshowNewModal(!showNewModal);
+    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth())}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
+    const start = moment(startDateTime, 'YYYY-MM-DD-hh-mm');
+    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
+    const end = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
+    const newEvent = {
+      title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn, approvals: [],
+    };
+    createEvent(newEvent, users.map(({ id }) => id));
   };
 
   // Fetch all calendarEvents when the component first loads
@@ -185,7 +199,7 @@ const CalendarScreen = (props) => {
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.modalButton} onPress={() => setshowNewModal(!showNewModal)}>
+            <TouchableOpacity style={styles.modalButton} onPress={handleSave}>
               <Text style={{ color: '#FFFFFF' }}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -303,11 +317,15 @@ const mapStateToProps = (state) => {
   return {
     calendarEvents: state.calendarEvent.allCalendarEvents,
     users: state.user.allUsers,
+    user: state.user.user,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    createEvent: (calendarEvent, users) => {
+      dispatch(createCalendarEvent(calendarEvent, users));
+    },
     getCalendarEvents: (users) => {
       dispatch(getAllCalendarEvents(users));
     },
