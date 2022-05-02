@@ -1,28 +1,25 @@
 Arguments: 
-  /usr/local/Cellar/node/17.4.0/bin/node /usr/local/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js add –save react-navigation react-navigation-tabs react-native-paper react-native-vector-icons
+  /usr/local/bin/node /opt/homebrew/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js start
 
 PATH: 
-  /Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Python.framework/Versions/3.9/bin
+  /opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin
 
 Yarn version: 
   1.22.17
 
 Node version: 
-  17.4.0
+  16.13.2
 
 Platform: 
-  darwin x64
+  darwin arm64
 
 Trace: 
-  TypeError [ERR_UNESCAPED_CHARACTERS]: https://registry.yarnpkg.com/–save: Request path contains unescaped characters
-      at new NodeError (node:internal/errors:371:5)
-      at new ClientRequest (node:_http_client:154:13)
-      at Object.request (node:https:353:10)
-      at Request.module.exports.Request.start (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:141445:32)
-      at Request.module.exports.Request.end (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:142204:10)
-      at end (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:141258:14)
-      at Immediate.<anonymous> (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:141272:7)
-      at processImmediate (node:internal/timers:466:21)
+  SyntaxError: /Users/kksamps2/Documents/GitHub/room-app/package.json: Unexpected token < in JSON at position 891
+      at JSON.parse (<anonymous>)
+      at /opt/homebrew/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/opt/homebrew/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:310:30)
+      at /opt/homebrew/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:321:13
 
 npm manifest: 
   {
@@ -39,8 +36,9 @@ npm manifest:
     },
     "dependencies": {
       "@react-native-async-storage/async-storage": "^1.17.3",
-      "@react-native-masked-view/masked-view": "^0.2.6",
+      "@react-native-community/datetimepicker": "^6.1.2",
       "@react-navigation/bottom-tabs": "^6.2.0",
+      "@react-navigation/material-top-tabs": "^6.2.1",
       "@react-navigation/native": "^6.0.8",
       "@react-navigation/stack": "^6.2.1",
       "axios": "^0.26.1",
@@ -52,13 +50,24 @@ npm manifest:
       "react-dom": "17.0.1",
       "react-native": "0.64.3",
       "react-native-gesture-handler": "^2.4.0",
+  <<<<<<< HEAD
+      "react-native-modal-datetime-picker": "^13.1.2",
       "react-native-safe-area-context": "3.3.2",
       "react-native-safe-area-view": "^1.1.1",
       "react-native-screens": "^3.13.1",
+      "react-native-switch-toggle": "^2.2.1",
+  =======
+      "react-native-pager-view": "5.4.9",
+      "react-native-safe-area-context": "3.3.2",
+      "react-native-safe-area-view": "^1.1.1",
+      "react-native-screens": "^3.13.1",
+      "react-native-tab-view": "^3.1.1",
+  >>>>>>> d8c73f6434a53c20f24065cea6f55257449d2ea9
       "react-native-web": "0.17.1",
       "react-redux": "^7.2.8",
       "redux": "^4.1.2",
-      "redux-thunk": "^2.4.1"
+      "redux-thunk": "^2.4.1",
+      "toggle-switch-react-native": "^3.3.0"
     },
     "devDependencies": {
       "@babel/core": "^7.12.9",
@@ -1552,10 +1561,19 @@ Lockfile:
       sudo-prompt "^9.0.0"
       wcwidth "^1.0.1"
   
+  <<<<<<< HEAD
+  "@react-native-community/datetimepicker@^6.1.2":
+    version "6.1.2"
+    resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-6.1.2.tgz#a897291bc8ff2394f922721f40692c812f9145a0"
+    integrity sha512-4D21x4eywCY2Ex4BI6tQhUEOOKSruz9uPbGK0azGKZap/etoiPtH3nuG56ACtpmUlu5d1R9zzTlumr02dp39hA==
+    dependencies:
+      invariant "^2.2.4"
+  =======
   "@react-native-masked-view/masked-view@^0.2.6":
     version "0.2.6"
     resolved "https://registry.yarnpkg.com/@react-native-masked-view/masked-view/-/masked-view-0.2.6.tgz#b26c52d5db3ad0926b13deea79c69620966a9221"
     integrity sha512-303CxmetUmgiX9NSUxatZkNh9qTYYdiM8xkGf9I3Uj20U3eGY3M78ljeNQ4UVCJA+FNGS5nC1dtS9GjIqvB4dg==
+  >>>>>>> 085ca2ff62c78fb1c296eca67264c6e3a3066acd
   
   "@react-native/assets@1.0.0":
     version "1.0.0"
@@ -1606,6 +1624,14 @@ Lockfile:
     version "1.3.3"
     resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.3.tgz#9f56b650a9a1a8263a271628be7342c8121d1788"
     integrity sha512-Lv2lR7si5gNME8dRsqz57d54m4FJtrwHRjNQLOyQO546ZxO+g864cSvoLC6hQedQU0+IJnPTsZiEI2hHqfpEpw==
+  
+  "@react-navigation/material-top-tabs@^6.2.1":
+    version "6.2.1"
+    resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-6.2.1.tgz#747d17bd0138a7d50c791e9cce1adc350904f67d"
+    integrity sha512-fGy2+/7cUAyrZUPUhzKUttA4avK5Z2FrNk0LRI04hRlAVqs5DYpnaQGkegGeOGwKmnxaVCjCVPr+KoEroyqduw==
+    dependencies:
+      color "^3.1.3"
+      warn-once "^0.1.0"
   
   "@react-navigation/native@^6.0.8":
     version "6.0.8"
@@ -2725,6 +2751,11 @@ Lockfile:
     integrity sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
     dependencies:
       esutils "^2.0.2"
+  
+  dooboolab-welcome@^1.3.0:
+    version "1.3.2"
+    resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.3.2.tgz#4928595312f0429b4ea1b485ba8767bae6acdab7"
+    integrity sha512-2NbMaIIURElxEf/UAoVUFlXrO+7n/FRhLCiQlk4fkbGRh9cJ3/f8VEMPveR9m4Ug2l2Zey+UCXjd6EcBqHJ5bw==
   
   ee-first@1.1.1:
     version "1.1.1"
@@ -5390,7 +5421,7 @@ Lockfile:
       kleur "^3.0.3"
       sisteransi "^1.0.5"
   
-  prop-types@^15.6.0, prop-types@^15.7.2:
+  prop-types@^15.5.7, prop-types@^15.6.0, prop-types@^15.7.2:
     version "15.8.1"
     resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
     integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5489,6 +5520,20 @@ Lockfile:
       lodash "^4.17.21"
       prop-types "^15.7.2"
   
+  <<<<<<< HEAD
+  react-native-modal-datetime-picker@^13.1.2:
+    version "13.1.2"
+    resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-13.1.2.tgz#7c8bd3402acb4dcfbca49c926a7f18dd108c69c4"
+    integrity sha512-PZDkuY7HayRX1KE2X2dm29CvCLzwj/vn6B6QdPbjZea/GEKvHBMOLGdhFCcA9+gD64Y41+VqfytUh2fdvUvQ1g==
+    dependencies:
+      prop-types "^15.7.2"
+  =======
+  react-native-pager-view@5.4.9:
+    version "5.4.9"
+    resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.9.tgz#c0d40847cfeda5a4e729b53271b0ee0fedff3eb5"
+    integrity sha512-D6tzxpwMGdl6CXgtskGWhKRc5cJakCazESRGt7PkqnpyiH3N35ft1KmR82pCSQetAFlytFiToeu3a/dG5CELvA==
+  >>>>>>> d8c73f6434a53c20f24065cea6f55257449d2ea9
+  
   react-native-safe-area-context@3.3.2:
     version "3.3.2"
     resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.3.2.tgz#9549a2ce580f2374edb05e49d661258d1b8bcaed"
@@ -5508,6 +5553,20 @@ Lockfile:
     dependencies:
       react-freeze "^1.0.0"
       warn-once "^0.1.0"
+  
+  <<<<<<< HEAD
+  react-native-switch-toggle@^2.2.1:
+    version "2.2.1"
+    resolved "https://registry.yarnpkg.com/react-native-switch-toggle/-/react-native-switch-toggle-2.2.1.tgz#1a7f88a54bded38e6e34988ddac6ba05ccf0adbf"
+    integrity sha512-Y/RQ1Pb/KDVZhBSNjc16LKtUi7MGZb0MYxouZLj/THpiSQLsy5pUyTwbIKRjNuZDNSxmMDXyRX1QfLt+oup4Uw==
+    dependencies:
+      dooboolab-welcome "^1.3.0"
+  =======
+  react-native-tab-view@^3.1.1:
+    version "3.1.1"
+    resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz#1f8d7a835ab4f5b1b1407ec8dddc1053b53fa3c6"
+    integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
+  >>>>>>> d8c73f6434a53c20f24065cea6f55257449d2ea9
   
   react-native-web@0.17.1:
     version "0.17.1"
@@ -6389,6 +6448,13 @@ Lockfile:
       extend-shallow "^3.0.2"
       regex-not "^1.0.2"
       safe-regex "^1.1.0"
+  
+  toggle-switch-react-native@^3.3.0:
+    version "3.3.0"
+    resolved "https://registry.yarnpkg.com/toggle-switch-react-native/-/toggle-switch-react-native-3.3.0.tgz#4c7ef67576154adb7f118d18d19dc9b1caece51c"
+    integrity sha512-DE0UjTOvUpUXjrRjF5r06dqzp/XrbDvJ6hYAwTp6ZgNrxn5Z7bDqe9Rs7axaRbWr7MXe5FdSGkCmfmK6tL7esw==
+    dependencies:
+      prop-types "^15.5.7"
   
   toidentifier@1.0.1:
     version "1.0.1"

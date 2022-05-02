@@ -22,10 +22,10 @@ const Stack = createStackNavigator();
 const HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeScreen"
     >
       <Stack.Screen
-        name="Home"
+        name="HomeScreen"
         options={({ navigation }) => ({
           headerTitle: (props) => <LogoTitle />,
           headerRight: () => (

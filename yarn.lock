@@ -1472,10 +1472,12 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
-"@react-native-masked-view/masked-view@^0.2.6":
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/@react-native-masked-view/masked-view/-/masked-view-0.2.6.tgz#b26c52d5db3ad0926b13deea79c69620966a9221"
-  integrity sha512-303CxmetUmgiX9NSUxatZkNh9qTYYdiM8xkGf9I3Uj20U3eGY3M78ljeNQ4UVCJA+FNGS5nC1dtS9GjIqvB4dg==
+"@react-native-community/datetimepicker@^6.1.2":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-6.1.2.tgz#a897291bc8ff2394f922721f40692c812f9145a0"
+  integrity sha512-4D21x4eywCY2Ex4BI6tQhUEOOKSruz9uPbGK0azGKZap/etoiPtH3nuG56ACtpmUlu5d1R9zzTlumr02dp39hA==
+  dependencies:
+    invariant "^2.2.4"
 
 "@react-native/assets@1.0.0":
   version "1.0.0"
@@ -5318,7 +5320,7 @@ prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.0, prop-types@^15.7.2:
+prop-types@^15.5.7, prop-types@^15.6.0, prop-types@^15.7.2:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5417,10 +5419,17 @@ react-native-gesture-handler@^2.4.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-pager-view@5.4.9:
-  version "5.4.9"
-  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.9.tgz#c0d40847cfeda5a4e729b53271b0ee0fedff3eb5"
-  integrity sha512-D6tzxpwMGdl6CXgtskGWhKRc5cJakCazESRGt7PkqnpyiH3N35ft1KmR82pCSQetAFlytFiToeu3a/dG5CELvA==
+react-native-modal-datetime-picker@^13.1.2:
+  version "13.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-13.1.2.tgz#7c8bd3402acb4dcfbca49c926a7f18dd108c69c4"
+  integrity sha512-PZDkuY7HayRX1KE2X2dm29CvCLzwj/vn6B6QdPbjZea/GEKvHBMOLGdhFCcA9+gD64Y41+VqfytUh2fdvUvQ1g==
+  dependencies:
+    prop-types "^15.7.2"
+
+react-native-pager-view@^5.4.15:
+  version "5.4.15"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.15.tgz#075fef5ae4ba6ecc37e49b6c4a24770131a2a3cc"
+  integrity sha512-5NssD840wFCuOL4B1ZRiRADvt+Vx2Dgify4SmAUqHXCx03yiGPnRWmFjYXyQeK6gq/8VY+gPGE4bTy9ahzBbDw==
 
 react-native-safe-area-context@3.3.2:
   version "3.3.2"
@@ -6327,6 +6336,13 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
+
+toggle-switch-react-native@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/toggle-switch-react-native/-/toggle-switch-react-native-3.3.0.tgz#4c7ef67576154adb7f118d18d19dc9b1caece51c"
+  integrity sha512-DE0UjTOvUpUXjrRjF5r06dqzp/XrbDvJ6hYAwTp6ZgNrxn5Z7bDqe9Rs7axaRbWr7MXe5FdSGkCmfmK6tL7esw==
+  dependencies:
+    prop-types "^15.5.7"
 
 toidentifier@1.0.1:
   version "1.0.1"
