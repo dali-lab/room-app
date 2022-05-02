@@ -2,7 +2,7 @@
 import React from 'react';
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
+import HomeStack from './HomeStack';
 import CalendarScreen from '../screens/CalendarScreen';
 import RequestScreen from '../screens/RequestScreen';
 
@@ -39,10 +39,12 @@ const BottomTabs = () => {
         tabBarLabelStyle: { fontSize: 16 },
         tabBarStyle: { marginTop: 10 },
         tabBarIcon: ({ focused, color, size }) => tabBarIcon(route, focused, color, size),
+        headerShown: false,
       })}
+
     >
       <Tab.Screen name="Calendar" component={CalendarScreen} />
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Request" component={RequestScreen} />
     </Tab.Navigator>
   );
