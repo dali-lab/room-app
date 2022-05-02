@@ -96,7 +96,7 @@ const CalendarScreen = (props) => {
       <ScrollView>
         {calendarEvents?.map(({
           id, title, start, end, author, approvals, allDay,
-        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} />)}
+        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />)}
 
       </ScrollView>
       <Modal

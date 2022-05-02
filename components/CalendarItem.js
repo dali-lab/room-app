@@ -17,7 +17,7 @@ const CalendarItem = (props) => {
   const [showEditModal, setshowEditModal] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
   const {
-    id, title, start, end, author, user, updateEvent, approvals, users, allDay, deleteEvent,
+    id, title, start, end, author, user, updateEvent, approvals, users, allDay, deleteEvent, showButtons,
   } = props;
   const [newTitle, setnewTitle] = useState('');
   const [newStartDate, setnewStartDate] = useState(new Date(start));
@@ -134,6 +134,8 @@ const CalendarItem = (props) => {
               </View>
               <Text style={styles.text}># of Likes</Text>
             </View>
+            { showButtons
+            && (
             <View style={styles.approveContainer}>
               <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
                 <View>
@@ -144,6 +146,7 @@ const CalendarItem = (props) => {
                 <Text>Let's Talk</Text>
               </TouchableOpacity>
             </View>
+            )}
           </View>
         )}
       <Modal
