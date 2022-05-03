@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import {
   StyleSheet, SafeAreaView, Text, TouchableOpacity, TextInput,
 } from 'react-native';
+import { connect } from 'react-redux';
+
 // import { connect } from 'react-redux';
 import { fonts, colors } from '../constants/GlobalStyles';
+import {
+  resetPassword,
+} from '../store/actions/user';
 
 const ForgotPasswordScreen = (props) => {
   const [email, setEmail] = useState('');
-  // const { ?? } = props;
+  const { forgotPassword } = props;
 
   return (
     <SafeAreaView>
@@ -21,9 +26,9 @@ const ForgotPasswordScreen = (props) => {
       />
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={() => console.log('set new password email sent')}
+        onPress={() => forgotPassword(email)}
       >
-        <Text style={styles.buttonText}>Send email to create new password</Text>
+        <Text style={styles.buttonText}>Send!</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -73,4 +78,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPasswordScreen;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    forgotPassword: (email) => {
+      dispatch(resetPassword(email));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ForgotPasswordScreen);

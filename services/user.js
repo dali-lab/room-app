@@ -81,3 +81,16 @@ export const signUpUser = async (email, password, firstName, lastName, roomCode)
     throw new Error(error);
   }
 };
+
+/**
+ * @description resets admin password with the specified email
+ * @param {String} email email
+ */
+export const resetPassword = async (email) => {
+  const url = `${global.API_URL}/reset-password/${email}`;
+  console.log('services1');
+
+  const { data: { data } } = await axios.put(url);
+  console.log('services2');
+  return data[0];
+};
