@@ -5,8 +5,9 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
+import moment from 'moment';
 import RequestItem from '../components/RequestItem';
-import { getForUser } from '../store/actions';
+import { getForUser, createRequest } from '../store/actions';
 import { fonts, colors, dimensions } from '../constants/GlobalStyles';
 
 const RequestScreen = (props) => {
@@ -21,12 +22,12 @@ const RequestScreen = (props) => {
   const [requestDescription, setRequestDescription] = useState('');
   const [hours, setHours] = useState('');
   const [minutes, setMinutes] = useState('');
-  const [seconds, setSeconds] = useState('');
+  const [days, setDays] = useState('');
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(user.roommates);
   // const [value, setValue] = useState(['claire', 'kaylie', 'jorie', 'chelsea']);
   const [items, setItems] = useState(value.map((roommate) => {
-    return { label: roommate.firstName, value: roommate.firstName };
+    return { label: roommate.firstName, value: roommate.id };
   }));
 
   // [
@@ -37,6 +38,17 @@ const RequestScreen = (props) => {
   //   // { label: 'Jorie', value: 'Jorie' },
   // ]
   const [isAnonymous, setIsAnonymous] = useState(false);
+
+  const handleRequest = () => {
+    const endTime = moment().add(days, 'd').add(hours, 'h').add(minutes, 'm');
+    const newRequest = {
+      description: requestDescription, author: user, anonymous: isAnonymous, recipients: value, end: endTime, upvotes: 0, downvotes: 0,
+    };
+    setShowModal(!showModal);
+    console.log('about to create request');
+    console.log(newRequest);
+    createRequest(newRequest);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -83,6 +95,13 @@ const RequestScreen = (props) => {
             <TextInput
               style={styles.timeInput}
               keyboardType="numeric"
+              onChangeText={(text) => setDays(text)}
+              value={days}
+            />
+            <Text style={styles.text1}>days</Text>
+            <TextInput
+              style={styles.timeInput}
+              keyboardType="numeric"
               onChangeText={(text) => setHours(text)}
               value={hours}
             />
@@ -94,13 +113,6 @@ const RequestScreen = (props) => {
               value={minutes}
             />
             <Text style={styles.text1}>minutes</Text>
-            <TextInput
-              style={styles.timeInput}
-              keyboardType="numeric"
-              onChangeText={(text) => setSeconds(text)}
-              value={seconds}
-            />
-            <Text style={styles.text1}>seconds</Text>
           </View>
           <Text style={styles.modalSubtitle}>Send to</Text>
           <View style={styles.recipientSelector}>
@@ -132,7 +144,7 @@ const RequestScreen = (props) => {
           </View>
           <TouchableOpacity
             style={styles.doneButton}
-            onPress={() => setShowModal(!showModal)}
+            onPress={handleRequest}
           >
             <Text style={styles.doneButtonText}>Done</Text>
           </TouchableOpacity>
@@ -288,6 +300,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getRequests: (userID) => {
       dispatch(getForUser(userID));
+    },
+    createRequest: (request) => {
+      dispatch(createRequest(request));
     },
   };
 };

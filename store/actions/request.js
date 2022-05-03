@@ -42,9 +42,14 @@ export const getRequest = (id) => {
 };
 
 export const createRequest = (request) => {
+  console.log('create request action');
+  console.log('create request action 0.5');
   return async (dispatch) => {
+    console.log('create request action 0.75');
     try {
+      console.log('create request action 1');
       await requestService.createRequest(request);
+      console.log('create request action 2');
       const requests = await requestService.getAllRequests();
       dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
     } catch (error) {

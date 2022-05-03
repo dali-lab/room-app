@@ -40,6 +40,7 @@ export const getRequest = async (userID, id) => {
 };
 
 export const createRequest = async (request) => {
+  console.log('create request services');
   try {
     const token = await AsyncStorage.getItem('authToken');
     const { data } = await axios.get(`${URL}`, request, { headers: { Authorization: `Bearer ${token}` } });
