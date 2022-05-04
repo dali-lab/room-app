@@ -54,14 +54,18 @@ const RequestScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Requests</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={styles.title}>Requests</Text>
+        <TouchableOpacity
+          style={styles.newEvent}
+          onPress={() => setShowModal(!showModal)}
+        >
+          <Text style={styles.plus}>+</Text>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.subtitle}>Swipe left on a request to edit or right delete it</Text>
-      <TouchableOpacity
-        style={styles.newEvent}
-        onPress={() => setShowModal(!showModal)}
-      >
-        <Text style={styles.plus}>+</Text>
-      </TouchableOpacity>
+
       <Modal
         visible={showModal}
         transparent
@@ -69,7 +73,7 @@ const RequestScreen = (props) => {
           console.log('Modal has been closed.');
         }}
       >
-        <SafeAreaView style={styles.modalContainer}>
+        <View style={styles.modalContainer}>
           <TouchableOpacity
             style={styles.exitButton}
             onPress={() => setShowModal(!showModal)}
@@ -151,7 +155,7 @@ const RequestScreen = (props) => {
             <Text style={styles.doneButtonText}>Done</Text>
           </TouchableOpacity>
 
-        </SafeAreaView>
+        </View>
       </Modal>
       <ScrollView>
         {requests?.map(({ author, description, completed }) => {
@@ -192,19 +196,26 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   newEvent: {
+    // width: 50,
+    // height: 50,
+    // borderRadius: 50 / 2,
+    backgroundColor: colors.indigo700,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // alignSelf: 'flex-end',
+    // marginRight: 20,
+    // marginBottom: 5,
+    borderRadius: 20,
     width: 50,
     height: 50,
-    borderRadius: 50 / 2,
-    backgroundColor: colors.indigo700,
     alignItems: 'center',
-    justifyContent: 'space-around',
-    alignSelf: 'flex-end',
-    marginRight: 20,
-    marginBottom: 5,
+    justifyContent: 'center',
+    margin: 10,
+
   },
   plus: {
     color: colors.backgroundSageGreen,
-    fontSize: 50,
+    fontSize: 40,
   },
   modalContainer: {
     backgroundColor: colors.lightGray,
