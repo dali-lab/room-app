@@ -11,7 +11,9 @@ import { getForUser, createRequest } from '../store/actions';
 import { fonts, colors, dimensions } from '../constants/GlobalStyles';
 
 const RequestScreen = (props) => {
-  const { requests, getRequests, user } = props;
+  const {
+    requests, getRequests, user, createUserRequest,
+  } = props;
 
   // Fetch all requests when the component first loads
   useEffect(() => {
@@ -47,7 +49,7 @@ const RequestScreen = (props) => {
     setShowModal(!showModal);
     console.log('about to create request');
     console.log(newRequest);
-    createRequest(newRequest);
+    createUserRequest(newRequest);
   };
 
   return (
@@ -301,7 +303,7 @@ const mapDispatchToProps = (dispatch) => {
     getRequests: (userID) => {
       dispatch(getForUser(userID));
     },
-    createRequest: (request) => {
+    createUserRequest: (request) => {
       dispatch(createRequest(request));
     },
   };
