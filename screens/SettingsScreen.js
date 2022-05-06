@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user.user, 
+    user: state.user.user,
     roomCode: state.user.roomCode,
   };
 };
