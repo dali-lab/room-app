@@ -52,6 +52,7 @@ const SignupScreen = (props) => {
           onChangeText={(text) => setPassword(text)}
           value={password}
           placeholder="Enter a password"
+          secureTextEntry
         />
         <Text style={styles.text}>Room Key</Text>
         <TextInput
