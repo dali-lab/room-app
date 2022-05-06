@@ -68,7 +68,9 @@ const SignupScreen = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.signupButton}
-          onPress={() => navigation.navigate('GenerateRoomKey')}
+          onPress={() => navigation.navigate('GenerateRoomKey', {
+            firstName1: firstName,
+          })}
         >
           <Text style={styles.bottomText}>
             Don&apos;t have a room key?

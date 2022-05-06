@@ -1,56 +1,28 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet, SafeAreaView, Text, TouchableOpacity, /* TextInput, */
 } from 'react-native';
-import { connect } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+// import { connect } from 'react-redux';
+// import { useNavigation } from '@react-navigation/native';
 import { fonts, colors } from '../constants/GlobalStyles';
-import { signUpUser } from '../store/actions';
 
-const GenerateRoomKeyScreen = (props, { navigation, route }) => {
+const GenerateRoomKeyScreen = (props) => {
   // const navigation = useNavigation();
-  const firstName2 = route.params;
-  // console.log(route.params.email1);
-  const [roomCode, setRoomCode] = useState('');
-  const generateCode = () => {
-    const length = 6;
-    const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-    let result = '';
-    for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-    setRoomCode(result);
-    console.log(firstName2);
-  };
-
-  // find out how to get rid of hardcoded stuff
-  const firstName = 'fn';
-  const lastName = 'ln';
-  const email = 'user18@test.com';
-  const password = 'user18pw';
-
-  const { signup } = props;
-  const handleSignup = () => {
-    if (firstName && lastName && email && password && roomCode) {
-      signup(email.toLowerCase(), password, firstName, lastName, roomCode);
-    }
-  };
+  // const { login } = props;
 
   return (
     <SafeAreaView>
       <Text style={styles.title}>Generate a room key</Text>
       <TouchableOpacity
         style={styles.signupButton}
-        onPress={generateCode}
+        onPress={() => console.log('room key generated')}
       >
         <Text style={styles.bottomTextBold}>Generate!</Text>
       </TouchableOpacity>
-      <Text style={styles.text}>
-        Your room key is:
-        {' '}
-        {roomCode}
-      </Text>
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={handleSignup}
+        onPress={() => console.log('sign in')}
       >
         <Text style={styles.buttonText}>Sign Up!</Text>
       </TouchableOpacity>
@@ -124,12 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    signup: (firstName, lastName, email, password, roomCode) => {
-      dispatch(signUpUser(firstName, lastName, email, password, roomCode));
-    },
-  };
-};
-
-export default connect(null, mapDispatchToProps)(GenerateRoomKeyScreen);
+export default GenerateRoomKeyScreen;
