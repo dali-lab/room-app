@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet, SafeAreaView, Text, TouchableOpacity, /* TextInput, */
+  StyleSheet, SafeAreaView, Text, TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
 import { fonts, colors } from '../constants/GlobalStyles';
 import { signUpUser } from '../store/actions';
 
-const GenerateRoomKeyScreen = (props, { navigation, route }) => {
-  // const navigation = useNavigation();
-  const firstName2 = route.params;
-  // console.log(route.params.email1);
+const GenerateRoomKeyScreen = (props) => {
+  const { signup, route } = props;
+  const {
+    firstName, lastName, email, password,
+  } = route.params;
   const [roomCode, setRoomCode] = useState('');
   const generateCode = () => {
     const length = 6;
@@ -18,16 +18,12 @@ const GenerateRoomKeyScreen = (props, { navigation, route }) => {
     let result = '';
     for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
     setRoomCode(result);
-    console.log(firstName2);
   };
 
-  // find out how to get rid of hardcoded stuff
-  const firstName = 'fn';
-  const lastName = 'ln';
-  const email = 'user18@test.com';
-  const password = 'user18pw';
+  const nullStyle = () => {
+    return (!firstName || firstName === '' || !lastName || lastName === '' || !email || email === '' || !password || password === '' || !roomCode || roomCode === '');
+  };
 
-  const { signup } = props;
   const handleSignup = () => {
     if (firstName && lastName && email && password && roomCode) {
       signup(email.toLowerCase(), password, firstName, lastName, roomCode);
@@ -49,10 +45,18 @@ const GenerateRoomKeyScreen = (props, { navigation, route }) => {
         {roomCode}
       </Text>
       <TouchableOpacity
-        style={styles.loginButton}
+        style={
+          nullStyle() ? [styles.loginButton, { backgroundColor: colors.backgroundGray }] : styles.loginButton
+}
         onPress={handleSignup}
       >
-        <Text style={styles.buttonText}>Sign Up!</Text>
+        <Text style={
+          nullStyle() ? [styles.buttonText, { color: colors.backgroundGray }] : styles.buttonText
+          }
+        >
+          Sign Up!
+
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

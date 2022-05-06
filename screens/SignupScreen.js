@@ -15,6 +15,9 @@ const SignupScreen = (props) => {
   const [roomCode, setRoomCode] = useState('');
   const navigation = useNavigation();
   const { signup } = props;
+  const nullStyle = () => {
+    return (!firstName || firstName === '' || !lastName || lastName === '' || !email || email === '' || !password || password === '' || !roomCode || roomCode === '');
+  };
   const handleSignup = () => {
     if (firstName && lastName && email && password && roomCode) {
       signup(email.toLowerCase(), password, firstName, lastName, roomCode);
@@ -62,15 +65,15 @@ const SignupScreen = (props) => {
           placeholder="Enter a room key"
         />
         <TouchableOpacity
-          style={styles.loginButton}
+          style={nullStyle() ? [styles.loginButton, { backgroundColor: colors.backgroundGray }] : styles.loginButton}
           onPress={handleSignup}
         >
-          <Text style={styles.buttonText}>Sign Up!</Text>
+          <Text style={nullStyle() ? [styles.buttonText, { color: colors.backgroundGray }] : styles.buttonText}>Sign Up!</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.signupButton}
           onPress={() => navigation.navigate('GenerateRoomKey', {
-            firstName1: firstName,
+            firstName, lastName, email, password,
           })}
         >
           <Text style={styles.bottomText}>
