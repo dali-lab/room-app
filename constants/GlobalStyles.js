@@ -14,6 +14,7 @@ export const colors = {
   indigo700: '#2E2D4D',
   lightGray: '#F4F5F4',
   loginGreen: '#57805B',
+  backgroundGray: '#F2F2F2',
 };
 
 export const fonts = {

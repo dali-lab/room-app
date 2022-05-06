@@ -33,6 +33,7 @@ const LoginScreen = (props) => {
         onChangeText={(text) => setPw(text)}
         value={pw}
         placeholder="Type your password"
+        secureTextEntry
       />
       <TouchableOpacity
         style={styles.forgotPw}
