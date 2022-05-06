@@ -43,11 +43,14 @@ export const createUser = (user, roomcode) => {
   };
 };
 
-export const updateUser = (id, user, roomcode) => {
+export const updateUser = (id, user, roomcode, updateSelf = false) => {
   return async (dispatch) => {
     try {
-      await userService.updateUser(id, user);
+      const newUser = await userService.updateUser(id, user);
       const users = await userService.getAllUsers(roomcode);
+      if (updateSelf) {
+        dispatch({ type: ActionTypes.SET_USER, payload: newUser });
+      }
       dispatch({ type: ActionTypes.SET_USERS, payload: users });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
