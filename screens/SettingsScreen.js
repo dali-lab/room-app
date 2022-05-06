@@ -33,7 +33,7 @@ const SettingsScreen = (props) => {
     updateNewUser(user.id, newUser, roomCode, true);
   };
   const handleLeaveRoom = () => {
-    const newUser = {
+    const newCurrUser = {
       email: user.email,
       password: user.password,
       firstName: newFirstName,
@@ -45,7 +45,7 @@ const SettingsScreen = (props) => {
       numGuests: user.numGuests,
       roommates: [],
     };
-    updateNewUser(user.id, newUser, roomCode, true);
+    updateNewUser(user.id, newCurrUser, roomCode, true);
     user.roommates.forEach((userCurr) => {
       const newUser = {
         email: userCurr.email,
