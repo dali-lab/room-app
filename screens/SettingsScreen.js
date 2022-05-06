@@ -16,25 +16,21 @@ const SettingsScreen = (props) => {
   useEffect(() => {
     getUsers(user?.roomCode);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, []);
   const [newFirstName, setnewFirstName] = useState(user.firstName);
   const [newLastName, setnewLastName] = useState(user.lastName);
   const [newIconColor, setnewIconColor] = useState(user.iconColor);
+  const [showXDarkPurple, setshowXDarkPurple] = useState(false);
+  const [showXLightPurple, setshowXLightPurple] = useState(false);
+  const [showXYellow, setShowXYellow] = useState(false);
 
   const handleSave = () => {
     const newUser = {
-      email: user.email,
-      password: user.password,
       firstName: newFirstName,
       lastName: newLastName,
-      isHome: user.isHome,
-      roomCode: user.roomCode,
-      guestType: user.guestType,
       iconColor: newIconColor,
-      numGuests: user.numGuests,
-      roommates: user.roommates,
     };
-    updateNewUser(user.id, newUser, roomCode);
+    updateNewUser(user.id, newUser, roomCode, true);
   };
   const handleLeaveRoom = () => {
     const newUser = {
@@ -49,7 +45,7 @@ const SettingsScreen = (props) => {
       numGuests: user.numGuests,
       roommates: [],
     };
-    updateNewUser(user.id, newUser, roomCode);
+    updateNewUser(user.id, newUser, roomCode, true);
     user.roommates.forEach((userCurr) => {
       const newUser = {
         email: userCurr.email,
@@ -90,32 +86,32 @@ const SettingsScreen = (props) => {
       <View style={styles.subContainer}>
         <Text style={styles.text}>Icon Color</Text>
         <View style={styles.colorPicker}>
-          {user.iconColor === colors.indigo700
+          {showXDarkPurple
             ? (
               <TouchableOpacity style={styles.buttonDarkPurple} onPress={() => setnewIconColor(colors.indigo700)}>
                 <Text style={{ textAlign: 'center', fontSize: 30 }}>X</Text>
               </TouchableOpacity>
             )
             : (
-              <TouchableOpacity style={styles.buttonDarkPurple} onPress={() => setnewIconColor(colors.indigo700)} />
+              <TouchableOpacity style={styles.buttonDarkPurple} onPress={() => { setnewIconColor(colors.indigo700); setshowXDarkPurple(true); setShowXYellow(false); setshowXLightPurple(false); }} />
             )}
-          {user.iconColor === '#FFFF00'
+          {showXYellow
             ? (
               <TouchableOpacity style={styles.buttonYellow} onPress={() => setnewIconColor('#FFFF00')}>
                 <Text style={{ textAlign: 'center', fontSize: 30 }}>X</Text>
               </TouchableOpacity>
             )
             : (
-              <TouchableOpacity style={styles.buttonYellow} onPress={() => setnewIconColor('#FFFF00')} />
+              <TouchableOpacity style={styles.buttonYellow} onPress={() => { setnewIconColor('#FFFF00'); setshowXDarkPurple(false); setShowXYellow(true); setshowXLightPurple(false); }} />
             )}
-          {user.iconColor === colors.indigo300
+          {showXLightPurple
             ? (
               <TouchableOpacity style={styles.buttonLightPurple} onPress={() => setnewIconColor(colors.indigo300)}>
                 <Text style={{ textAlign: 'center', fontSize: 30 }}>X</Text>
               </TouchableOpacity>
             )
             : (
-              <TouchableOpacity style={styles.buttonLightPurple} onPress={() => setnewIconColor(colors.indigo300)} />
+              <TouchableOpacity style={styles.buttonLightPurple} onPress={() => { setnewIconColor(colors.indigo300); setshowXDarkPurple(false); setShowXYellow(false); setshowXLightPurple(true); }} />
             )}
         </View>
 
@@ -198,8 +194,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateNewUser: (id, user, roomcode) => {
-      dispatch(updateUser(id, user, roomcode));
+    updateNewUser: (id, user, roomcode, updateSelf) => {
+      dispatch(updateUser(id, user, roomcode, updateSelf));
     },
     getUsers: (roomcode) => {
       dispatch(getAllUsers(roomcode));
