@@ -66,26 +66,6 @@ const SettingsScreen = (props) => {
       updateNewUser(userCurr.id, newUser, roomCode);
     });
   };
-  const handleDeleteRoom = () => {
-    // dont allow if user still has roommates or others have same roomcode
-    if (user.roommates.length === 0) {
-      const newUser = {
-        email: user.email,
-        password: user.password,
-        firstName: newFirstName,
-        lastName: newLastName,
-        isHome: user.isHome,
-        roomCode: '',
-        guestType: user.guestType,
-        iconColor: newIconColor,
-        numGuests: user.numGuests,
-        roommates: user.roommates,
-      };
-      updateNewUser(user.id, newUser, roomCode);
-    } else {
-      console.log('action not allowed since other roommates use this code');
-    }
-  };
   return (
     <SafeAreaView>
       <View style={styles.subContainer}>
@@ -143,11 +123,6 @@ const SettingsScreen = (props) => {
       <View style={styles.subContainer}>
         <TouchableOpacity style={styles.modalButton} onPress={handleLeaveRoom}>
           <Text style={{ color: '#FFFFFF', fontSize: fonts.largeText }}>Leave Room</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.subContainer}>
-        <TouchableOpacity style={styles.modalButton} onPress={handleDeleteRoom}>
-          <Text style={{ color: '#FFFFFF', fontSize: fonts.largeText }}>Delete Room</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.subContainer}>
