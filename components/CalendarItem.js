@@ -1,18 +1,85 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Switch,
+  StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Switch, Platform,
 } from 'react-native';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import { updateCalendarEvent, deleteCalendarEvent } from '../store/actions/calendarEvent';
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+// Can use this function below, OR use Expo's Push Notification Tool-> https://expo.dev/notifications
+async function sendPushNotification(expoPushToken) {
+  const message = {
+    to: expoPushToken,
+    sound: 'default',
+    title: 'Original Title',
+    body: 'And here is the body!',
+    data: { someData: 'goes here' },
+  };
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+const registerForPushNotificationsAsync = async () => {
+  let token;
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      // alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  }
+  // } else {
+  //   alert('Must use physical device for Push Notifications');
+  // }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+  return token;
+};
+
 const CalendarItem = (props) => {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
   const [showLetsTalkModal, setshowLetsTalkModal] = useState(false);
   const [showEditModal, setshowEditModal] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
@@ -69,6 +136,27 @@ const CalendarItem = (props) => {
     setnewEndTime(date);
     hideEndTimePicker();
   };
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => (setExpoPushToken(token))).catch(() => {
+      console.log('Promise Rejected');
+    });
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   const LeftActions = () => {
     return (
@@ -144,6 +232,28 @@ const CalendarItem = (props) => {
               </TouchableOpacity>
               <TouchableOpacity style={styles.letsTalkButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
                 <Text>Let's Talk</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.letsTalkButton}
+                onPress={async () => {
+                  await sendPushNotification(expoPushToken);
+                }}
+              >
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <Text>
+                    Title:
+                    {notification && notification.request.content.title}
+                  </Text>
+                  <Text>
+                    Body:
+                    {notification && notification.request.content.body}
+                  </Text>
+                  <Text>
+                    Data:
+                    {notification && JSON.stringify(notification.request.content.data)}
+                  </Text>
+                </View>
+                <Text>"Press to Send Notification"</Text>
               </TouchableOpacity>
             </View>
             )}
