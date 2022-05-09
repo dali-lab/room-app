@@ -19,9 +19,9 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
     getUsers(user.roomCode);
-    getCalendarEvents(users.map(({ id }) => id));
+    getCalendarEvents(users?.map(({ id }) => id));
     getRequests(user.id);
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [users]); // eslint-disable-line react-hooks/exhaustive-deps
   // Fetch all calendarEvents when the component first loads
 
   return (
