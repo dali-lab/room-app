@@ -42,7 +42,7 @@ export const createRequest = async (request) => {
   console.log('create request services');
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(`${URL}`, request, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.post(`${URL}`, request, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);

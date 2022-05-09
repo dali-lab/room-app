@@ -47,8 +47,6 @@ const RequestScreen = (props) => {
       description: requestDescription, author: user, anonymous: isAnonymous, recipients: value, end: endTime, upvotes: 0, downvotes: 0,
     };
     setShowModal(!showModal);
-    console.log('about to create request');
-    console.log(newRequest);
     createUserRequest(newRequest);
   };
 
