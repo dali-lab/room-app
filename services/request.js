@@ -4,10 +4,10 @@ import { API_URL } from '../constants';
 
 const URL = `${API_URL}/requests`;
 
-export const getAllRequests = async () => {
+export const getAllRequests = async (userId) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(URL, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.get(`${URL}?userId=${userId}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);

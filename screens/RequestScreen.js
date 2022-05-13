@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import RequestItem from '../components/RequestItem';
-import { getForUser } from '../store/actions';
+import { getAllRequests } from '../store/actions';
 import { fonts, colors } from '../constants/GlobalStyles';
 import NewRequestModal from '../components/NewRequestModal';
 
@@ -100,7 +100,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getRequests: (userID) => {
-      dispatch(getForUser(userID));
+      dispatch(getAllRequests(userID));
     },
   };
 };
