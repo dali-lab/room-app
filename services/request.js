@@ -15,18 +15,6 @@ export const getAllRequests = async (userId) => {
   }
 };
 
-// get all requests for user
-export const getForUser = async (userID) => {
-  try {
-    const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(`${URL}/${userID}`, { headers: { Authorization: `Bearer ${token}` } });
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw new Error(error);
-  }
-};
-
 export const getRequest = async (userID, id) => {
   try {
     const token = await AsyncStorage.getItem('authToken');

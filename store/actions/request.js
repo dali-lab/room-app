@@ -7,7 +7,6 @@ export const ActionTypes = {
 };
 
 export const getAllRequests = (userId) => {
-  console.log('made it to function');
   return async (dispatch) => {
     try {
       const requests = await requestService.getAllRequests(userId);
@@ -18,17 +17,6 @@ export const getAllRequests = (userId) => {
     }
   };
 };
-
-// export const getForUser = (userID) => {
-//   return async (dispatch) => {
-//     try {
-//       const requests = await requestService.getForUser(userID);
-//       dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
-//     } catch (error) {
-//       dispatch({ type: ActionTypes.API_ERROR, payload: error });
-//     }
-//   };
-// };
 
 export const getRequest = (id) => {
   return async (dispatch) => {
