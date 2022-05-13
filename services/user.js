@@ -87,10 +87,10 @@ export const signUpUser = async (email, password, firstName, lastName, roomCode)
  * @param {String} email email
  */
 export const resetPassword = async (email) => {
-  const url = `${global.API_URL}/reset-password/${email}`;
-  console.log('services1');
+  const url = `${URL}/reset-password`;
+  // const token = await AsyncStorage.getItem('authToken');
 
-  const { data: { data } } = await axios.put(url);
-  console.log('services2');
+  const { data } = await axios.put(url, { email });
+
   return data[0];
 };

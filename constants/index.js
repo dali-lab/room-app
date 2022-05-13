@@ -4,7 +4,7 @@ const SERVER_ENDPOINTS = {
   LOCAL: 'https://localhost:9090',
 };
 
-const API_URL = SERVER_ENDPOINTS.LOCAL;
+const API_URL = SERVER_ENDPOINTS.PROD;
 
 export {
   API_URL,
