@@ -3,8 +3,6 @@ import {
   StyleSheet, SafeAreaView, Text, TouchableOpacity, TextInput,
 } from 'react-native';
 import { connect } from 'react-redux';
-
-// import { connect } from 'react-redux';
 import { fonts, colors } from '../constants/GlobalStyles';
 import {
   resetPassword,
