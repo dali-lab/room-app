@@ -4,22 +4,10 @@ import { API_URL } from '../constants';
 
 const URL = `${API_URL}/requests`;
 
-export const getAllRequests = async () => {
+export const getAllRequests = async (userId) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(URL, { headers: { Authorization: `Bearer ${token}` } });
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw new Error(error);
-  }
-};
-
-// get all requests for user
-export const getForUser = async (userID) => {
-  try {
-    const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(`${URL}/${userID}`, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.get(`${URL}?userId=${userId}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -41,7 +29,7 @@ export const getRequest = async (userID, id) => {
 export const createRequest = async (request) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(`${URL}`, request, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.post(`${URL}`, request, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);

@@ -1,7 +1,6 @@
 import {
   ActionTypes as requestActionTypes,
   getAllRequests,
-  getForUser,
   getRequest,
   createRequest,
   updateRequest,
@@ -39,7 +38,6 @@ const ActionTypes = {
 export {
   ActionTypes,
   getAllRequests,
-  getForUser,
   getRequest,
   createRequest,
   updateRequest,
