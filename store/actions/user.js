@@ -122,3 +122,17 @@ export const signOutUser = () => {
     }
   };
 };
+
+/**
+ * @description action creator for resetting user password
+ * @param {String} email email of user to reset password of and send new pass to
+ */
+export const resetPassword = (email) => async (dispatch) => {
+  try {
+    console.log('actions1');
+    await userService.resetPassword(email);
+    console.log('actions2');
+  } catch (error) {
+    dispatch({ type: ActionTypes.API_ERROR, payload: error });
+  }
+};

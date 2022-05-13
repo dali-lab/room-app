@@ -81,3 +81,16 @@ export const signUpUser = async (email, password, firstName, lastName, roomCode)
     throw new Error(error);
   }
 };
+
+/**
+ * @description resets admin password with the specified email
+ * @param {String} email email
+ */
+export const resetPassword = async (email) => {
+  const url = `${URL}/reset-password`;
+  // const token = await AsyncStorage.getItem('authToken');
+
+  const { data } = await axios.put(url, { email });
+
+  return data[0];
+};
