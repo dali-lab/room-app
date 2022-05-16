@@ -11,6 +11,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import { updateCalendarEvent, deleteCalendarEvent } from '../store/actions/calendarEvent';
+import UserIcon from './UserIcon';
 
 const CalendarItem = (props) => {
   const [showLetsTalkModal, setshowLetsTalkModal] = useState(false);
@@ -114,12 +115,12 @@ const CalendarItem = (props) => {
           <View>
             <Swipeable renderLeftActions={LeftActions}>
               <View style={styles.eventContainer}>
-                <Text style={styles.icon}>{`${author} icon`}</Text>
+                <UserIcon key={author.id} user={author} size={54}> </UserIcon>
                 <View style={styles.description}>
                   <Text style={styles.title}>{title}</Text>
                   <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
                 </View>
-                <Text style={styles.text}># of Likes</Text>
+                <Text style={styles.text}>{approvals}</Text>
               </View>
             </Swipeable>
           </View>
@@ -127,12 +128,14 @@ const CalendarItem = (props) => {
         : (
           <View>
             <View style={styles.eventContainer}>
-              <Text style={styles.icon}>{`${author} icon`}</Text>
+              <View style={styles.icon}>
+                <UserIcon key={author.id} user={author} size={54} style={styles.icon}> </UserIcon>
+              </View>
               <View style={styles.description}>
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
               </View>
-              <Text style={styles.text}># of Likes</Text>
+              <Text style={styles.text}>{`${approvals.length} #`}</Text>
             </View>
             { showButtons
             && (
@@ -296,6 +299,7 @@ const styles = StyleSheet.create({
     height: 80,
     marginTop: 20,
     marginLeft: 20,
+    marginBottom: 20,
     justifyContent: 'center',
   },
   swipeContainer: {
@@ -369,10 +373,7 @@ const styles = StyleSheet.create({
     color: colors.darkSageGreen,
   },
   icon: {
-    fontSize: 10,
-    fontWeight: '300',
     marginLeft: 20,
-    width: dimensions.screenWidth * 0.1,
   },
   approveButton: {
     backgroundColor: '#52BE64',
