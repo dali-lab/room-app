@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet, Text, SafeAreaView, TouchableOpacity, ScrollView, View,
+  StyleSheet, Text, SafeAreaView, TouchableOpacity, ScrollView, View, Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import RequestItem from '../components/RequestItem';
@@ -14,35 +14,63 @@ const RequestScreen = (props) => {
     requests, getRequests, user,
   } = props;
 
+  const dummy = [];
+
   // Fetch all requests when the component first loads
   useEffect(() => {
     getRequests(user.id);
   }, [requests, user]);
 
   const [showModal, setShowModal] = useState(false);
+  if (dummy.length === 0) {
+    // if (calendarEvents.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={styles.title}>Requests</Text>
-        <TouchableOpacity
-          style={styles.newEvent}
-          onPress={() => setShowModal(!showModal)}
+        <View style={{
+          flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', paddingTop: 130,
+        }}
         >
-          <Text style={styles.plus}>+</Text>
-        </TouchableOpacity>
-      </View>
+          <Image
+            source={require('../assets/request.png')}
+          />
+          <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
 
-      <Text style={styles.subtitle}>Swipe left on a request to edit or right delete it</Text>
+          <Text style={styles.empty_title}>No Upcoming Events!</Text>
+          <Text style={styles.empty_subtitle}>Click the plus button to create a new event</Text>
+          <TouchableOpacity style={styles.empty_addButton} onPress={() => setShowModal(!showModal)}>
+            <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
 
-      <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
-      <ScrollView>
-        {requests?.map(({ author, description, completed }) => {
-          return <RequestItem key={description} author={author} description={description} completed={completed} />;
-        })}
-      </ScrollView>
-    </SafeAreaView>
-  );
+          </TouchableOpacity>
+
+        </View>
+      </SafeAreaView>
+
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.title}>Requests</Text>
+          <TouchableOpacity
+            style={styles.newEvent}
+            onPress={() => setShowModal(!showModal)}
+          >
+            <Text style={styles.plus}>+</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.subtitle}>Swipe left on a request to edit or right delete it</Text>
+
+        <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
+        <ScrollView>
+          {requests?.map(({ author, description, completed }) => {
+            return <RequestItem key={description} author={author} description={description} completed={completed} />;
+          })}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -58,6 +86,31 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     color: colors.darkSageGreen,
     marginTop: 13,
+  },
+  empty_title: {
+    fontSize: fonts.large24,
+    textAlign: 'center',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  empty_subtitle: {
+    fontSize: fonts.smallText,
+    textAlign: 'center',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginBottom: 3,
+  },
+  empty_addButton: {
+    backgroundColor: colors.darkSageGreen,
+    borderRadius: 20,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
   },
   title: {
     fontSize: fonts.large24,

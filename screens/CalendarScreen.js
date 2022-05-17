@@ -1,212 +1,71 @@
 import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet, ScrollView, SafeAreaView, Text, View, TouchableOpacity, Modal, TextInput, Switch,
+  StyleSheet, ScrollView, SafeAreaView, Text, View, TouchableOpacity, Image,
 } from 'react-native';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import CalendarItem from '../components/CalendarItem';
 import { getAllCalendarEvents, createCalendarEvent } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
+import CalendarModal from '../components/CalendarModal';
 
 const CalendarScreen = (props) => {
   const {
-    getCalendarEvents, calendarEvents, users, createEvent, user,
+    getCalendarEvents, calendarEvents, users,
   } = props;
 
   const [showNewModal, setshowNewModal] = useState(false);
-  const [newTitle, setnewTitle] = useState('');
-  const [newStartDate, setnewStartDate] = useState(new Date());
-  const [newEndDate, setnewEndDate] = useState(new Date());
-  const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-  const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
-  const [newStartTime, setnewStartTime] = useState(new Date());
-  const [newEndTime, setnewEndTime] = useState(new Date());
-  const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
-  const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
-  const [switchOn, setSwitchOn] = useState(false);
 
-  const showStartDatePicker = () => {
-    setStartDatePickerVisibility(true);
-  };
-  const hideStartDatePicker = () => {
-    setStartDatePickerVisibility(false);
-  };
-  const showEndDatePicker = () => {
-    setEndDatePickerVisibility(true);
-  };
-  const hideEndDatePicker = () => {
-    setEndDatePickerVisibility(false);
-  };
-  const showStartTimePicker = () => {
-    setStartTimePickerVisibility(true);
-  };
-  const hideStartTimePicker = () => {
-    setStartTimePickerVisibility(false);
-  };
-  const showEndTimePicker = () => {
-    setEndTimePickerVisibility(true);
-  };
-  const hideEndTimePicker = () => {
-    setEndTimePickerVisibility(false);
-  };
-  const handleConfirmStart = (date) => {
-    setnewStartDate(date);
-    hideStartDatePicker();
-  };
-  const handleConfirmEnd = (date) => {
-    setnewEndDate(date);
-    hideEndDatePicker();
-  };
-  const handleConfirmStartTime = (date) => {
-    setnewStartTime(date);
-    hideStartTimePicker();
-  };
-  const handleConfirmEndTime = (date) => {
-    setnewEndTime(date);
-    hideEndTimePicker();
-  };
-
-  const handleSave = () => {
-    setshowNewModal(!showNewModal);
-    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth())}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
-    const start = moment(startDateTime, 'YYYY-MM-DD-hh-mm');
-    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
-    const end = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
-    const newEvent = {
-      title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn, approvals: [],
-    };
-    createEvent(newEvent, users.map(({ id }) => id));
-  };
-
+  // const dummy = [];
   // Fetch all calendarEvents when the component first loads
   useEffect(() => {
     getCalendarEvents(users.map(({ id }) => id));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // if (dummy.length === 0) {
+  if (calendarEvents.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={styles.title}>Upcoming Events</Text>
-        <TouchableOpacity style={styles.addButton} onPress={() => setshowNewModal(!showNewModal)}>
-          <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
-      <ScrollView>
-        {calendarEvents?.map(({
-          id, title, start, end, author, approvals, allDay,
-        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />)}
-
-      </ScrollView>
-      <Modal
-        animationType="fade"
-        visible={showNewModal}
-        transparent
-        onRequestClose={() => {
-          console.log('Modal has been closed.');
+        <View style={{
+          flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', paddingTop: 175,
         }}
-      >
-        <View style={styles.swipeModalContainer}>
-          <TouchableOpacity style={styles.exitButton} onPress={() => setshowNewModal(!showNewModal)}>
-            <Text style={styles.text}>X</Text>
+        >
+          <Image
+            source={require('../assets/calendar.png')}
+          />
+          <CalendarModal showNewModal={showNewModal} setshowNewModal={setshowNewModal} />
+
+          <Text style={styles.empty_title}>No Upcoming Events!</Text>
+          <Text style={styles.empty_subtitle}>Click the plus button to create a new event</Text>
+          <TouchableOpacity style={styles.addButton} onPress={() => setshowNewModal(!showNewModal)}>
+            <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
+
           </TouchableOpacity>
 
-          <Text style={styles.icon}>INSERT CALENDAR LOGO INSERT CALENDAR LOGO INSERT CALENDAR LOGO</Text>
-          <View style={styles.description}>
-            <Text style={styles.title}>NEW EVENT</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>Title</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputTitle}
-                onChangeText={(text) => setnewTitle(text)}
-                value={newTitle}
-              />
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>All-Day</Text>
-            <View style={styles.inputContainer}>
-              <Switch value={switchOn}
-                onValueChange={() => {
-                  setSwitchOn(!switchOn);
-                }}
-              />
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>Start</Text>
-            <View style={styles.inputContainer}>
-              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartDatePicker}>
-                <Text style={styles.text}>{`${moment(newStartDate).format('MMM DD')}`}</Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={isStartDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirmStart}
-                onCancel={hideStartDatePicker}
-              />
-              {!switchOn
-                ? (
-                  <View>
-                    <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
-                      <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
-                    </TouchableOpacity>
-                    <DateTimePickerModal
-                      isVisible={isStartTimePickerVisible}
-                      mode="time"
-                      onConfirm={handleConfirmStartTime}
-                      onCancel={hideStartTimePicker}
-                    />
-                  </View>
-                )
-                : (
-                  null
-                )}
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>End</Text>
-            <View style={styles.inputContainer}>
-              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndDatePicker}>
-                <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={isEndDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirmEnd}
-                onCancel={hideEndDatePicker}
-              />
-              {!switchOn
-                ? (
-                  <View>
-                    <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndTimePicker}>
-                      <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
-                    </TouchableOpacity>
-                    <DateTimePickerModal
-                      isVisible={isEndTimePickerVisible}
-                      mode="time"
-                      onConfirm={handleConfirmEndTime}
-                      onCancel={hideEndTimePicker}
-                    />
-                  </View>
-                )
-                : (
-                  null
-                )}
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.modalButton} onPress={handleSave}>
-              <Text style={{ color: '#FFFFFF' }}>Save</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </Modal>
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.title}>Upcoming Events</Text>
+          <TouchableOpacity style={styles.addButton} onPress={() => setshowNewModal(!showNewModal)}>
+            <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
+        <ScrollView>
+          {calendarEvents?.map(({
+            id, title, start, end, author, approvals, allDay,
+          }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />)}
+
+        </ScrollView>
+        <CalendarModal showNewModal={showNewModal} setshowNewModal={setshowNewModal} />
+      </SafeAreaView>
+
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -228,6 +87,31 @@ const styles = StyleSheet.create({
     color: colors.darkSageGreen,
     marginLeft: 20,
     marginBottom: 3,
+  },
+  empty_title: {
+    fontSize: fonts.large24,
+    textAlign: 'center',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  empty_subtitle: {
+    fontSize: fonts.smallText,
+    textAlign: 'center',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginBottom: 3,
+  },
+  empty_addButton: {
+    backgroundColor: colors.darkSageGreen,
+    borderRadius: 20,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
   },
   text: {
     fontSize: fonts.largeText,

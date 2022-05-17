@@ -8,6 +8,8 @@ const URL = `${API_URL}/events`;
 
 export const createCalendarEvent = async (calendarEvent) => {
   try {
+    console.log('services');
+
     const { data } = await axios.post(`${URL}`, calendarEvent);
     return data;
   } catch (error) {
