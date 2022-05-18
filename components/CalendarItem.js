@@ -1,11 +1,13 @@
+/* eslint-disable global-require */
 /* eslint-disable no-shadow */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import {
+  Image,
   StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Switch,
 } from 'react-native';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -135,7 +137,8 @@ const CalendarItem = (props) => {
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
               </View>
-              <Text style={styles.text}>{`${approvals.length} #`}</Text>
+              <Text style={styles.text}>{`${approvals.length}`}</Text>
+              <Image style={{ height: 35, width: 35 }} source={require('../assets/check-mark.png')} />
             </View>
             { showButtons
             && (
@@ -312,6 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundSageGreen,
     alignItems: 'center',
     flexDirection: 'row',
+    justifyContent: 'space-around',
     borderColor: colors.darkSageGreen,
     borderLeftWidth: 5,
   },
