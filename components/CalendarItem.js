@@ -95,8 +95,8 @@ const CalendarItem = (props) => {
       allDay,
       author,
     };
+    console.log(newEvent);
     updateEvent(id, newEvent, users.map(({ id }) => id));
-    console.log(approvals);
   };
 
   const handleSave = () => {
@@ -199,7 +199,7 @@ const CalendarItem = (props) => {
             <Text style={styles.text}>X</Text>
           </TouchableOpacity>
 
-          <Text style={styles.icon}>INSERT CALENDAR LOGO INSERT CALENDAR LOGO INSERT CALENDAR LOGO</Text>
+          <Image style={{ height: 35, width: 35 }} source={require('../assets/calendar-modal.png')} />
           <View style={styles.description}>
             <Text style={styles.title}>EDIT EVENT</Text>
           </View>

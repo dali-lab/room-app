@@ -1,6 +1,7 @@
+/* eslint-disable global-require */
 import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet, ScrollView, SafeAreaView, Text, View, TouchableOpacity, Modal, TextInput, Switch,
+  StyleSheet, ScrollView, SafeAreaView, Text, View, TouchableOpacity, Modal, TextInput, Switch, Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -25,6 +26,7 @@ const CalendarScreen = (props) => {
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
+  const [currentDates, setcurrentDates] = useState(['04-23']);
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -96,8 +98,18 @@ const CalendarScreen = (props) => {
       <ScrollView>
         {calendarEvents?.map(({
           id, title, start, end, author, approvals, allDay,
-        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />)}
-
+        }) => (
+          currentDates.includes(moment(start).format('MM-DD'))
+            ? (
+              <CalendarItem key={id} id={id} title="need date" start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
+            )
+            : (
+              <View>
+                <Text style={styles.subtitle}>{moment(start).format('MM-DD')}</Text>
+                <CalendarItem key={id} id={id} title="need date" start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
+              </View>
+            )
+        ))}
       </ScrollView>
       <Modal
         animationType="fade"
@@ -112,7 +124,7 @@ const CalendarScreen = (props) => {
             <Text style={styles.text}>X</Text>
           </TouchableOpacity>
 
-          <Text style={styles.icon}>INSERT CALENDAR LOGO INSERT CALENDAR LOGO INSERT CALENDAR LOGO</Text>
+          <Image style={{ height: 125, width: 125 }} source={require('../assets/calendar-modal.png')} />
           <View style={styles.description}>
             <Text style={styles.title}>NEW EVENT</Text>
           </View>
