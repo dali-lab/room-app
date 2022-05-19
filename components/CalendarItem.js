@@ -96,6 +96,7 @@ const CalendarItem = (props) => {
       author,
     };
     updateEvent(id, newEvent, users.map(({ id }) => id));
+    console.log(approvals);
   };
 
   const handleSave = () => {
@@ -105,7 +106,7 @@ const CalendarItem = (props) => {
     const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
     const end = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
     const newEvent = {
-      title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn, approvals,
+      title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn,
     };
     updateEvent(id, newEvent, users.map(({ id }) => id));
   };
@@ -140,7 +141,7 @@ const CalendarItem = (props) => {
               <Text style={styles.text}>{`${approvals.length}`}</Text>
               <Image style={{ height: 35, width: 35 }} source={require('../assets/check-mark.png')} />
             </View>
-            { showButtons
+            { showButtons && !approvals.includes(user)
             && (
             <View style={styles.approveContainer}>
               <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
