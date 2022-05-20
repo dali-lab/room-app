@@ -95,7 +95,6 @@ const CalendarItem = (props) => {
       allDay,
       author,
     };
-    console.log(newEvent);
     updateEvent(id, newEvent, users.map(({ id }) => id));
   };
 

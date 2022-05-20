@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable global-require */
 import React, { useEffect, useState } from 'react';
 import {
@@ -26,7 +27,7 @@ const CalendarScreen = (props) => {
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
-  const [currentDates, setcurrentDates] = useState(['04-23']);
+  const [currentDates, setcurrentDates] = useState([]);
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -84,30 +85,32 @@ const CalendarScreen = (props) => {
   // Fetch all calendarEvents when the component first loads
   useEffect(() => {
     getCalendarEvents(users.map(({ id }) => id));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Upcoming Events</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={styles.title}>Upcoming Events</Text>
+        <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
         <TouchableOpacity style={styles.addButton} onPress={() => setshowNewModal(!showNewModal)}>
           <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
       <ScrollView>
         {calendarEvents?.map(({
           id, title, start, end, author, approvals, allDay,
         }) => (
           currentDates.includes(moment(start).format('MM-DD'))
             ? (
-              <CalendarItem key={id} id={id} title="need date" start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
+              <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
             )
             : (
-              <View>
-                <Text style={styles.subtitle}>{moment(start).format('MM-DD')}</Text>
-                <CalendarItem key={id} id={id} title="need date" start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
-              </View>
+              // this isn't working :(
+              () => setcurrentDates((currentDates) => [...currentDates, moment(start).format('MM-DD')]),
+                <View key={id}>
+                  <Text style={styles.subtitle}>{moment(start).format('dddd, MMMM Do')}</Text>
+                  <CalendarItem id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
+                </View>
             )
         ))}
       </ScrollView>
