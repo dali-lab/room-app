@@ -14,16 +14,13 @@ const RequestScreen = (props) => {
     requests, getRequests, user,
   } = props;
 
-  const dummy = [];
-
   // Fetch all requests when the component first loads
   useEffect(() => {
     getRequests(user.id);
   }, [requests, user]);
 
   const [showModal, setShowModal] = useState(false);
-  if (dummy.length === 0) {
-    // if (calendarEvents.length === 0) {
+  if (requests.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
 

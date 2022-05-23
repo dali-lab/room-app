@@ -15,12 +15,10 @@ const CalendarScreen = (props) => {
 
   const [showNewModal, setshowNewModal] = useState(false);
 
-  // const dummy = [];
   // Fetch all calendarEvents when the component first loads
   useEffect(() => {
     getCalendarEvents(users.map(({ id }) => id));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  // if (dummy.length === 0) {
   if (calendarEvents.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
