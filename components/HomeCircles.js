@@ -12,11 +12,11 @@ const HomeCircles = (props) => {
   const { users, user, updateUsers } = props;
 
   const awayCircleClick = () => {
-    updateUsers(user.id, { isHome: 'false' }, user.roomCode);
+    updateUsers(user.id, { isHome: 'false' }, user.roomCode, true);
   };
 
   const homeCircleClick = () => {
-    updateUsers(user.id, { isHome: 'true' }, user.roomCode);
+    updateUsers(user.id, { isHome: 'true' }, user.roomCode, true);
   };
 
   const [showHomeModal, setshowHomeModal] = useState(false);
@@ -162,8 +162,8 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     // added
-    updateUsers: (id, user, roomcode) => {
-      dispatch(updateUser(id, user, roomcode));
+    updateUsers: (id, user, roomcode, updateSelf) => {
+      dispatch(updateUser(id, user, roomcode, updateSelf));
     },
   };
 };

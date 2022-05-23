@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import {
   getAllUsers, signOutUser, getAllCalendarEvents,
-  getForUser,
+  getAllRequests,
 } from '../store/actions';
 import { fonts } from '../constants/GlobalStyles';
 import HomeCircles from '../components/HomeCircles';
@@ -35,8 +35,8 @@ const HomeScreen = (props) => {
       <Text style={styles.title}>Notifications</Text>
       <ScrollView>
         {calendarEvents?.map(({
-          id, title, start, end, author, approvals,
-        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} showButtons={false} />)}
+          id, title, start, end, author, approvals, allDay,
+        }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons={false} />)}
         {requests?.map(({ author, description, completed }) => {
           return <RequestItem key={description} author={author} description={description} completed={completed} />;
         })}
@@ -86,7 +86,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(getAllCalendarEvents(users));
     },
     getRequests: (userID) => {
-      dispatch(getForUser(userID));
+      dispatch(getAllRequests(userID));
     },
   };
 };

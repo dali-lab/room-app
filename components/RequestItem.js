@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity,
+  StyleSheet, View, Text, TouchableOpacity, Modal, Button,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 
 const LeftActions = () => {
   return (
-    <View style={styles.swipeContainer}>
-      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed edit button')}>
-        <Text style={styles.swipeItemText}>Edit</Text>
-      </TouchableOpacity>
+    <View>
+      <View style={styles.swipeContainer}>
+        <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
+          <Text style={styles.swipeItemText}>Edit</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -28,18 +30,45 @@ const RightActions = () => {
 const RequestItem = ({
   description, user, completed,
 }) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
-    <View style={styles.container}>
-      <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
-        <View style={styles.authorCircle}>
-          <Text style={styles.authorText}>{user}</Text>
-        </View>
-        <Text style={styles.description}>{description}</Text>
-        <View style={styles.completed}>
-          <View style={styles.checkbox} />
-          <Text style={styles.text}>Completed</Text>
-        </View>
-      </Swipeable>
+    <View>
+      <View style={styles.container}>
+        <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
+          <View style={styles.authorCircle}>
+            <Text style={styles.authorText}>{user}</Text>
+          </View>
+          <Text style={styles.description}>{description}</Text>
+          <View style={styles.completed}>
+            <View style={styles.checkbox} />
+            <Text style={styles.text}>Completed</Text>
+          </View>
+          <View>
+            <Button
+              onPress={() => setShowModal(!showModal)}
+              title="edit temp"
+            />
+            <Modal
+              visible={showModal}
+              transparent
+              onRequestClose={() => {
+                console.log('Modal has been closed.');
+              }}
+            >
+              <View style={styles.modalContainer}>
+                <Text>Edit Modal</Text>
+                <Button
+                  onPress={() => setShowModal(!showModal)}
+                  title="back"
+                />
+              </View>
+            </Modal>
+          </View>
+        </Swipeable>
+
+      </View>
+
     </View>
   );
 };
@@ -113,6 +142,22 @@ const styles = StyleSheet.create({
   authorText: {
     fontSize: fonts.large24,
     color: colors.indigo700,
+  },
+  modalContainer: {
+    backgroundColor: colors.backgroundSageGreen,
+    width: dimensions.screenWidth * 0.8,
+    height: 140,
+    marginTop: dimensions.screenHeight * 0.3,
+    margin: dimensions.screenWidth * 0.1,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowRadius: 60,
+    shadowOpacity: 0.2,
   },
 });
 
