@@ -6,25 +6,13 @@ export const ActionTypes = {
   API_ERROR: 'API_ERROR',
 };
 
-export const getAllRequests = () => {
-  console.log('made it to function');
+export const getAllRequests = (userId) => {
   return async (dispatch) => {
     try {
-      const requests = await requestService.getAllRequests();
+      const requests = await requestService.getAllRequests(userId);
       dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
     } catch (error) {
       console.log(error);
-      dispatch({ type: ActionTypes.API_ERROR, payload: error });
-    }
-  };
-};
-
-export const getForUser = (userID) => {
-  return async (dispatch) => {
-    try {
-      const requests = await requestService.getForUser(userID);
-      dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
-    } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }
   };

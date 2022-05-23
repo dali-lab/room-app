@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import {
   getAllUsers, signOutUser, getAllCalendarEvents,
-  getForUser,
+  getAllRequests,
 } from '../store/actions';
 import { fonts } from '../constants/GlobalStyles';
 import HomeCircles from '../components/HomeCircles';
@@ -86,7 +86,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(getAllCalendarEvents(users));
     },
     getRequests: (userID) => {
-      dispatch(getForUser(userID));
+      dispatch(getAllRequests(userID));
     },
   };
 };

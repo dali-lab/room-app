@@ -1,31 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet, Text, SafeAreaView, TouchableOpacity, ScrollView,
+  StyleSheet, Text, SafeAreaView, TouchableOpacity, ScrollView, View,
 } from 'react-native';
 import { connect } from 'react-redux';
 import RequestItem from '../components/RequestItem';
-import { getForUser } from '../store/actions';
+import { getAllRequests } from '../store/actions';
 import { fonts, colors } from '../constants/GlobalStyles';
+import NewRequestModal from '../components/NewRequestModal';
 
 const RequestScreen = (props) => {
-  const { requests, getRequests, user } = props;
+  const {
+    requests, getRequests, user,
+  } = props;
 
   // Fetch all requests when the component first loads
   useEffect(() => {
     getRequests(user.id);
-  }, []);
+  }, [requests, user]);
+
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Requests</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={styles.title}>Requests</Text>
+        <TouchableOpacity
+          style={styles.newEvent}
+          onPress={() => setShowModal(!showModal)}
+        >
+          <Text style={styles.plus}>+</Text>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.subtitle}>Swipe left on a request to edit or right delete it</Text>
-      <TouchableOpacity
-        style={styles.newEvent}
-        onPress={() => console.log('create new event')}
-      >
-        <Text style={styles.plus}>+</Text>
-      </TouchableOpacity>
+
+      <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
       <ScrollView>
         {requests?.map(({ author, description, completed }) => {
           return <RequestItem key={description} author={author} description={description} completed={completed} />;
@@ -44,6 +54,11 @@ const styles = StyleSheet.create({
     fontSize: fonts.largeText,
     textAlign: 'center',
   },
+  text1: {
+    fontSize: fonts.smallText,
+    color: colors.darkSageGreen,
+    marginTop: 13,
+  },
   title: {
     fontSize: fonts.large24,
     textAlign: 'left',
@@ -58,22 +73,20 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: colors.indigo700,
     marginLeft: 20,
-    marginBottom: -15,
   },
   newEvent: {
+    backgroundColor: colors.indigo700,
+    borderRadius: 20,
     width: 50,
     height: 50,
-    borderRadius: 50 / 2,
-    backgroundColor: colors.indigo700,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'flex-end',
-    marginRight: 20,
-    marginBottom: 5,
+    margin: 10,
+
   },
   plus: {
     color: colors.backgroundSageGreen,
-    fontSize: 50,
+    fontSize: 40,
   },
 });
 
@@ -87,7 +100,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getRequests: (userID) => {
-      dispatch(getForUser(userID));
+      dispatch(getAllRequests(userID));
     },
   };
 };
