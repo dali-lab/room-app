@@ -77,9 +77,11 @@ const CalendarItem = (props) => {
     return (
       <View style={styles.swipeContainer}>
         <TouchableOpacity style={styles.swipeItem} onPress={() => setshowEditModal(!showEditModal)}>
+          <Image style={{ height: 25, width: 25, marginBottom: 10 }} source={require('../assets/edit.png')} />
           <Text style={styles.swipeItemText}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.swipeItem} onPress={() => deleteEvent(id, users.map(({ id }) => id))}>
+          <Image style={{ height: 25, width: 25, marginBottom: 10 }} source={require('../assets/trash.png')} />
           <Text style={styles.swipeItemText}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -117,12 +119,15 @@ const CalendarItem = (props) => {
           <View>
             <Swipeable renderLeftActions={LeftActions}>
               <View style={styles.eventContainer}>
-                <UserIcon key={author.id} user={author} size={54}> </UserIcon>
+                <View style={styles.icon}>
+                  <UserIcon key={author.id} user={author} size={54} style={styles.icon}> </UserIcon>
+                </View>
                 <View style={styles.description}>
                   <Text style={styles.title}>{title}</Text>
                   <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
                 </View>
-                <Text style={styles.text}>{approvals}</Text>
+                <Text style={styles.text}>{`${approvals.length}`}</Text>
+                <Image style={{ height: 35, width: 35 }} source={require('../assets/check-mark.png')} />
               </View>
             </Swipeable>
           </View>
@@ -412,7 +417,8 @@ const styles = StyleSheet.create({
   swipeItem: {
     backgroundColor: colors.darkSageGreen,
     justifyContent: 'center',
-    padding: 10,
+    alignContent: 'space-around',
+    paddingLeft: 15,
     width: 60,
   },
   swipeItemText: {
