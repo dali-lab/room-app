@@ -35,11 +35,11 @@ const HomeCircles = (props) => {
                 ? (
                   <TouchableOpacity onPress={() => setshowHomeModal(!showHomeModal)}>
                     <GuestModal showHomeModal={showHomeModal} setshowHomeModal={setshowHomeModal} />
-                    <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>
+                    <UserIcon key={userCurr.id} user={userCurr} size={54} isHomeScreen> </UserIcon>
                   </TouchableOpacity>
                 )
                 : (
-                  <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>
+                  <UserIcon key={userCurr.id} user={userCurr} size={54} isHomeScreen> </UserIcon>
                 ));
           } else return null;
         })}
