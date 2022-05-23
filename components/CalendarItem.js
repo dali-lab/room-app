@@ -149,12 +149,16 @@ const CalendarItem = (props) => {
             && (
             <View style={styles.approveContainer}>
               <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
-                <View>
-                  <Text>Approve</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image style={{ height: 30, width: 30 }} source={require('../assets/check-mark-white.png')} />
+                  <Text style={styles.approveButtonText}>Approve</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity style={styles.letsTalkButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
-                <Text>Let's Talk</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
+                  <Image style={{ height: 25, width: 4 }} source={require('../assets/lets-talk.png')} />
+                  <Text style={styles.approveButtonText}>Let's Talk</Text>
+                </View>
               </TouchableOpacity>
             </View>
             )}
@@ -306,7 +310,6 @@ const styles = StyleSheet.create({
     width: dimensions.screenWidth * 0.9,
     height: 80,
     marginTop: 20,
-    // marginLeft: 20,
     marginBottom: 20,
     justifyContent: 'center',
   },
@@ -377,6 +380,11 @@ const styles = StyleSheet.create({
     color: colors.darkSageGreen,
     fontWeight: '600',
   },
+  approveButtonText: {
+    fontSize: fonts.largeText,
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
   editTitle: {
     fontSize: fonts.large24,
     textAlign: 'left',
@@ -397,11 +405,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#52BE64',
     width: dimensions.screenWidth * 0.3,
     alignItems: 'center',
+    borderRadius: 5,
+    height: 30,
   },
   letsTalkButton: {
     backgroundColor: '#3398FF',
     width: dimensions.screenWidth * 0.3,
-    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    borderRadius: 5,
+    height: 30,
   },
   inputTitle: {
     backgroundColor: '#FFFFFF',
