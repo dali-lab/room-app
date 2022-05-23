@@ -203,9 +203,9 @@ const CalendarItem = (props) => {
             <Text style={styles.text}>X</Text>
           </TouchableOpacity>
 
-          <Image style={{ height: 35, width: 35 }} source={require('../assets/calendar-modal.png')} />
+          <Image style={{ height: 125, width: 125 }} source={require('../assets/calendar-modal.png')} />
           <View style={styles.description}>
-            <Text style={styles.title}>EDIT EVENT</Text>
+            <Text style={styles.editTitle}>EDIT EVENT</Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.text}>Title</Text>
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     width: dimensions.screenWidth * 0.9,
     height: 80,
     marginTop: 20,
-    marginLeft: 20,
+    // marginLeft: 20,
     marginBottom: 20,
     justifyContent: 'center',
   },
@@ -376,6 +376,15 @@ const styles = StyleSheet.create({
     fontSize: fonts.largeText,
     color: colors.darkSageGreen,
     fontWeight: '600',
+  },
+  editTitle: {
+    fontSize: fonts.large24,
+    textAlign: 'left',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight: 'bold',
   },
   text: {
     fontSize: fonts.smallText,

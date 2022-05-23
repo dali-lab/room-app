@@ -90,13 +90,13 @@ const CalendarScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Upcoming Events</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 20 }}>
         <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
         <TouchableOpacity style={styles.addButton} onPress={() => setshowNewModal(!showNewModal)}>
           <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
         {calendarEvents?.map(({
           id, title, start, end, author, approvals, allDay,
         }) => (
@@ -105,7 +105,7 @@ const CalendarScreen = (props) => {
               <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
             )
             : (
-              // this isn't working :(
+              // this isn't working :( probably because this page is refreshed every millisecond...
               () => setcurrentDates((currentDates) => [...currentDates, moment(start).format('MM-DD')]),
                 <View key={id}>
                   <Text style={styles.subtitle}>{moment(start).format('dddd, MMMM Do')}</Text>
@@ -241,7 +241,6 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     textAlign: 'left',
     color: colors.darkSageGreen,
-    marginLeft: 20,
     marginBottom: 3,
   },
   text: {
