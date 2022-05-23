@@ -5,21 +5,22 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import RequestItem from '../components/RequestItem';
-import { getAllRequests } from '../store/actions';
+import { getAllRequests, changeRequestEditState } from '../store/actions';
 import { fonts, colors } from '../constants/GlobalStyles';
 import NewRequestModal from '../components/NewRequestModal';
 
 const RequestScreen = (props) => {
   const {
-    requests, getRequests, user,
+    requests, getRequests, user, isEditing, changeEditState,
   } = props;
 
   // Fetch all requests when the component first loads
   useEffect(() => {
     getRequests(user.id);
-  }, [requests, user]);
+  }, [isEditing]);
 
   const [showModal, setShowModal] = useState(false);
+  // console.log('hi');
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,7 +28,10 @@ const RequestScreen = (props) => {
         <Text style={styles.title}>Requests</Text>
         <TouchableOpacity
           style={styles.newEvent}
-          onPress={() => setShowModal(!showModal)}
+          onPress={() => {
+            setShowModal(!showModal);
+            changeEditState(true);
+          }}
         >
           <Text style={styles.plus}>+</Text>
         </TouchableOpacity>
@@ -37,8 +41,10 @@ const RequestScreen = (props) => {
 
       <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
       <ScrollView>
-        {requests?.map(({ author, description, completed }) => {
-          return <RequestItem key={description} author={author} description={description} completed={completed} />;
+        {requests?.map(({
+          id, author, description, completed, recipients, anonymous, end,
+        }) => {
+          return <RequestItem key={id} id={id} author={author} description={description} completed={completed} recipients={recipients} anonymous={anonymous} end={end} />;
         })}
       </ScrollView>
     </SafeAreaView>
@@ -94,6 +100,7 @@ const mapStateToProps = (state) => {
   return {
     requests: state.request.allRequests,
     user: state.user.user,
+    isEditing: state.request.isEditing,
   };
 };
 
@@ -101,6 +108,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getRequests: (userID) => {
       dispatch(getAllRequests(userID));
+    },
+    changeEditState: (isEditing) => {
+      dispatch(changeRequestEditState(isEditing));
     },
   };
 };

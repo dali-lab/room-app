@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import {
   StyleSheet, SafeAreaView, Button, ScrollView, Text,
 } from 'react-native';
@@ -17,11 +18,13 @@ const HomeScreen = (props) => {
     getCalendarEvents, signOut, calendarEvents, users, getUsers, user, requests, getRequests,
   } = props;
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     getUsers(user.roomCode);
     getCalendarEvents(users?.map(({ id }) => id));
     getRequests(user.id);
-  }, [users]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, isFocused]); // eslint-disable-line react-hooks/exhaustive-deps
   // Fetch all calendarEvents when the component first loads
 
   return (

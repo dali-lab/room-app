@@ -5,6 +5,7 @@ import {
   createRequest,
   updateRequest,
   deleteRequest,
+  changeRequestEditState,
 } from './request';
 import {
   ActionTypes as userActionTypes,
@@ -42,6 +43,7 @@ export {
   createRequest,
   updateRequest,
   deleteRequest,
+  changeRequestEditState,
   getAllCalendarEvents,
   getCalendarEvent,
   createCalendarEvent,

@@ -3,6 +3,7 @@ import * as requestService from '../../services/request';
 export const ActionTypes = {
   SET_REQUESTS: 'SET_REQUESTS',
   SET_REQUEST: 'SET_REQUEST',
+  CHANGE_EDIT_STATE: 'CHANGE_EDIT_STATE',
   API_ERROR: 'API_ERROR',
 };
 
@@ -62,5 +63,11 @@ export const deleteRequest = (id) => {
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }
+  };
+};
+
+export const changeRequestEditState = (isEditing) => {
+  return (dispatch) => {
+    dispatch({ type: ActionTypes.CHANGE_EDIT_STATE, payload: isEditing });
   };
 };

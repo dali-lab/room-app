@@ -6,19 +6,44 @@ import {
 import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import moment from 'moment';
-import { createRequest, changeRequestEditState } from '../store/actions';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { updateRequest, changeRequestEditState } from '../store/actions';
 import { fonts, colors, dimensions } from '../constants/GlobalStyles';
 
-const NewRequestModal = (props) => {
+const EditRequestModal = (props) => {
   const {
-    user, createUserRequest, showModal, setShowModal, changeEditState,
+    id, user, description, end, recipients, anonymous, updateUserRequest, showModal, setShowModal, changeEditState,
   } = props;
 
-  const [requestDescription, setRequestDescription] = useState('');
-  const [hours, setHours] = useState('');
-  const [minutes, setMinutes] = useState('');
-  const [days, setDays] = useState('');
+  const [requestDescription, setRequestDescription] = useState(description);
+  // const [hours, setHours] = useState('');
+  // const [minutes, setMinutes] = useState('');
+  // const [days, setDays] = useState('');
   const [open, setOpen] = useState(false);
+  const [newEndDate, setnewEndDate] = useState(new Date(end));
+  const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+  const [newEndTime, setnewEndTime] = useState(new Date(end));
+  const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
+  const showEndDatePicker = () => {
+    setEndDatePickerVisibility(true);
+  };
+  const hideEndDatePicker = () => {
+    setEndDatePickerVisibility(false);
+  };
+  const showEndTimePicker = () => {
+    setEndTimePickerVisibility(true);
+  };
+  const hideEndTimePicker = () => {
+    setEndTimePickerVisibility(false);
+  };
+  const handleConfirmEnd = (date) => {
+    setnewEndDate(date);
+    hideEndDatePicker();
+  };
+  const handleConfirmEndTime = (date) => {
+    setnewEndTime(date);
+    hideEndTimePicker();
+  };
   const [value, setValue] = useState(user.roommates);
   const [items, setItems] = useState(value.map((roommate) => {
     return { label: roommate.firstName, value: roommate.id };
@@ -27,13 +52,14 @@ const NewRequestModal = (props) => {
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   const handleRequest = () => {
-    const endTime = moment().add(days, 'd').add(hours, 'h').add(minutes, 'm');
+    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
+    const endTime = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
     const newRequest = {
       description: requestDescription, author: user, anonymous: isAnonymous, recipients: value, end: endTime, upvotes: 0, downvotes: 0,
     };
     changeEditState(false);
     setShowModal(!showModal);
-    createUserRequest(newRequest);
+    updateUserRequest(id, newRequest);
   };
 
   return (
@@ -59,16 +85,42 @@ const NewRequestModal = (props) => {
             // eslint-disable-next-line global-require
           source={require('../assets/inactive-request.png')}
         />
-        <Text style={styles.modalTitle}>New Request</Text>
+        <Text style={styles.modalTitle}>Edit Request</Text>
         <Text style={styles.modalSubtitle}>Description</Text>
         <TextInput
           style={styles.input}
           onChangeText={(text) => setRequestDescription(text)}
           value={requestDescription}
-          placeholder="Enter a description"
+          placeholder={description}
         />
-        <Text style={styles.modalSubtitle}>Expires in</Text>
-        <View style={styles.row}>
+        <Text style={styles.modalSubtitle}>Expires on</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={styles.inputContainer}>
+            <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndDatePicker}>
+              <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isEndDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirmEnd}
+              onCancel={hideEndDatePicker}
+            />
+
+            <View>
+              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndTimePicker}>
+                <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isEndTimePickerVisible}
+                mode="time"
+                onConfirm={handleConfirmEndTime}
+                onCancel={hideEndTimePicker}
+              />
+            </View>
+
+          </View>
+        </View>
+        {/* <View style={styles.row}>
           <TextInput
             style={styles.timeInput}
             keyboardType="numeric"
@@ -90,7 +142,7 @@ const NewRequestModal = (props) => {
             value={minutes}
           />
           <Text style={styles.text1}>minutes</Text>
-        </View>
+        </View> */}
         <Text style={styles.modalSubtitle}>Send to</Text>
         <View style={styles.recipientSelector}>
           <DropDownPicker
@@ -220,18 +272,27 @@ const styles = StyleSheet.create({
     fontSize: fonts.large22,
     color: colors.lightGray,
   },
+  dateTimePickerButton: {
+    backgroundColor: colors.backgroundSageGreen,
+    marginLeft: 18,
+  },
+  inputContainer: {
+    width: dimensions.screenWidth * 0.5,
+    flexDirection: 'row',
+  },
 });
 
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
+    // requestId: state.request.id, <- ngl I have no idea if that's right
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createUserRequest: (request) => {
-      dispatch(createRequest(request));
+    updateUserRequest: (requestId, request) => {
+      dispatch(updateRequest(requestId, request));
     },
     changeEditState: (isEditing) => {
       dispatch(changeRequestEditState(isEditing));
@@ -239,4 +300,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewRequestModal);
+export default connect(mapStateToProps, mapDispatchToProps)(EditRequestModal);

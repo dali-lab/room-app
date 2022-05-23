@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Modal, Button,
+  StyleSheet, View, Text, TouchableOpacity,
 } from 'react-native';
+import { connect } from 'react-redux';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { changeRequestEditState } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
+import EditRequestModal from './EditRequestModal';
 
-const LeftActions = () => {
+const LeftActions = (setShowModal, showModal) => {
+  // const [showModal, setShowModal] = useState(false);
+
   return (
     <View>
       <View style={styles.swipeContainer}>
-        <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
+        <TouchableOpacity style={styles.swipeItem} onPress={() => setShowModal(!showModal)}>
           <Text style={styles.swipeItemText}>Edit</Text>
         </TouchableOpacity>
       </View>
+      {/* <EditRequestModal showModal={showModal} setShowModal={setShowModal} /> */}
     </View>
   );
 };
@@ -28,14 +34,14 @@ const RightActions = () => {
 };
 
 const RequestItem = ({
-  description, user, completed,
+  id, description, user, end, recipients, anonymous,
 }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <View>
       <View style={styles.container}>
-        <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
+        <Swipeable renderLeftActions={() => LeftActions(setShowModal, showModal)} renderRightActions={RightActions}>
           <View style={styles.authorCircle}>
             <Text style={styles.authorText}>{user}</Text>
           </View>
@@ -45,25 +51,7 @@ const RequestItem = ({
             <Text style={styles.text}>Completed</Text>
           </View>
           <View>
-            <Button
-              onPress={() => setShowModal(!showModal)}
-              title="edit temp"
-            />
-            <Modal
-              visible={showModal}
-              transparent
-              onRequestClose={() => {
-                console.log('Modal has been closed.');
-              }}
-            >
-              <View style={styles.modalContainer}>
-                <Text>Edit Modal</Text>
-                <Button
-                  onPress={() => setShowModal(!showModal)}
-                  title="back"
-                />
-              </View>
-            </Modal>
+            <EditRequestModal showModal={showModal} setShowModal={setShowModal} id={id} description={description} end={end} recipients={recipients} anonymous={anonymous} />
           </View>
         </Swipeable>
 
@@ -161,4 +149,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RequestItem;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeEditState: (isEditing) => {
+      dispatch(changeRequestEditState(isEditing));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(RequestItem);
