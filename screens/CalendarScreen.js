@@ -27,7 +27,7 @@ const CalendarScreen = (props) => {
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
-  const [currentDates, setcurrentDates] = useState([]);
+  // const [currentDates, setcurrentDates] = useState([]);
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -84,8 +84,10 @@ const CalendarScreen = (props) => {
 
   // Fetch all calendarEvents when the component first loads
   useEffect(() => {
-    getCalendarEvents(users.map(({ id }) => id));
-  }); // eslint-disable-line react-hooks/exhaustive-deps
+    getCalendarEvents(users?.map(({ id }) => id));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  let currentDate = '';
 
   return (
     <SafeAreaView style={styles.container}>
@@ -97,22 +99,21 @@ const CalendarScreen = (props) => {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-        {calendarEvents?.map(({
+        {calendarEvents?.sort((a, b) => (new Date(a.start)) - (new Date(b.start))).map(({
           id, title, start, end, author, approvals, allDay,
-        }) => (
-          currentDates.includes(moment(start).format('MM-DD'))
-            ? (
-              <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
-            )
-            : (
-              // this isn't working :( probably because this page is refreshed every millisecond...
-              () => setcurrentDates((currentDates) => [...currentDates, moment(start).format('MM-DD')]),
-                <View key={id}>
-                  <Text style={styles.subtitle}>{moment(start).format('dddd, MMMM Do')}</Text>
-                  <CalendarItem id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
-                </View>
-            )
-        ))}
+        }) => {
+          if (moment(currentDate).format('MM-DD') === moment(start).format('MM-DD')) {
+            return (<CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />);
+          } else {
+            currentDate = start;
+            return (
+              <View key={id}>
+                <Text style={styles.subtitle}>{moment(start).format('dddd, MMMM Do')}</Text>
+                <CalendarItem id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
+              </View>
+            );
+          }
+        })}
       </ScrollView>
       <Modal
         animationType="fade"
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     textAlign: 'left',
     color: colors.darkSageGreen,
-    marginBottom: 3,
+    // marginBottom: 3,
   },
   text: {
     fontSize: fonts.largeText,

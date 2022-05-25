@@ -308,7 +308,6 @@ const CalendarItem = (props) => {
 const styles = StyleSheet.create({
   container: {
     width: dimensions.screenWidth * 0.9,
-    height: 80,
     marginTop: 20,
     marginBottom: 20,
     justifyContent: 'center',
@@ -318,7 +317,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundSageGreen,
   },
   eventContainer: {
-    height: 80,
+    paddingTop: 10,
+    paddingBottom: 10,
     width: dimensions.screenWidth * 0.9,
     backgroundColor: colors.backgroundSageGreen,
     alignItems: 'center',
