@@ -20,7 +20,7 @@ const CalendarItem = (props) => {
   const [showEditModal, setshowEditModal] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
   const {
-    id, title, start, end, author, user, updateEvent, approvals, users, allDay, deleteEvent, showButtons,
+    id, title, start, end, author, user, updateEvent, approvals, users, allDay, deleteEvent, showButtons, roommates,
   } = props;
   const [newTitle, setnewTitle] = useState('');
   const [newStartDate, setnewStartDate] = useState(new Date(start));
@@ -96,6 +96,7 @@ const CalendarItem = (props) => {
       end,
       allDay,
       author,
+      roommates,
     };
     updateEvent(id, newEvent, users.map(({ id }) => id));
   };
@@ -145,23 +146,24 @@ const CalendarItem = (props) => {
               <Text style={styles.text}>{`${approvals.length}`}</Text>
               <Image style={{ height: 35, width: 35 }} source={require('../assets/check-mark.png')} />
             </View>
-            { showButtons && !approvals.includes(user)
-            && (
-            <View style={styles.approveContainer}>
-              <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Image style={{ height: 30, width: 30 }} source={require('../assets/check-mark-white.png')} />
-                  <Text style={styles.approveButtonText}>Approve</Text>
+            {showButtons && !approvals.map(({ id }) => id).includes(user.id)
+              ? (
+                <View style={styles.approveContainer}>
+                  <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Image style={{ height: 30, width: 30 }} source={require('../assets/check-mark-white.png')} />
+                      <Text style={styles.approveButtonText}>Approve</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.letsTalkButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
+                      <Image style={{ height: 25, width: 4 }} source={require('../assets/lets-talk.png')} />
+                      <Text style={styles.approveButtonText}>Let's Talk</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.letsTalkButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
-                  <Image style={{ height: 25, width: 4 }} source={require('../assets/lets-talk.png')} />
-                  <Text style={styles.approveButtonText}>Let's Talk</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            )}
+              )
+              : (null) }
           </View>
         )}
       <Modal

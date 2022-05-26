@@ -138,7 +138,6 @@ const CalendarScreen = (props) => {
               <TextInput
                 style={styles.inputTitle}
                 onChangeText={(text) => setnewTitle(text)}
-                value={newTitle}
               />
             </View>
           </View>
@@ -242,7 +241,6 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     textAlign: 'left',
     color: colors.darkSageGreen,
-    // marginBottom: 3,
   },
   text: {
     fontSize: fonts.largeText,
