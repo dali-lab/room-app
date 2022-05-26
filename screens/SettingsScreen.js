@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     marginHorizontal: 10,
-    backgroundColor: colors.indigo700,
+    backgroundColor: 'purple',
     justifyContent: 'center',
   },
   buttonLightPurple: {

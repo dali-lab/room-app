@@ -101,11 +101,11 @@ const CalendarItem = (props) => {
     updateEvent(id, newEvent, users.map(({ id }) => id));
   };
 
-  const handleSave = () => {
+  const handleDone = () => {
     setshowEditModal(!showEditModal);
-    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth())}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
+    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth() + 1)}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
     const start = moment(startDateTime, 'YYYY-MM-DD-hh-mm');
-    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
+    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth() + 1)}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
     const end = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
     const newEvent = {
       title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn,
@@ -125,7 +125,13 @@ const CalendarItem = (props) => {
                 </View>
                 <View style={styles.description}>
                   <Text style={styles.title}>{title}</Text>
-                  <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+                  { allDay
+                    ? (
+                      <Text style={styles.text}>all-day</Text>
+                    )
+                    : (
+                      <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+                    )}
                 </View>
                 <Text style={styles.text}>{`${approvals.length}`}</Text>
                 <Image style={{ height: 35, width: 35 }} source={require('../assets/check-mark.png')} />
@@ -200,6 +206,12 @@ const CalendarItem = (props) => {
         animationType="fade"
         visible={showEditModal}
         transparent
+        onShow={() => {
+          setnewStartTime(new Date(start));
+          setnewStartDate(new Date(start));
+          setnewEndTime(new Date(end));
+          setnewEndDate(new Date(end));
+        }}
         onRequestClose={() => {
           console.log('Modal has been closed.');
         }}
@@ -218,7 +230,6 @@ const CalendarItem = (props) => {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputTitle}
-                value={newTitle}
                 defaultValue={`${title}`}
                 onChangeText={(text) => setnewTitle(text)}
               />
@@ -230,6 +241,10 @@ const CalendarItem = (props) => {
               <Switch value={switchOn}
                 onValueChange={() => {
                   setSwitchOn(!switchOn);
+                  const newEvent = {
+                    allDay: switchOn,
+                  };
+                  updateEvent(id, newEvent, users.map(({ id }) => id));
                 }}
               />
             </View>
@@ -243,6 +258,7 @@ const CalendarItem = (props) => {
               <DateTimePickerModal
                 isVisible={isStartDatePickerVisible}
                 mode="date"
+                defaultValue={newStartDate}
                 onConfirm={handleConfirmStart}
                 onCancel={hideStartDatePicker}
               />
@@ -253,6 +269,7 @@ const CalendarItem = (props) => {
                       <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
+                      defaultValue={newStartTime}
                       isVisible={isStartTimePickerVisible}
                       mode="time"
                       onConfirm={handleConfirmStartTime}
@@ -274,6 +291,7 @@ const CalendarItem = (props) => {
               <DateTimePickerModal
                 isVisible={isEndDatePickerVisible}
                 mode="date"
+                defaultValue={newEndDate}
                 onConfirm={handleConfirmEnd}
                 onCancel={hideEndDatePicker}
               />
@@ -284,6 +302,7 @@ const CalendarItem = (props) => {
                       <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
+                      defaultValue={newEndDate}
                       isVisible={isEndTimePickerVisible}
                       mode="time"
                       onConfirm={handleConfirmEndTime}
@@ -297,7 +316,7 @@ const CalendarItem = (props) => {
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.modalButton} onPress={handleSave}>
+            <TouchableOpacity style={styles.modalButton} onPress={handleDone}>
               <Text style={{ color: '#FFFFFF' }}>Done</Text>
             </TouchableOpacity>
           </View>

@@ -27,7 +27,6 @@ const CalendarScreen = (props) => {
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
-  // const [currentDates, setcurrentDates] = useState([]);
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -138,6 +137,7 @@ const CalendarScreen = (props) => {
               <TextInput
                 style={styles.inputTitle}
                 onChangeText={(text) => setnewTitle(text)}
+                value={newTitle}
               />
             </View>
           </View>
@@ -241,6 +241,7 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     textAlign: 'left',
     color: colors.darkSageGreen,
+    // marginBottom: 3,
   },
   text: {
     fontSize: fonts.largeText,
