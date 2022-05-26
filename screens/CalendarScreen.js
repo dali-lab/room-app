@@ -227,6 +227,7 @@ const CalendarScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   title: {
     fontSize: fonts.large24,
