@@ -69,11 +69,11 @@ const CalendarScreen = (props) => {
     hideEndTimePicker();
   };
 
-  const handleSave = () => {
+  const handleDone = () => {
     setshowNewModal(!showNewModal);
-    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth())}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
+    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth() + 1)}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
     const start = moment(startDateTime, 'YYYY-MM-DD-hh-mm');
-    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
+    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth() + 1)}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
     const end = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
     const newEvent = {
       title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn, approvals: [],
@@ -90,12 +90,14 @@ const CalendarScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Upcoming Events</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 20 }}>
-        <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
-        <TouchableOpacity style={styles.addButton} onPress={() => setshowNewModal(!showNewModal)}>
-          <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={styles.title}>Upcoming Events</Text>
+        <TouchableOpacity onPress={() => setshowNewModal(!showNewModal)}>
+          <Image style={{ height: 60, width: 60, margin: 10 }} source={require('../assets/add-calendar-icon.png')} />
         </TouchableOpacity>
+      </View>
+      <View style={{ marginLeft: 20 }}>
+        <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
       </View>
       <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
         {calendarEvents?.sort((a, b) => (new Date(a.start)) - (new Date(b.start))).map(({
@@ -107,7 +109,7 @@ const CalendarScreen = (props) => {
             currentDate = start;
             return (
               <View key={id}>
-                <Text style={styles.subtitle}>{moment(start).format('dddd, MMMM Do')}</Text>
+                <Text style={styles.dateText}>{moment(start).format('dddd, MMMM Do')}</Text>
                 <CalendarItem id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
               </View>
             );
@@ -123,15 +125,15 @@ const CalendarScreen = (props) => {
         }}
       >
         <View style={styles.swipeModalContainer}>
-          <TouchableOpacity style={styles.exitButton} onPress={() => setshowNewModal(!showNewModal)}>
-            <Text style={styles.text}>X</Text>
+          <TouchableOpacity style={{ marginRight: dimensions.screenWidth * 0.6, marginTop: 5 }} onPress={() => setshowNewModal(!showNewModal)}>
+            <Image style={{ height: 55, width: 55 }} source={require('../assets/exit-calendar-modal.png')} />
           </TouchableOpacity>
 
           <Image style={{ height: 125, width: 125 }} source={require('../assets/calendar-modal.png')} />
           <View style={styles.description}>
-            <Text style={styles.title}>NEW EVENT</Text>
+            <Text style={styles.editTitle}>NEW EVENT</Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', margin: 8 }}>
             <Text style={styles.text}>Title</Text>
             <View style={styles.inputContainer}>
               <TextInput
@@ -141,18 +143,19 @@ const CalendarScreen = (props) => {
               />
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', margin: 8 }}>
             <Text style={styles.text}>All-Day</Text>
             <View style={styles.inputContainer}>
               <Switch value={switchOn}
+                style={{ marginLeft: 10 }}
                 onValueChange={() => {
                   setSwitchOn(!switchOn);
                 }}
               />
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>Start</Text>
+          <View style={{ flexDirection: 'row', margin: 8 }}>
+            <Text style={styles.timeText}>Start</Text>
             <View style={styles.inputContainer}>
               <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartDatePicker}>
                 <Text style={styles.text}>{`${moment(newStartDate).format('MMM DD')}`}</Text>
@@ -182,8 +185,8 @@ const CalendarScreen = (props) => {
                 )}
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>End</Text>
+          <View style={{ flexDirection: 'row', margin: 8 }}>
+            <Text style={styles.timeText}>End</Text>
             <View style={styles.inputContainer}>
               <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndDatePicker}>
                 <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
@@ -214,8 +217,8 @@ const CalendarScreen = (props) => {
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.modalButton} onPress={handleSave}>
-              <Text style={{ color: '#FFFFFF' }}>Save</Text>
+            <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
+              <Text style={styles.buttonText}>Done</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -242,11 +245,22 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     textAlign: 'left',
     color: colors.darkSageGreen,
-    // marginBottom: 3,
+  },
+  dateText: {
+    fontSize: fonts.smallText,
+    textAlign: 'left',
+    color: colors.darkSageGreen,
+    marginBottom: 10,
+    marginTop: 10,
   },
   text: {
-    fontSize: fonts.largeText,
-    textAlign: 'center',
+    fontSize: fonts.smallText,
+    color: colors.darkSageGreen,
+  },
+  timeText: {
+    fontSize: fonts.smallText,
+    color: colors.darkSageGreen,
+    width: 35,
   },
   addButton: {
     backgroundColor: colors.darkSageGreen,
@@ -256,6 +270,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
+  },
+  doneButton: {
+    backgroundColor: colors.darkSageGreen,
+    width: dimensions.screenWidth * 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    height: 30,
+    margin: 20,
   },
   swipeModalContainer: {
     backgroundColor: colors.backgroundSageGreen,
@@ -279,18 +302,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: dimensions.screenWidth * 0.1,
   },
-  exitButton: {
-    borderWidth: 3,
-    borderColor: colors.darkSageGreen,
-    borderRadius: 20,
-
-    width: dimensions.screenWidth * 0.1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: dimensions.screenHeight * 0.04,
-    marginRight: dimensions.screenWidth * 0.6,
-    marginTop: 10,
-  },
   inputContainer: {
     width: dimensions.screenWidth * 0.5,
     flexDirection: 'row',
@@ -311,8 +322,10 @@ const styles = StyleSheet.create({
   inputTitle: {
     backgroundColor: '#FFFFFF',
     width: dimensions.screenWidth * 0.4,
-    marginLeft: 10,
+    marginLeft: 20,
     height: dimensions.screenHeight * 0.03,
+    borderRadius: 10,
+    padding: 4,
   },
   modalButton: {
     backgroundColor: colors.darkSageGreen,
@@ -325,6 +338,22 @@ const styles = StyleSheet.create({
   dateTimePickerButton: {
     backgroundColor: '#FFFFFF',
     marginLeft: 18,
+    borderRadius: 10,
+    padding: 4,
+  },
+  editTitle: {
+    fontSize: fonts.large24,
+    textAlign: 'left',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  buttonText: {
+    fontSize: fonts.largeText,
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
 });
 
