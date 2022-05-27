@@ -40,7 +40,7 @@ export const createRequest = async (request) => {
 export const updateRequest = async (id, request) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(`${URL}/${id}`, request, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.put(`${URL}/${id}`, request, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);
@@ -51,7 +51,7 @@ export const updateRequest = async (id, request) => {
 export const deleteRequest = async (id) => {
   try {
     const token = await AsyncStorage.getItem('authToken');
-    const { data } = await axios.get(`${URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const { data } = await axios.delete(`${URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     return data;
   } catch (error) {
     console.log(error);

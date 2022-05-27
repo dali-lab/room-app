@@ -12,6 +12,7 @@ export const colors = {
   mediumSageGreen: '#C6DAC9',
   indigo300: '#C7C6E1',
   indigo700: '#2E2D4D',
+  backgroundIndigo: '#E6E6F3',
   lightGray: '#F4F5F4',
   loginGreen: '#57805B',
   backgroundGray: '#F2F2F2',

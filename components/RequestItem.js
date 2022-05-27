@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-// import { updateRequest, changeRequestEditState } from '../store/actions';
+import { updateRequest } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import UserIcon from './UserIcon';
 
@@ -31,9 +31,11 @@ const RightActions = () => {
 };
 
 const RequestItem = ({
-  description, user, completed, props, upvotes, downvotes,
+  id, description, user, completed, upvotes, downvotes, author, updateRequestItem,
 }) => {
   const [showModal, setShowModal] = useState(false);
+  // eslint-disable-next-line no-empty-pattern
+  const [isCompleted, setCompleted] = useState(completed);
   // const {
   //   author,
   // } = props;
@@ -41,39 +43,45 @@ const RequestItem = ({
     <View>
       <View style={styles.container}>
         <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={styles.rowStyle}>
             <View style={styles.icon}>
-              <UserIcon key={user.id} user={user} size={54} style={styles.icon}> </UserIcon>
+              <UserIcon key={author.id} user={author} size={54} style={styles.icon}> </UserIcon>
             </View>
-            <View style={{ flexDirection: 'column' }}>
+            <View style={styles.columnStyle}>
               <Text style={styles.description}>{description}</Text>
               <View style={styles.completed}>
-                <View style={styles.checkbox} />
-                <Text style={[styles.text, { marginLeft: 10 }]}>Completed</Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    updateRequestItem(id, { completed: !isCompleted });
+                    setCompleted(!isCompleted);
+                  }}
+                >
+                  <Image
+                  // eslint-disable-next-line global-require
+                    source={isCompleted ? require('../assets/checked.png') : require('../assets/unchecked.png')}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.completedText}>Completed</Text>
               </View>
             </View>
-            <View style={{ flexDirection: 'column', marginRight: 5 }}>
-              <View style={{ flexDirection: 'row', marginBottom: 15 }}>
-                <Text style={styles.text}>{`${upvotes}`}</Text>
+            <View style={styles.columnStyle}>
+              <View style={styles.upVotes}>
+                <Text style={styles.voteCounter}>{`${upvotes}`}</Text>
                 <TouchableOpacity>
                   <Image
                     // eslint-disable-next-line global-require
                     source={require('../assets/upArrow.png')}
-                    style={{
-                      marginTop: 8,
-                    }}
                   />
                 </TouchableOpacity>
               </View>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.text}>{`${downvotes}`}</Text>
+              <View style={styles.rowStyle}>
+                <Text style={styles.voteCounter}>{`${downvotes}`}</Text>
                 <TouchableOpacity>
                   <Image
                     // eslint-disable-next-line global-require
                     source={require('../assets/downArrow.png')}
-                    style={{
-                      marginTop: 8,
-                    }}
+                    style={{ marginTop: 5 }}
                   />
                 </TouchableOpacity>
               </View>
@@ -133,9 +141,12 @@ const styles = StyleSheet.create({
   container: {
     width: dimensions.screenWidth * 0.9,
     height: 80,
-    backgroundColor: colors.indigo300,
+    backgroundColor: colors.backgroundIndigo,
     margin: 20,
     padding: 10,
+    borderColor: colors.indigo700,
+    borderLeftWidth: 5,
+
   },
   description: {
     fontSize: fonts.largeText,
@@ -147,12 +158,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 10,
     marginTop: 5,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: colors.indigo700,
   },
   text: {
     fontSize: fonts.smallText,
@@ -189,7 +194,30 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
   },
   icon: {
+    marginLeft: 15,
+  },
+  rowStyle: {
+    flexDirection: 'row',
+  },
+  columnStyle: {
+    flexDirection: 'column',
+  },
+  voteCounter: {
+    fontSize: fonts.smallText,
+    color: colors.indigo700,
     marginLeft: 20,
+    marginRight: 5,
+  },
+  upVotes: {
+    flexDirection: 'row',
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  completedText: {
+    fontSize: fonts.smallText,
+    color: colors.indigo700,
+    marginLeft: 10,
+    marginRight: 90,
   },
 });
 
@@ -199,4 +227,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(RequestItem);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateRequestItem: (id, requestData) => {
+      dispatch(updateRequest(id, requestData));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequestItem);
