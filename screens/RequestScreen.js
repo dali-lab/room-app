@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
@@ -22,19 +23,20 @@ const RequestScreen = (props) => {
   const [showModal, setShowModal] = useState(false);
   if (requests.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.emptyContainer}>
 
         <View style={{
           flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', paddingTop: 130,
         }}
         >
           <Image
+            style={{ height: 150, width: 150, margin: 10 }}
             source={require('../assets/request.png')}
           />
           <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
 
-          <Text style={styles.empty_title}>No Upcoming Events!</Text>
-          <Text style={styles.empty_subtitle}>Click the plus button to create a new event</Text>
+          <Text style={styles.empty_title}>No Upcoming Requests!</Text>
+          <Text style={styles.empty_subtitle}>Click the plus button to create a new request</Text>
           <TouchableOpacity style={styles.empty_addButton} onPress={() => setShowModal(!showModal)}>
             <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
 
@@ -71,9 +73,14 @@ const RequestScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    alignContent: 'center',
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
   },
   text: {
     fontSize: fonts.largeText,

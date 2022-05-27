@@ -8,7 +8,6 @@ const URL = `${API_URL}/events`;
 
 export const createCalendarEvent = async (calendarEvent) => {
   try {
-    console.log('services');
     const token = await AsyncStorage.getItem('authToken');
     const { data } = await axios.post(`${URL}`, calendarEvent, { headers: { Authorization: `Bearer ${token}` } });
     return data;

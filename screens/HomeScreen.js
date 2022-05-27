@@ -21,7 +21,7 @@ const HomeScreen = (props) => {
     getUsers(user.roomCode);
     getCalendarEvents(users?.map(({ id }) => id));
     getRequests(user.id);
-  }, [users]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
   // Fetch all calendarEvents when the component first loads
 
   return (
@@ -33,8 +33,8 @@ const HomeScreen = (props) => {
         color="green"
       />
       <Text style={styles.title}>Notifications</Text>
-      <ScrollView>
-        {calendarEvents?.map(({
+      <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+        {calendarEvents?.sort((a, b) => a.start - b.start).map(({
           id, title, start, end, author, approvals, allDay,
         }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons={false} />)}
         {requests?.map(({ author, description, completed }) => {
@@ -47,6 +47,7 @@ const HomeScreen = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#FFFFFF',
     flex: 1,
     alignItems: 'center',
   },
