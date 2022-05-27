@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Modal, Button,
+  StyleSheet, View, Text, TouchableOpacity, Modal, Button, Image,
 } from 'react-native';
+import { connect } from 'react-redux';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+// import { updateRequest, changeRequestEditState } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
+import UserIcon from './UserIcon';
 
 const LeftActions = () => {
   return (
@@ -28,27 +31,53 @@ const RightActions = () => {
 };
 
 const RequestItem = ({
-  description, user, completed,
+  description, user, completed, props, upvotes, downvotes,
 }) => {
   const [showModal, setShowModal] = useState(false);
-
+  // const {
+  //   author,
+  // } = props;
   return (
     <View>
       <View style={styles.container}>
         <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
-          <View style={styles.authorCircle}>
-            <Text style={styles.authorText}>{user}</Text>
-          </View>
-          <Text style={styles.description}>{description}</Text>
-          <View style={styles.completed}>
-            <View style={styles.checkbox} />
-            <Text style={styles.text}>Completed</Text>
-          </View>
-          <View>
-            <Button
-              onPress={() => setShowModal(!showModal)}
-              title="edit temp"
-            />
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.icon}>
+              <UserIcon key={user.id} user={user} size={54} style={styles.icon}> </UserIcon>
+            </View>
+            <View style={{ flexDirection: 'column' }}>
+              <Text style={styles.description}>{description}</Text>
+              <View style={styles.completed}>
+                <View style={styles.checkbox} />
+                <Text style={[styles.text, { marginLeft: 10 }]}>Completed</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'column', marginRight: 5 }}>
+              <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+                <Text style={styles.text}>{`${upvotes}`}</Text>
+                <TouchableOpacity>
+                  <Image
+                    // eslint-disable-next-line global-require
+                    source={require('../assets/upArrow.png')}
+                    style={{
+                      marginTop: 8,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.text}>{`${downvotes}`}</Text>
+                <TouchableOpacity>
+                  <Image
+                    // eslint-disable-next-line global-require
+                    source={require('../assets/downArrow.png')}
+                    style={{
+                      marginTop: 8,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
             <Modal
               visible={showModal}
               transparent
@@ -111,12 +140,12 @@ const styles = StyleSheet.create({
   description: {
     fontSize: fonts.largeText,
     fontWeight: '600',
-    marginLeft: 70,
+    marginLeft: 10,
   },
   completed: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 70,
+    marginLeft: 10,
     marginTop: 5,
   },
   checkbox: {
@@ -159,6 +188,15 @@ const styles = StyleSheet.create({
     shadowRadius: 60,
     shadowOpacity: 0.2,
   },
+  icon: {
+    marginLeft: 20,
+  },
 });
 
-export default RequestItem;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+  };
+};
+
+export default connect(mapStateToProps, null)(RequestItem);
