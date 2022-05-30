@@ -1,56 +1,110 @@
+/* eslint-disable global-require */
 import React, { useState } from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity,
+  StyleSheet, View, Text, TouchableOpacity, Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { changeRequestEditState } from '../store/actions';
+import { updateRequest, deleteRequest, changeRequestEditState } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
+import UserIcon from './UserIcon';
 import EditRequestModal from './EditRequestModal';
 
-const LeftActions = (setShowModal, showModal) => {
-  // const [showModal, setShowModal] = useState(false);
-
-  return (
-    <View>
-      <View style={styles.swipeContainer}>
-        <TouchableOpacity style={styles.swipeItem} onPress={() => setShowModal(!showModal)}>
-          <Text style={styles.swipeItemText}>Edit</Text>
-        </TouchableOpacity>
-      </View>
-      {/* <EditRequestModal showModal={showModal} setShowModal={setShowModal} /> */}
-    </View>
-  );
-};
-
-const RightActions = () => {
+const LeftActions = (id, userId, deleteRequestItem, setShowModal, showModal) => {
   return (
     <View style={styles.swipeContainer}>
-      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
-        <Text style={styles.deleteIcon}>X</Text>
+      <TouchableOpacity style={styles.swipeItem} onPress={() => setShowModal(!showModal)}>
+        <Image style={{ height: 25, width: 25, marginBottom: 10 }} source={require('../assets/edit.png')} />
+        <Text style={styles.swipeItemText}>Edit</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.swipeItem} onPress={() => { deleteRequestItem(id, userId); }}>
+        <Image style={{ height: 25, width: 25, marginBottom: 10 }} source={require('../assets/trash.png')} />
+        <Text style={styles.swipeItemText}>Delete</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const RequestItem = ({
-  id, description, user, end, recipients, anonymous,
+  id, description, user, completed, upvotes, downvotes, author, updateRequestItem, deleteRequestItem, anonymous,
 }) => {
   const [showModal, setShowModal] = useState(false);
-
+  // eslint-disable-next-line no-empty-pattern
+  const [isCompleted, setCompleted] = useState(completed);
+  const [upVoted, setUpVoted] = useState(false);
+  const [downVoted, setDownVoted] = useState(false);
+  const handleUpVote = () => {
+    if (!upVoted && !downVoted) {
+      updateRequestItem(id, user.id, { upvotes: upvotes + 1 });
+    } else if (!upVoted && downVoted) {
+      updateRequestItem(id, user.id, { upvotes: upvotes + 1, downvotes: downvotes + 1 });
+    }
+    setUpVoted(true);
+    setDownVoted(false);
+  };
+  const handleDownVote = () => {
+    if (!upVoted && !downVoted) {
+      updateRequestItem(id, user.id, { downvotes: downvotes - 1 });
+    } else if (upVoted && !downVoted) {
+      updateRequestItem(id, user.id, { upvotes: upvotes - 1, downvotes: downvotes - 1 });
+    }
+    setUpVoted(false);
+    setDownVoted(true);
+  };
+  // const {
+  //   author,
+  // } = props;
   return (
     <View>
       <View style={styles.container}>
-        <Swipeable renderLeftActions={() => LeftActions(setShowModal, showModal)} renderRightActions={RightActions}>
-          <View style={styles.authorCircle}>
-            <Text style={styles.authorText}>{user}</Text>
-          </View>
-          <Text style={styles.description}>{description}</Text>
-          <View style={styles.completed}>
-            <View style={styles.checkbox} />
-            <Text style={styles.text}>Completed</Text>
-          </View>
-          <View>
+        <Swipeable renderLeftActions={() => LeftActions(id, user.id, deleteRequestItem, setShowModal, showModal)}>
+          <View style={styles.requestContainer}>
+            <View style={styles.icon}>
+              <UserIcon key={author.id} user={author} size={54} style={styles.icon}> </UserIcon>
+            </View>
+            <View style={styles.columnStyle}>
+              <Text style={styles.description}>{description}</Text>
+              <View style={styles.completed}>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    updateRequestItem(id, user.id, { completed: !isCompleted });
+                    setCompleted(!isCompleted);
+                  }}
+                >
+                  <Image
+                  // eslint-disable-next-line global-require
+                    source={isCompleted ? require('../assets/checked.png') : require('../assets/unchecked.png')}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.completedText}>Completed</Text>
+              </View>
+            </View>
+            <View style={styles.columnStyle}>
+              <View style={styles.upVotes}>
+                <Text style={upVoted ? styles.VoteCounted : styles.voteCounter}>{`${upvotes}`}</Text>
+                <TouchableOpacity
+                  onPress={handleUpVote}
+                >
+                  <Image
+                    // eslint-disable-next-line global-require
+                    source={require('../assets/upArrow.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.rowStyle}>
+                <Text style={downVoted ? styles.VoteCounted : styles.voteCounter}>{`${downvotes}`}</Text>
+                <TouchableOpacity
+                  onPress={handleDownVote}
+                >
+                  <Image
+                    // eslint-disable-next-line global-require
+                    source={require('../assets/downArrow.png')}
+                    style={{ marginTop: 5 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
             <EditRequestModal showModal={showModal} setShowModal={setShowModal} id={id} description={description} end={end} recipients={recipients} anonymous={anonymous} />
           </View>
         </Swipeable>
@@ -68,22 +122,15 @@ const styles = StyleSheet.create({
     color: colors.lightGray,
   },
   swipeContainer: {
-    height: 80,
-    marginLeft: 0,
-    marginTop: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: colors.indigo700,
   },
   swipeItem: {
     backgroundColor: colors.indigo700,
     justifyContent: 'center',
+    alignContent: 'space-around',
+    paddingLeft: 15,
     width: 60,
-    height: 80,
-    alignItems: 'center',
-    flexDirection: 'row',
-    display: 'flex',
   },
   swipeItemText: {
     fontSize: fonts.smallText,
@@ -91,27 +138,30 @@ const styles = StyleSheet.create({
   },
   container: {
     width: dimensions.screenWidth * 0.9,
-    height: 80,
-    backgroundColor: colors.indigo300,
     margin: 20,
-    padding: 10,
+    justifyContent: 'center',
+  },
+  requestContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    width: dimensions.screenWidth * 0.9,
+    backgroundColor: colors.backgroundIndigo,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    borderColor: colors.indigo700,
+    borderLeftWidth: 5,
   },
   description: {
     fontSize: fonts.largeText,
     fontWeight: '600',
-    marginLeft: 70,
+    marginLeft: 10,
   },
   completed: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 70,
+    marginLeft: 10,
     marginTop: 5,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: colors.indigo700,
   },
   text: {
     fontSize: fonts.smallText,
@@ -147,14 +197,59 @@ const styles = StyleSheet.create({
     shadowRadius: 60,
     shadowOpacity: 0.2,
   },
+  icon: {
+    marginLeft: 15,
+  },
+  rowStyle: {
+    flexDirection: 'row',
+  },
+  columnStyle: {
+    flexDirection: 'column',
+  },
+  voteCounter: {
+    fontSize: fonts.smallText,
+    color: colors.indigo700,
+    marginLeft: 15,
+    marginRight: 5,
+  },
+  VoteCounted: {
+    fontSize: fonts.smallText,
+    color: colors.indigo700,
+    marginLeft: 15,
+    marginRight: 5,
+    fontWeight: 'bold',
+  },
+  upVotes: {
+    flexDirection: 'row',
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  completedText: {
+    fontSize: fonts.smallText,
+    color: colors.indigo700,
+    marginLeft: 10,
+    marginRight: 90,
+  },
 });
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    updateRequestItem: (id, userId, requestData) => {
+      dispatch(updateRequest(id, userId, requestData));
+    },
+    deleteRequestItem: (id, userId) => {
+      dispatch(deleteRequest(id, userId));
+    },
     changeEditState: (isEditing) => {
       dispatch(changeRequestEditState(isEditing));
     },
   };
 };
 
-export default connect(null, mapDispatchToProps)(RequestItem);
+export default connect(mapStateToProps, mapDispatchToProps)(RequestItem);

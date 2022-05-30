@@ -31,8 +31,11 @@ export const getCalendarEvent = (id) => {
 export const createCalendarEvent = (calendarEvent, users) => {
   return async (dispatch) => {
     try {
+      console.log('create');
+
       await calendarEventService.createCalendarEvent(calendarEvent);
       const calendarEvents = await calendarEventService.getAllCalendarEvents(users);
+
       dispatch({ type: ActionTypes.SET_CALENDAR_EVENTS, payload: calendarEvents });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
