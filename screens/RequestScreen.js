@@ -52,10 +52,11 @@ const RequestScreen = (props) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.title}>Requests</Text>
           <TouchableOpacity
-            style={styles.newEvent}
+            style={styles.empty_addButton}
             onPress={() => setShowModal(!showModal)}
           >
-            <Text style={styles.plus}>+</Text>
+            <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
+
           </TouchableOpacity>
         </View>
 
@@ -108,8 +109,8 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   empty_addButton: {
-    backgroundColor: colors.darkSageGreen,
-    borderRadius: 20,
+    backgroundColor: colors.indigo700,
+    borderRadius: 25,
     width: 50,
     height: 50,
     alignItems: 'center',
@@ -131,6 +132,7 @@ const styles = StyleSheet.create({
     color: colors.indigo700,
     marginLeft: 20,
   },
+
   newEvent: {
     backgroundColor: colors.indigo700,
     borderRadius: 20,

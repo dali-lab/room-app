@@ -5,10 +5,15 @@ import {
 import { fonts, colors } from '../constants/GlobalStyles';
 
 const UserIcon = (props) => {
-  const { user, size } = props;
+  const {
+    user, size, fontsize, fontcolor,
+  } = props;
   return (
-    <View style={[styles.container, { backgroundColor: user.iconColor, height: size, width: size }]}>
-      <Text key={user.firstName}>{`${user.firstName[0]}${user.lastName[0]}`}</Text>
+    <View style={[styles.container, {
+      backgroundColor: user.iconColor, height: size, width: size,
+    }]}
+    >
+      <Text key={user.firstName} style={{ fontSize: fontsize, color: fontcolor }}>{`${user.firstName[0]}${user.lastName[0]}` }</Text>
     </View>
   );
 };

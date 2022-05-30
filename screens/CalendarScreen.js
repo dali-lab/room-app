@@ -282,6 +282,7 @@ const styles = StyleSheet.create({
     color: colors.darkSageGreen,
     marginBottom: 10,
     marginTop: 10,
+    fontWeight: 'bold',
   },
   empty_title: {
     fontSize: fonts.large24,

@@ -65,7 +65,7 @@ const SettingsScreen = (props) => {
   return (
     <SafeAreaView>
       <View style={styles.subContainer}>
-        <UserIcon key={user.id} user={user} size={90}> </UserIcon>
+        <UserIcon key={user.id} user={user} size={90} fontsize={fonts.iconFont}> </UserIcon>
       </View>
       <View style={styles.subContainer}>
         <Text style={styles.text}>First Name</Text>
@@ -88,21 +88,21 @@ const SettingsScreen = (props) => {
         <View style={styles.colorPicker}>
           {showXDarkPurple
             ? (
-              <TouchableOpacity style={styles.buttonDarkPurple} onPress={() => setnewIconColor(colors.indigo700)}>
+              <TouchableOpacity style={styles.buttonDarkPurple} onPress={() => setnewIconColor(colors.indigo500)}>
                 <Text style={{ textAlign: 'center', fontSize: 30 }}>X</Text>
               </TouchableOpacity>
             )
             : (
-              <TouchableOpacity style={styles.buttonDarkPurple} onPress={() => { setnewIconColor(colors.indigo700); setshowXDarkPurple(true); setShowXYellow(false); setshowXLightPurple(false); }} />
+              <TouchableOpacity style={styles.buttonDarkPurple} onPress={() => { setnewIconColor(colors.indigo500); setshowXDarkPurple(true); setShowXYellow(false); setshowXLightPurple(false); }} />
             )}
           {showXYellow
             ? (
-              <TouchableOpacity style={styles.buttonYellow} onPress={() => setnewIconColor('#FFFF00')}>
+              <TouchableOpacity style={styles.buttonYellow} onPress={() => setnewIconColor(colors.iconYellow)}>
                 <Text style={{ textAlign: 'center', fontSize: 30 }}>X</Text>
               </TouchableOpacity>
             )
             : (
-              <TouchableOpacity style={styles.buttonYellow} onPress={() => { setnewIconColor('#FFFF00'); setshowXDarkPurple(false); setShowXYellow(true); setshowXLightPurple(false); }} />
+              <TouchableOpacity style={styles.buttonYellow} onPress={() => { setnewIconColor(colors.iconYellow); setshowXDarkPurple(false); setShowXYellow(true); setshowXLightPurple(false); }} />
             )}
           {showXLightPurple
             ? (
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     marginHorizontal: 10,
-    backgroundColor: 'purple',
+    backgroundColor: colors.indigo500,
     justifyContent: 'center',
   },
   buttonLightPurple: {
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     marginHorizontal: 10,
-    backgroundColor: '#FFFF00',
+    backgroundColor: colors.iconYellow,
     justifyContent: 'center',
   },
 });
