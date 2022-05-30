@@ -22,6 +22,7 @@ const HomeScreen = (props) => {
     getCalendarEvents(users?.map(({ id }) => id));
     getRequests(user.id);
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Fetch all calendarEvents when the component first loads
 
   return (
@@ -37,8 +38,10 @@ const HomeScreen = (props) => {
         {calendarEvents?.sort((a, b) => a.start - b.start).map(({
           id, title, start, end, author, approvals, allDay,
         }) => <CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons={false} />)}
-        {requests?.map(({ author, description, completed }) => {
-          return <RequestItem key={description} author={author} description={description} completed={completed} />;
+        {requests?.map(({
+          id, author, description, completed, upvotes, downvotes,
+        }) => {
+          return <RequestItem key={id} id={id} author={author} description={description} completed={completed} upvotes={upvotes} downvotes={downvotes} />;
         })}
       </ScrollView>
     </SafeAreaView>

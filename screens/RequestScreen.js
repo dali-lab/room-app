@@ -63,8 +63,10 @@ const RequestScreen = (props) => {
 
         <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
         <ScrollView>
-          {requests?.map(({ author, description, completed }) => {
-            return <RequestItem key={description} author={author} description={description} completed={completed} />;
+          {requests?.map(({
+            id, author, description, completed, upvotes, downvotes,
+          }) => {
+            return <RequestItem key={id} id={id} author={author} description={description} completed={completed} upvotes={upvotes} downvotes={downvotes} />;
           })}
         </ScrollView>
       </SafeAreaView>
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   empty_addButton: {
-    backgroundColor: colors.darkSageGreen,
+    backgroundColor: colors.indigo700,
     borderRadius: 20,
     width: 50,
     height: 50,
