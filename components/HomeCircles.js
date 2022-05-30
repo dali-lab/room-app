@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { getAllUsers, updateUser } from '../store/actions';
-import { fonts, colors } from '../constants/GlobalStyles';
+import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import UserIcon from './UserIcon';
+import GuestModal from './GuestModal';
 
 const HomeCircles = (props) => {
   const { users, user, updateUsers } = props;
@@ -18,6 +19,8 @@ const HomeCircles = (props) => {
     updateUsers(user.id, { isHome: 'true' }, user.roomCode, true);
   };
 
+  const [showHomeModal, setshowHomeModal] = useState(false);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -27,7 +30,17 @@ const HomeCircles = (props) => {
         <Text style={styles.homeText}>home</Text>
         {users?.map((userCurr) => {
           if (userCurr.isHome) {
-            return <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>;
+            return (
+              userCurr.id === user.id
+                ? (
+                  <TouchableOpacity onPress={() => setshowHomeModal(!showHomeModal)}>
+                    <GuestModal showHomeModal={showHomeModal} setshowHomeModal={setshowHomeModal} />
+                    <UserIcon key={userCurr.id} user={userCurr} size={54} isHomeScreen> </UserIcon>
+                  </TouchableOpacity>
+                )
+                : (
+                  <UserIcon key={userCurr.id} user={userCurr} size={54} isHomeScreen> </UserIcon>
+                ));
           } else return null;
         })}
       </TouchableOpacity>
@@ -38,7 +51,16 @@ const HomeCircles = (props) => {
         <Text style={styles.awayText}>away</Text>
         {users?.map((userCurr) => {
           if (!userCurr.isHome) {
-            return <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>;
+            return (
+              userCurr.id === user.id
+                ? (
+                  <TouchableOpacity onPress={() => setshowHomeModal(!showHomeModal)}>
+                    <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>
+                  </TouchableOpacity>
+                )
+                : (
+                  <UserIcon key={userCurr.id} user={userCurr} size={54}> </UserIcon>
+                ));
           } else return null;
         })}
       </TouchableOpacity>
@@ -50,6 +72,46 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginTop: 50,
+  },
+  text: {
+    fontSize: fonts.largeText,
+    textAlign: 'center',
+  },
+  modalButton: {
+    backgroundColor: colors.darkSageGreen,
+    width: dimensions.screenWidth * 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: dimensions.screenHeight * 0.03,
+    margin: 10,
+  },
+  swipeModalContainer: {
+    backgroundColor: colors.backgroundSageGreen,
+    width: dimensions.screenWidth * 0.8,
+    height: dimensions.screenHeight * 0.5,
+    marginTop: dimensions.screenHeight * 0.2,
+    margin: dimensions.screenWidth * 0.1,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowRadius: 60,
+    shadowOpacity: 0.2,
+  },
+  exitButton: {
+    borderWidth: 3,
+    borderColor: colors.darkSageGreen,
+    borderRadius: 20,
+
+    width: dimensions.screenWidth * 0.1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: dimensions.screenHeight * 0.04,
+    marginRight: dimensions.screenWidth * 0.6,
+    marginTop: 10,
   },
   homeCircle: {
     width: 216,
@@ -66,6 +128,12 @@ const styles = StyleSheet.create({
     marginTop: 100,
     marginLeft: -50,
     alignItems: 'center',
+  },
+  icon: {
+    fontSize: 10,
+    fontWeight: '300',
+    marginLeft: 20,
+    width: dimensions.screenWidth * 0.1,
   },
   homeText: {
     fontSize: fonts.large24,
