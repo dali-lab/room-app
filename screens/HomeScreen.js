@@ -22,6 +22,7 @@ const HomeScreen = (props) => {
     getCalendarEvents(users?.map(({ id }) => id));
     getRequests(user.id);
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Fetch all calendarEvents when the component first loads
 
   return (

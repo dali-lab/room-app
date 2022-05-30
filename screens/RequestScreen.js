@@ -23,8 +23,11 @@ const RequestScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+
+      <Text style={styles.title}>Requests</Text>
+
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={styles.title}>Requests</Text>
+        <Text style={styles.subtitle}>Swipe left on a request to edit or delete it</Text>
         <TouchableOpacity
           style={styles.newEvent}
           onPress={() => setShowModal(!showModal)}
@@ -32,8 +35,6 @@ const RequestScreen = (props) => {
           <Text style={styles.plus}>+</Text>
         </TouchableOpacity>
       </View>
-
-      <Text style={styles.subtitle}>Swipe left on a request to edit or right delete it</Text>
 
       <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
       <ScrollView>

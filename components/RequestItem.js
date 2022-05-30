@@ -1,49 +1,63 @@
+/* eslint-disable global-require */
 import React, { useState } from 'react';
 import {
   StyleSheet, View, Text, TouchableOpacity, Modal, Button, Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { updateRequest } from '../store/actions';
+import { updateRequest, deleteRequest } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import UserIcon from './UserIcon';
 
-const LeftActions = () => {
-  return (
-    <View>
-      <View style={styles.swipeContainer}>
-        <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
-          <Text style={styles.swipeItemText}>Edit</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
-
-const RightActions = () => {
+const LeftActions = (id, userId, deleteRequestItem) => {
   return (
     <View style={styles.swipeContainer}>
-      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed delete button')}>
-        <Text style={styles.deleteIcon}>X</Text>
+      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed edit button')}>
+        <Image style={{ height: 25, width: 25, marginBottom: 10 }} source={require('../assets/edit.png')} />
+        <Text style={styles.swipeItemText}>Edit</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.swipeItem} onPress={() => { deleteRequestItem(id, userId); }}>
+        <Image style={{ height: 25, width: 25, marginBottom: 10 }} source={require('../assets/trash.png')} />
+        <Text style={styles.swipeItemText}>Delete</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const RequestItem = ({
-  id, description, user, completed, upvotes, downvotes, author, updateRequestItem,
+  id, description, user, completed, upvotes, downvotes, author, updateRequestItem, deleteRequestItem,
 }) => {
   const [showModal, setShowModal] = useState(false);
   // eslint-disable-next-line no-empty-pattern
   const [isCompleted, setCompleted] = useState(completed);
+  const [upVoted, setUpVoted] = useState(false);
+  const [downVoted, setDownVoted] = useState(false);
+  const handleUpVote = () => {
+    if (!upVoted && !downVoted) {
+      updateRequestItem(id, user.id, { upvotes: upvotes + 1 });
+    } else if (!upVoted && downVoted) {
+      updateRequestItem(id, user.id, { upvotes: upvotes + 1, downvotes: downvotes + 1 });
+    }
+    setUpVoted(true);
+    setDownVoted(false);
+  };
+  const handleDownVote = () => {
+    if (!upVoted && !downVoted) {
+      updateRequestItem(id, user.id, { downvotes: downvotes - 1 });
+    } else if (upVoted && !downVoted) {
+      updateRequestItem(id, user.id, { upvotes: upvotes - 1, downvotes: downvotes - 1 });
+    }
+    setUpVoted(false);
+    setDownVoted(true);
+  };
   // const {
   //   author,
   // } = props;
   return (
     <View>
       <View style={styles.container}>
-        <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
-          <View style={styles.rowStyle}>
+        <Swipeable renderLeftActions={() => LeftActions(id, user.id, deleteRequestItem)}>
+          <View style={styles.requestContainer}>
             <View style={styles.icon}>
               <UserIcon key={author.id} user={author} size={54} style={styles.icon}> </UserIcon>
             </View>
@@ -53,7 +67,7 @@ const RequestItem = ({
 
                 <TouchableOpacity
                   onPress={() => {
-                    updateRequestItem(id, { completed: !isCompleted });
+                    updateRequestItem(id, user.id, { completed: !isCompleted });
                     setCompleted(!isCompleted);
                   }}
                 >
@@ -67,8 +81,10 @@ const RequestItem = ({
             </View>
             <View style={styles.columnStyle}>
               <View style={styles.upVotes}>
-                <Text style={styles.voteCounter}>{`${upvotes}`}</Text>
-                <TouchableOpacity>
+                <Text style={upVoted ? styles.VoteCounted : styles.voteCounter}>{`${upvotes}`}</Text>
+                <TouchableOpacity
+                  onPress={handleUpVote}
+                >
                   <Image
                     // eslint-disable-next-line global-require
                     source={require('../assets/upArrow.png')}
@@ -76,8 +92,10 @@ const RequestItem = ({
                 </TouchableOpacity>
               </View>
               <View style={styles.rowStyle}>
-                <Text style={styles.voteCounter}>{`${downvotes}`}</Text>
-                <TouchableOpacity>
+                <Text style={downVoted ? styles.VoteCounted : styles.voteCounter}>{`${downvotes}`}</Text>
+                <TouchableOpacity
+                  onPress={handleDownVote}
+                >
                   <Image
                     // eslint-disable-next-line global-require
                     source={require('../assets/downArrow.png')}
@@ -117,22 +135,15 @@ const styles = StyleSheet.create({
     color: colors.lightGray,
   },
   swipeContainer: {
-    height: 80,
-    marginLeft: 0,
-    marginTop: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: colors.indigo700,
   },
   swipeItem: {
     backgroundColor: colors.indigo700,
     justifyContent: 'center',
+    alignContent: 'space-around',
+    paddingLeft: 15,
     width: 60,
-    height: 80,
-    alignItems: 'center',
-    flexDirection: 'row',
-    display: 'flex',
   },
   swipeItemText: {
     fontSize: fonts.smallText,
@@ -140,13 +151,19 @@ const styles = StyleSheet.create({
   },
   container: {
     width: dimensions.screenWidth * 0.9,
-    height: 80,
-    backgroundColor: colors.backgroundIndigo,
     margin: 20,
-    padding: 10,
+    justifyContent: 'center',
+  },
+  requestContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    width: dimensions.screenWidth * 0.9,
+    backgroundColor: colors.backgroundIndigo,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     borderColor: colors.indigo700,
     borderLeftWidth: 5,
-
   },
   description: {
     fontSize: fonts.largeText,
@@ -205,8 +222,15 @@ const styles = StyleSheet.create({
   voteCounter: {
     fontSize: fonts.smallText,
     color: colors.indigo700,
-    marginLeft: 20,
+    marginLeft: 15,
     marginRight: 5,
+  },
+  VoteCounted: {
+    fontSize: fonts.smallText,
+    color: colors.indigo700,
+    marginLeft: 15,
+    marginRight: 5,
+    fontWeight: 'bold',
   },
   upVotes: {
     flexDirection: 'row',
@@ -229,8 +253,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateRequestItem: (id, requestData) => {
-      dispatch(updateRequest(id, requestData));
+    updateRequestItem: (id, userId, requestData) => {
+      dispatch(updateRequest(id, userId, requestData));
+    },
+    deleteRequestItem: (id, userId) => {
+      dispatch(deleteRequest(id, userId));
     },
   };
 };

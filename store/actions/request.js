@@ -29,11 +29,11 @@ export const getRequest = (id) => {
   };
 };
 
-export const createRequest = (request) => {
+export const createRequest = (request, userId) => {
   return async (dispatch) => {
     try {
       await requestService.createRequest(request);
-      const requests = await requestService.getAllRequests();
+      const requests = await requestService.getAllRequests(userId);
       dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
@@ -41,11 +41,11 @@ export const createRequest = (request) => {
   };
 };
 
-export const updateRequest = (id, request) => {
+export const updateRequest = (id, userId, request) => {
   return async (dispatch) => {
     try {
       await requestService.updateRequest(id, request);
-      const requests = await requestService.getAllRequests();
+      const requests = await requestService.getAllRequests(userId);
       dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
@@ -53,11 +53,11 @@ export const updateRequest = (id, request) => {
   };
 };
 
-export const deleteRequest = (id) => {
+export const deleteRequest = (id, userId) => {
   return async (dispatch) => {
     try {
       await requestService.deleteRequest(id);
-      const requests = await requestService.getAllRequests();
+      const requests = await requestService.getAllRequests(userId);
       dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
