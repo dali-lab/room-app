@@ -50,6 +50,7 @@ const HomeScreen = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#FFFFFF',
     flex: 1,
     alignItems: 'center',
   },

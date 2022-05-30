@@ -20,7 +20,7 @@ const CalendarItem = (props) => {
   const [showEditModal, setshowEditModal] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
   const {
-    id, title, start, end, author, user, updateEvent, approvals, users, allDay, deleteEvent, showButtons,
+    id, title, start, end, author, user, updateEvent, approvals, users, allDay, deleteEvent, showButtons, roommates,
   } = props;
   const [newTitle, setnewTitle] = useState('');
   const [newStartDate, setnewStartDate] = useState(new Date(start));
@@ -96,15 +96,16 @@ const CalendarItem = (props) => {
       end,
       allDay,
       author,
+      roommates,
     };
     updateEvent(id, newEvent, users.map(({ id }) => id));
   };
 
-  const handleSave = () => {
+  const handleDone = () => {
     setshowEditModal(!showEditModal);
-    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth())}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
+    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth() + 1)}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
     const start = moment(startDateTime, 'YYYY-MM-DD-hh-mm');
-    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
+    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth() + 1)}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
     const end = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
     const newEvent = {
       title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn,
@@ -124,7 +125,13 @@ const CalendarItem = (props) => {
                 </View>
                 <View style={styles.description}>
                   <Text style={styles.title}>{title}</Text>
-                  <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+                  { allDay
+                    ? (
+                      <Text style={styles.text}>all-day</Text>
+                    )
+                    : (
+                      <Text style={styles.text}>{`${moment(start).format('h:mm a')} - ${moment(end).format('h:mm a')}`}</Text>
+                    )}
                 </View>
                 <Text style={styles.text}>{`${approvals.length}`}</Text>
                 <Image style={{ height: 35, width: 35 }} source={require('../assets/check-mark.png')} />
@@ -145,23 +152,24 @@ const CalendarItem = (props) => {
               <Text style={styles.text}>{`${approvals.length}`}</Text>
               <Image style={{ height: 35, width: 35 }} source={require('../assets/check-mark.png')} />
             </View>
-            { showButtons && !approvals.includes(user)
-            && (
-            <View style={styles.approveContainer}>
-              <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Image style={{ height: 30, width: 30 }} source={require('../assets/check-mark-white.png')} />
-                  <Text style={styles.approveButtonText}>Approve</Text>
+            {showButtons && !approvals.map(({ id }) => id).includes(user.id)
+              ? (
+                <View style={styles.approveContainer}>
+                  <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Image style={{ height: 30, width: 30 }} source={require('../assets/check-mark-white.png')} />
+                      <Text style={styles.buttonText}>Approve</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.letsTalkButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
+                      <Image style={{ height: 25, width: 4 }} source={require('../assets/lets-talk.png')} />
+                      <Text style={styles.buttonText}>Let's Talk</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.letsTalkButton} onPress={() => setshowLetsTalkModal(!showLetsTalkModal)}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
-                  <Image style={{ height: 25, width: 4 }} source={require('../assets/lets-talk.png')} />
-                  <Text style={styles.approveButtonText}>Let's Talk</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            )}
+              )
+              : (null) }
           </View>
         )}
       <Modal
@@ -180,7 +188,7 @@ const CalendarItem = (props) => {
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.text}>Message</Text>
             <TextInput
-              style={styles.inputTitle}
+              style={styles.text}
               placeholder="Optional"
             />
           </View>
@@ -198,42 +206,54 @@ const CalendarItem = (props) => {
         animationType="fade"
         visible={showEditModal}
         transparent
+        onShow={() => {
+          setnewTitle(title);
+          setnewStartTime(new Date(start));
+          setnewStartDate(new Date(start));
+          setnewEndTime(new Date(end));
+          setnewEndDate(new Date(end));
+          setSwitchOn(allDay);
+        }}
         onRequestClose={() => {
           console.log('Modal has been closed.');
         }}
       >
         <View style={styles.swipeModalContainer}>
-          <TouchableOpacity style={styles.exitButton} onPress={() => setshowEditModal(!showEditModal)}>
-            <Text style={styles.text}>X</Text>
+          <TouchableOpacity style={{ marginRight: dimensions.screenWidth * 0.6, marginTop: 5 }} onPress={() => setshowEditModal(!showEditModal)}>
+            <Image style={{ height: 55, width: 55 }} source={require('../assets/exit-calendar-modal.png')} />
           </TouchableOpacity>
 
           <Image style={{ height: 125, width: 125 }} source={require('../assets/calendar-modal.png')} />
           <View style={styles.description}>
             <Text style={styles.editTitle}>EDIT EVENT</Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', margin: 8 }}>
             <Text style={styles.text}>Title</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputTitle}
-                value={newTitle}
                 defaultValue={`${title}`}
                 onChangeText={(text) => setnewTitle(text)}
               />
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', margin: 8 }}>
             <Text style={styles.text}>All-Day</Text>
             <View style={styles.inputContainer}>
               <Switch value={switchOn}
+                style={{ marginLeft: 10 }}
                 onValueChange={() => {
                   setSwitchOn(!switchOn);
+                  const newEvent = {
+                    allDay: switchOn,
+                  };
+                  updateEvent(id, newEvent, users.map(({ id }) => id));
                 }}
               />
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>Start</Text>
+          <View style={{ flexDirection: 'row', margin: 8 }}>
+            <Text style={styles.timeText}>Start</Text>
             <View style={styles.inputContainer}>
               <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartDatePicker}>
                 <Text style={styles.text}>{`${moment(newStartDate).format('MMM DD')}`}</Text>
@@ -241,6 +261,7 @@ const CalendarItem = (props) => {
               <DateTimePickerModal
                 isVisible={isStartDatePickerVisible}
                 mode="date"
+                defaultValue={newStartDate}
                 onConfirm={handleConfirmStart}
                 onCancel={hideStartDatePicker}
               />
@@ -251,6 +272,7 @@ const CalendarItem = (props) => {
                       <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
+                      defaultValue={newStartTime}
                       isVisible={isStartTimePickerVisible}
                       mode="time"
                       onConfirm={handleConfirmStartTime}
@@ -263,8 +285,8 @@ const CalendarItem = (props) => {
                 )}
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>End</Text>
+          <View style={{ flexDirection: 'row', margin: 8 }}>
+            <Text style={styles.timeText}>End</Text>
             <View style={styles.inputContainer}>
               <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndDatePicker}>
                 <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
@@ -272,6 +294,7 @@ const CalendarItem = (props) => {
               <DateTimePickerModal
                 isVisible={isEndDatePickerVisible}
                 mode="date"
+                defaultValue={newEndDate}
                 onConfirm={handleConfirmEnd}
                 onCancel={hideEndDatePicker}
               />
@@ -282,6 +305,7 @@ const CalendarItem = (props) => {
                       <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
+                      defaultValue={newEndTime}
                       isVisible={isEndTimePickerVisible}
                       mode="time"
                       onConfirm={handleConfirmEndTime}
@@ -294,11 +318,9 @@ const CalendarItem = (props) => {
                 )}
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.modalButton} onPress={handleSave}>
-              <Text style={{ color: '#FFFFFF' }}>Done</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
+            <Text style={styles.buttonText}>Done</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -308,8 +330,8 @@ const CalendarItem = (props) => {
 const styles = StyleSheet.create({
   container: {
     width: dimensions.screenWidth * 0.9,
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 5,
+    marginBottom: 5,
     justifyContent: 'center',
   },
   swipeContainer: {
@@ -380,10 +402,15 @@ const styles = StyleSheet.create({
     color: colors.darkSageGreen,
     fontWeight: '600',
   },
-  approveButtonText: {
+  buttonText: {
     fontSize: fonts.largeText,
     color: '#FFFFFF',
     fontWeight: '600',
+  },
+  timeText: {
+    fontSize: fonts.smallText,
+    color: colors.darkSageGreen,
+    width: 35,
   },
   editTitle: {
     fontSize: fonts.large24,
@@ -408,6 +435,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 30,
   },
+  doneButton: {
+    backgroundColor: colors.darkSageGreen,
+    width: dimensions.screenWidth * 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    height: 30,
+    margin: 20,
+  },
   letsTalkButton: {
     backgroundColor: '#3398FF',
     width: dimensions.screenWidth * 0.3,
@@ -418,8 +454,10 @@ const styles = StyleSheet.create({
   inputTitle: {
     backgroundColor: '#FFFFFF',
     width: dimensions.screenWidth * 0.4,
-    marginLeft: 10,
+    marginLeft: 20,
     height: dimensions.screenHeight * 0.03,
+    borderRadius: 10,
+    padding: 4,
   },
   inputTime: {
     backgroundColor: '#FFFFFF',
@@ -450,21 +488,11 @@ const styles = StyleSheet.create({
     width: dimensions.screenWidth * 0.5,
     flexDirection: 'row',
   },
-  exitButton: {
-    borderWidth: 3,
-    borderColor: colors.darkSageGreen,
-    borderRadius: 20,
-
-    width: dimensions.screenWidth * 0.1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: dimensions.screenHeight * 0.04,
-    marginRight: dimensions.screenWidth * 0.6,
-    marginTop: 10,
-  },
   dateTimePickerButton: {
     backgroundColor: '#FFFFFF',
     marginLeft: 18,
+    borderRadius: 10,
+    padding: 4,
   },
 });
 

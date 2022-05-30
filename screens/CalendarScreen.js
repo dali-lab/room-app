@@ -5,11 +5,12 @@ import {
   StyleSheet, ScrollView, SafeAreaView, Text, View, TouchableOpacity, Modal, TextInput, Switch, Image,
 } from 'react-native';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import moment from 'moment';
 import CalendarItem from '../components/CalendarItem';
 import { getAllCalendarEvents, createCalendarEvent } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
+import CalendarModal from '../components/CalendarModal';
 
 const CalendarScreen = (props) => {
   const {
@@ -27,7 +28,6 @@ const CalendarScreen = (props) => {
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
-  // const [currentDates, setcurrentDates] = useState([]);
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -70,11 +70,11 @@ const CalendarScreen = (props) => {
     hideEndTimePicker();
   };
 
-  const handleSave = () => {
+  const handleDone = () => {
     setshowNewModal(!showNewModal);
-    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth())}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
+    const startDateTime = `${String(newStartDate.getFullYear())}-${String(newStartDate.getMonth() + 1)}-${String(newStartDate.getDate())}-${String(newStartTime.getHours())}-${String(newStartTime.getMinutes())}`;
     const start = moment(startDateTime, 'YYYY-MM-DD-hh-mm');
-    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
+    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth() + 1)}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
     const end = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
     const newEvent = {
       title: newTitle, start: start.toDate(), end: end.toDate(), author: user, allDay: switchOn, approvals: [],
@@ -84,150 +84,183 @@ const CalendarScreen = (props) => {
 
   // Fetch all calendarEvents when the component first loads
   useEffect(() => {
-    getCalendarEvents(users?.map(({ id }) => id));
+    getCalendarEvents(users.map(({ id }) => id));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  if (calendarEvents != null && calendarEvents.length === 0) {
+    return (
+      <SafeAreaView style={styles.emptyContainer}>
 
-  let currentDate = '';
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Upcoming Events</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 20 }}>
-        <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
-        <TouchableOpacity style={styles.addButton} onPress={() => setshowNewModal(!showNewModal)}>
-          <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-        {calendarEvents?.sort((a, b) => (new Date(a.start)) - (new Date(b.start))).map(({
-          id, title, start, end, author, approvals, allDay,
-        }) => {
-          if (moment(currentDate).format('MM-DD') === moment(start).format('MM-DD')) {
-            return (<CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />);
-          } else {
-            currentDate = start;
-            return (
-              <View key={id}>
-                <Text style={styles.subtitle}>{moment(start).format('dddd, MMMM Do')}</Text>
-                <CalendarItem id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
-              </View>
-            );
-          }
-        })}
-      </ScrollView>
-      <Modal
-        animationType="fade"
-        visible={showNewModal}
-        transparent
-        onRequestClose={() => {
-          console.log('Modal has been closed.');
+        <View style={{
+          flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', paddingTop: 175,
         }}
-      >
-        <View style={styles.swipeModalContainer}>
-          <TouchableOpacity style={styles.exitButton} onPress={() => setshowNewModal(!showNewModal)}>
-            <Text style={styles.text}>X</Text>
+        >
+          <Image
+            style={{ height: 105, width: 105, margin: 10 }}
+            source={require('../assets/calendar.png')}
+          />
+          <CalendarModal showNewModal={showNewModal} setshowNewModal={setshowNewModal} />
+
+          <Text style={styles.empty_title}>No Upcoming Events!</Text>
+          <Text style={styles.empty_subtitle}>Click the plus button to create a new event</Text>
+          <TouchableOpacity style={styles.addButton} onPress={() => setshowNewModal(!showNewModal)}>
+            <Text style={{ color: '#FFFFFF', fontSize: 40 }}>+</Text>
+
           </TouchableOpacity>
 
-          <Image style={{ height: 125, width: 125 }} source={require('../assets/calendar-modal.png')} />
-          <View style={styles.description}>
-            <Text style={styles.title}>NEW EVENT</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>Title</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputTitle}
-                onChangeText={(text) => setnewTitle(text)}
-                value={newTitle}
-              />
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>All-Day</Text>
-            <View style={styles.inputContainer}>
-              <Switch value={switchOn}
-                onValueChange={() => {
-                  setSwitchOn(!switchOn);
-                }}
-              />
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>Start</Text>
-            <View style={styles.inputContainer}>
-              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartDatePicker}>
-                <Text style={styles.text}>{`${moment(newStartDate).format('MMM DD')}`}</Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={isStartDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirmStart}
-                onCancel={hideStartDatePicker}
-              />
-              {!switchOn
-                ? (
-                  <View>
-                    <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
-                      <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
-                    </TouchableOpacity>
-                    <DateTimePickerModal
-                      isVisible={isStartTimePickerVisible}
-                      mode="time"
-                      onConfirm={handleConfirmStartTime}
-                      onCancel={hideStartTimePicker}
-                    />
-                  </View>
-                )
-                : (
-                  null
-                )}
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.text}>End</Text>
-            <View style={styles.inputContainer}>
-              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndDatePicker}>
-                <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={isEndDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirmEnd}
-                onCancel={hideEndDatePicker}
-              />
-              {!switchOn
-                ? (
-                  <View>
-                    <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndTimePicker}>
-                      <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
-                    </TouchableOpacity>
-                    <DateTimePickerModal
-                      isVisible={isEndTimePickerVisible}
-                      mode="time"
-                      onConfirm={handleConfirmEndTime}
-                      onCancel={hideEndTimePicker}
-                    />
-                  </View>
-                )
-                : (
-                  null
-                )}
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.modalButton} onPress={handleSave}>
-              <Text style={{ color: '#FFFFFF' }}>Save</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </Modal>
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
+  } else {
+    let currentDate = '';
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.title}>Upcoming Events</Text>
+          <TouchableOpacity onPress={() => setshowNewModal(!showNewModal)}>
+            <Image style={{ height: 60, width: 60, margin: 10 }} source={require('../assets/add-calendar-icon.png')} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginLeft: 20 }}>
+          <Text style={styles.subtitle}>Swipe left on an event to edit or delete it</Text>
+        </View>
+        <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+          {calendarEvents?.sort((a, b) => (new Date(a.start)) - (new Date(b.start))).map(({
+            id, title, start, end, author, approvals, allDay,
+          }) => {
+            if (moment(currentDate).format('MM-DD') === moment(start).format('MM-DD')) {
+              return (<CalendarItem key={id} id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />);
+            } else {
+              currentDate = start;
+              return (
+                <View key={id}>
+                  <Text style={styles.dateText}>{moment(start).format('dddd, MMMM Do')}</Text>
+                  <CalendarItem id={id} title={title} start={start} end={end} author={author} approvals={approvals} allDay={allDay} showButtons />
+                </View>
+              );
+            }
+          })}
+        </ScrollView>
+        <Modal
+          animationType="fade"
+          visible={showNewModal}
+          transparent
+          onRequestClose={() => {
+            console.log('Modal has been closed.');
+          }}
+        >
+          <View style={styles.swipeModalContainer}>
+            <TouchableOpacity style={{ marginRight: dimensions.screenWidth * 0.6, marginTop: 5 }} onPress={() => setshowNewModal(!showNewModal)}>
+              <Image style={{ height: 55, width: 55 }} source={require('../assets/exit-calendar-modal.png')} />
+            </TouchableOpacity>
+
+            <Image style={{ height: 125, width: 125 }} source={require('../assets/calendar-modal.png')} />
+            <View style={styles.description}>
+              <Text style={styles.editTitle}>NEW EVENT</Text>
+            </View>
+            <View style={{ flexDirection: 'row', margin: 8 }}>
+              <Text style={styles.text}>Title</Text>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.inputTitle}
+                  onChangeText={(text) => setnewTitle(text)}
+                  value={newTitle}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', margin: 8 }}>
+              <Text style={styles.text}>All-Day</Text>
+              <View style={styles.inputContainer}>
+                <Switch value={switchOn}
+                  style={{ marginLeft: 10 }}
+                  onValueChange={() => {
+                    setSwitchOn(!switchOn);
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', margin: 8 }}>
+              <Text style={styles.timeText}>Start</Text>
+              <View style={styles.inputContainer}>
+                <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartDatePicker}>
+                  <Text style={styles.text}>{`${moment(newStartDate).format('MMM DD')}`}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isStartDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirmStart}
+                  onCancel={hideStartDatePicker}
+                />
+                {!switchOn
+                  ? (
+                    <View>
+                      <TouchableOpacity style={styles.dateTimePickerButton} onPress={showStartTimePicker}>
+                        <Text style={styles.text}>{`${moment(newStartTime).format('h:mm a')}`}</Text>
+                      </TouchableOpacity>
+                      <DateTimePickerModal
+                        isVisible={isStartTimePickerVisible}
+                        mode="time"
+                        onConfirm={handleConfirmStartTime}
+                        onCancel={hideStartTimePicker}
+                      />
+                    </View>
+                  )
+                  : (
+                    null
+                  )}
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', margin: 8 }}>
+              <Text style={styles.timeText}>End</Text>
+              <View style={styles.inputContainer}>
+                <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndDatePicker}>
+                  <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isEndDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirmEnd}
+                  onCancel={hideEndDatePicker}
+                />
+                {!switchOn
+                  ? (
+                    <View>
+                      <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndTimePicker}>
+                        <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
+                      </TouchableOpacity>
+                      <DateTimePickerModal
+                        isVisible={isEndTimePickerVisible}
+                        mode="time"
+                        onConfirm={handleConfirmEndTime}
+                        onCancel={hideEndTimePicker}
+                      />
+                    </View>
+                  )
+                  : (
+                    null
+                  )}
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
+                <Text style={styles.buttonText}>Done</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </SafeAreaView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    alignContent: 'center',
+  },
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   title: {
     fontSize: fonts.large24,
@@ -242,11 +275,47 @@ const styles = StyleSheet.create({
     fontSize: fonts.smallText,
     textAlign: 'left',
     color: colors.darkSageGreen,
-    // marginBottom: 3,
+  },
+  dateText: {
+    fontSize: fonts.smallText,
+    textAlign: 'left',
+    color: colors.darkSageGreen,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  empty_title: {
+    fontSize: fonts.large24,
+    textAlign: 'center',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  empty_subtitle: {
+    fontSize: fonts.smallText,
+    textAlign: 'center',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginBottom: 3,
+  },
+  empty_addButton: {
+    backgroundColor: colors.darkSageGreen,
+    borderRadius: 20,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
   },
   text: {
-    fontSize: fonts.largeText,
-    textAlign: 'center',
+    fontSize: fonts.smallText,
+    color: colors.darkSageGreen,
+  },
+  timeText: {
+    fontSize: fonts.smallText,
+    color: colors.darkSageGreen,
+    width: 35,
   },
   addButton: {
     backgroundColor: colors.darkSageGreen,
@@ -256,6 +325,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
+  },
+  doneButton: {
+    backgroundColor: colors.darkSageGreen,
+    width: dimensions.screenWidth * 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    height: 30,
+    margin: 20,
   },
   swipeModalContainer: {
     backgroundColor: colors.backgroundSageGreen,
@@ -279,18 +357,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: dimensions.screenWidth * 0.1,
   },
-  exitButton: {
-    borderWidth: 3,
-    borderColor: colors.darkSageGreen,
-    borderRadius: 20,
-
-    width: dimensions.screenWidth * 0.1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: dimensions.screenHeight * 0.04,
-    marginRight: dimensions.screenWidth * 0.6,
-    marginTop: 10,
-  },
   inputContainer: {
     width: dimensions.screenWidth * 0.5,
     flexDirection: 'row',
@@ -311,8 +377,10 @@ const styles = StyleSheet.create({
   inputTitle: {
     backgroundColor: '#FFFFFF',
     width: dimensions.screenWidth * 0.4,
-    marginLeft: 10,
+    marginLeft: 20,
     height: dimensions.screenHeight * 0.03,
+    borderRadius: 10,
+    padding: 4,
   },
   modalButton: {
     backgroundColor: colors.darkSageGreen,
@@ -325,6 +393,22 @@ const styles = StyleSheet.create({
   dateTimePickerButton: {
     backgroundColor: '#FFFFFF',
     marginLeft: 18,
+    borderRadius: 10,
+    padding: 4,
+  },
+  editTitle: {
+    fontSize: fonts.large24,
+    textAlign: 'left',
+    color: colors.darkSageGreen,
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  buttonText: {
+    fontSize: fonts.largeText,
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
 });
 
