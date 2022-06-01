@@ -5,6 +5,7 @@ import { ActionTypes } from '../actions';
 const initialState = {
   allRequests: null,
   request: null,
+  isEditing: false,
 };
 
 // reducer
@@ -16,6 +17,8 @@ const RequestReducer = (state = initialState, action) => {
       return { ...state, request: action.payload };
     // case ActionTypes.LOGOUT:
     //   return { ...initialState };
+    case ActionTypes.CHANGE_EDIT_STATE:
+      return { ...state, isEditing: action.payload };
     default:
       return state;
   }

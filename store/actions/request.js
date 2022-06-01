@@ -3,6 +3,7 @@ import * as requestService from '../../services/request';
 export const ActionTypes = {
   SET_REQUESTS: 'SET_REQUESTS',
   SET_REQUEST: 'SET_REQUEST',
+  CHANGE_EDIT_STATE: 'CHANGE_EDIT_STATE',
   API_ERROR: 'API_ERROR',
 };
 
@@ -41,12 +42,13 @@ export const createRequest = (request, userId) => {
   };
 };
 
-export const updateRequest = (id, userId, request) => {
+export const updateRequest = (id, request) => {
   return async (dispatch) => {
     try {
       await requestService.updateRequest(id, request);
-      const requests = await requestService.getAllRequests(userId);
+      const requests = await requestService.getAllRequests();
       dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
+      console.log(requests);
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }
@@ -62,5 +64,11 @@ export const deleteRequest = (id, userId) => {
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }
+  };
+};
+
+export const changeRequestEditState = (isEditing) => {
+  return (dispatch) => {
+    dispatch({ type: ActionTypes.CHANGE_EDIT_STATE, payload: isEditing });
   };
 };

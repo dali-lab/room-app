@@ -1,18 +1,19 @@
 /* eslint-disable global-require */
 import React, { useState } from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Modal, Button, Image,
+  StyleSheet, View, Text, TouchableOpacity, Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { updateRequest, deleteRequest } from '../store/actions';
+import { updateRequest, deleteRequest, changeRequestEditState } from '../store/actions';
 import { fonts, dimensions, colors } from '../constants/GlobalStyles';
 import UserIcon from './UserIcon';
+import EditRequestModal from './EditRequestModal';
 
-const LeftActions = (id, userId, deleteRequestItem) => {
+const LeftActions = (id, userId, deleteRequestItem, setShowModal, showModal) => {
   return (
     <View style={styles.swipeContainer}>
-      <TouchableOpacity style={styles.swipeItem} onPress={() => console.log('pressed edit button')}>
+      <TouchableOpacity style={styles.swipeItem} onPress={() => setShowModal(!showModal)}>
         <Image style={{ height: 25, width: 25, marginBottom: 10 }} source={require('../assets/edit.png')} />
         <Text style={styles.swipeItemText}>Edit</Text>
       </TouchableOpacity>
@@ -25,7 +26,7 @@ const LeftActions = (id, userId, deleteRequestItem) => {
 };
 
 const RequestItem = ({
-  id, description, user, completed, upvotes, downvotes, author, updateRequestItem, deleteRequestItem,
+  id, description, recipients, end, user, completed, upvotes, downvotes, author, updateRequestItem, deleteRequestItem, anonymous,
 }) => {
   const [showModal, setShowModal] = useState(false);
   // eslint-disable-next-line no-empty-pattern
@@ -56,7 +57,7 @@ const RequestItem = ({
   return (
     <View>
       <View style={styles.container}>
-        <Swipeable renderLeftActions={() => LeftActions(id, user.id, deleteRequestItem)}>
+        <Swipeable renderLeftActions={() => LeftActions(id, user.id, deleteRequestItem, setShowModal, showModal)}>
           <View style={styles.requestContainer}>
             <View style={styles.icon}>
               <UserIcon key={author.id} user={author} size={54} style={styles.icon}> </UserIcon>
@@ -104,21 +105,7 @@ const RequestItem = ({
                 </TouchableOpacity>
               </View>
             </View>
-            <Modal
-              visible={showModal}
-              transparent
-              onRequestClose={() => {
-                console.log('Modal has been closed.');
-              }}
-            >
-              <View style={styles.modalContainer}>
-                <Text>Edit Modal</Text>
-                <Button
-                  onPress={() => setShowModal(!showModal)}
-                  title="back"
-                />
-              </View>
-            </Modal>
+            <EditRequestModal showModal={showModal} setShowModal={setShowModal} id={id} description={description} end={end} recipients={recipients} anonymous={anonymous} />
           </View>
         </Swipeable>
 
@@ -258,6 +245,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteRequestItem: (id, userId) => {
       dispatch(deleteRequest(id, userId));
+    },
+    changeEditState: (isEditing) => {
+      dispatch(changeRequestEditState(isEditing));
     },
   };
 };

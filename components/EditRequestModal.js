@@ -8,18 +8,19 @@ import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { createRequest, changeRequestEditState } from '../store/actions';
+import { updateRequest, changeRequestEditState } from '../store/actions';
 import { fonts, colors, dimensions } from '../constants/GlobalStyles';
 
-const NewRequestModal = (props) => {
+const EditRequestModal = (props) => {
   const {
-    user, createUserRequest, showModal, setShowModal, changeEditState,
+    id, user, description, end, recipients, anonymous, updateUserRequest, showModal, setShowModal, changeEditState,
   } = props;
 
-  const [requestDescription, setRequestDescription] = useState('');
+  const [requestDescription, setRequestDescription] = useState(description);
   // const [hours, setHours] = useState('');
   // const [minutes, setMinutes] = useState('');
   // const [days, setDays] = useState('');
+  const [open, setOpen] = useState(false);
   const [newEndDate, setnewEndDate] = useState(new Date(moment()));
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
   const [newEndTime, setnewEndTime] = useState(new Date(moment()));
@@ -44,7 +45,6 @@ const NewRequestModal = (props) => {
     setnewEndTime(date);
     hideEndTimePicker();
   };
-  const [open, setOpen] = useState(false);
   const [value, setValue] = useState(user.roommates);
   const [items, setItems] = useState(value.map((roommate) => {
     return { label: roommate.firstName, value: roommate.id };
@@ -53,7 +53,6 @@ const NewRequestModal = (props) => {
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   const handleRequest = () => {
-    // const endTime = moment().add(days, 'd').add(hours, 'h').add(minutes, 'm');
     const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
     const endTime = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
     const newRequest = {
@@ -61,7 +60,7 @@ const NewRequestModal = (props) => {
     };
     changeEditState(false);
     setShowModal(!showModal);
-    createUserRequest(newRequest);
+    updateUserRequest(id, newRequest);
   };
 
   return (
@@ -82,38 +81,14 @@ const NewRequestModal = (props) => {
           />
         </TouchableOpacity>
         <Image style={{ height: 125, width: 125 }} source={require('../assets/request-modal.png')} />
-        <Text style={styles.modalTitle}>New Request</Text>
+        <Text style={styles.modalTitle}>Edit Request</Text>
         <Text style={styles.modalSubtitle}>Description</Text>
         <TextInput
           style={styles.input}
           onChangeText={(text) => setRequestDescription(text)}
           value={requestDescription}
-          placeholder="Enter a description"
+          placeholder={description}
         />
-        {/* <Text style={styles.modalSubtitle}>Expires in</Text>
-        <View style={styles.row}>
-          <TextInput
-            style={styles.timeInput}
-            keyboardType="numeric"
-            onChangeText={(text) => setDays(text)}
-            value={days}
-          />
-          <Text style={styles.text1}>days</Text>
-          <TextInput
-            style={styles.timeInput}
-            keyboardType="numeric"
-            onChangeText={(text) => setHours(text)}
-            value={hours}
-          />
-          <Text style={styles.text1}>hours</Text>
-          <TextInput
-            style={styles.timeInput}
-            keyboardType="numeric"
-            onChangeText={(text) => setMinutes(text)}
-            value={minutes}
-          />
-          <Text style={styles.text1}>minutes</Text>
-        </View> */}
         <Text style={styles.modalSubtitle}>Expires on</Text>
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.inputContainer}>
@@ -141,6 +116,29 @@ const NewRequestModal = (props) => {
 
           </View>
         </View>
+        {/* <View style={styles.row}>
+          <TextInput
+            style={styles.timeInput}
+            keyboardType="numeric"
+            onChangeText={(text) => setDays(text)}
+            value={days}
+          />
+          <Text style={styles.text1}>days</Text>
+          <TextInput
+            style={styles.timeInput}
+            keyboardType="numeric"
+            onChangeText={(text) => setHours(text)}
+            value={hours}
+          />
+          <Text style={styles.text1}>hours</Text>
+          <TextInput
+            style={styles.timeInput}
+            keyboardType="numeric"
+            onChangeText={(text) => setMinutes(text)}
+            value={minutes}
+          />
+          <Text style={styles.text1}>minutes</Text>
+        </View> */}
         <Text style={styles.modalSubtitle}>Send to</Text>
         <View style={styles.recipientSelector}>
           <DropDownPicker
@@ -290,8 +288,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createUserRequest: (request) => {
-      dispatch(createRequest(request));
+    updateUserRequest: (requestId, request, userId) => {
+      dispatch(updateRequest(requestId, request, userId));
     },
     changeEditState: (isEditing) => {
       dispatch(changeRequestEditState(isEditing));
@@ -299,4 +297,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewRequestModal);
+export default connect(mapStateToProps, mapDispatchToProps)(EditRequestModal);
