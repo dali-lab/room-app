@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import {
@@ -6,6 +7,7 @@ import {
 import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import moment from 'moment';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { createRequest, changeRequestEditState } from '../store/actions';
 import { fonts, colors, dimensions } from '../constants/GlobalStyles';
 
@@ -15,9 +17,33 @@ const NewRequestModal = (props) => {
   } = props;
 
   const [requestDescription, setRequestDescription] = useState('');
-  const [hours, setHours] = useState('');
-  const [minutes, setMinutes] = useState('');
-  const [days, setDays] = useState('');
+  // const [hours, setHours] = useState('');
+  // const [minutes, setMinutes] = useState('');
+  // const [days, setDays] = useState('');
+  const [newEndDate, setnewEndDate] = useState(new Date(moment()));
+  const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+  const [newEndTime, setnewEndTime] = useState(new Date(moment()));
+  const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
+  const showEndDatePicker = () => {
+    setEndDatePickerVisibility(true);
+  };
+  const hideEndDatePicker = () => {
+    setEndDatePickerVisibility(false);
+  };
+  const showEndTimePicker = () => {
+    setEndTimePickerVisibility(true);
+  };
+  const hideEndTimePicker = () => {
+    setEndTimePickerVisibility(false);
+  };
+  const handleConfirmEnd = (date) => {
+    setnewEndDate(date);
+    hideEndDatePicker();
+  };
+  const handleConfirmEndTime = (date) => {
+    setnewEndTime(date);
+    hideEndTimePicker();
+  };
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(user.roommates);
   const [items, setItems] = useState(value.map((roommate) => {
@@ -27,7 +53,9 @@ const NewRequestModal = (props) => {
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   const handleRequest = () => {
-    const endTime = moment().add(days, 'd').add(hours, 'h').add(minutes, 'm');
+    // const endTime = moment().add(days, 'd').add(hours, 'h').add(minutes, 'm');
+    const endDateTime = `${String(newEndDate.getFullYear())}-${String(newEndDate.getMonth())}-${String(newEndDate.getDate())}-${String(newEndTime.getHours())}-${String(newEndTime.getMinutes())}`;
+    const endTime = moment(endDateTime, 'YYYY-MM-DD-hh-mm');
     const newRequest = {
       description: requestDescription, author: user, anonymous: isAnonymous, recipients: value, end: endTime, upvotes: 0, downvotes: 0,
     };
@@ -50,15 +78,10 @@ const NewRequestModal = (props) => {
           onPress={() => setShowModal(!showModal)}
         >
           <Image
-            // eslint-disable-next-line global-require
             source={require('../assets/x.png')}
           />
         </TouchableOpacity>
-        <Image
-          style={styles.logo}
-            // eslint-disable-next-line global-require
-          source={require('../assets/inactive-request.png')}
-        />
+        <Image style={{ height: 125, width: 125 }} source={require('../assets/request-modal.png')} />
         <Text style={styles.modalTitle}>New Request</Text>
         <Text style={styles.modalSubtitle}>Description</Text>
         <TextInput
@@ -67,7 +90,7 @@ const NewRequestModal = (props) => {
           value={requestDescription}
           placeholder="Enter a description"
         />
-        <Text style={styles.modalSubtitle}>Expires in</Text>
+        {/* <Text style={styles.modalSubtitle}>Expires in</Text>
         <View style={styles.row}>
           <TextInput
             style={styles.timeInput}
@@ -90,6 +113,33 @@ const NewRequestModal = (props) => {
             value={minutes}
           />
           <Text style={styles.text1}>minutes</Text>
+        </View> */}
+        <Text style={styles.modalSubtitle}>Expires on</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={styles.inputContainer}>
+            <TouchableOpacity style={[styles.dateTimePickerButton, { marginRight: 18 }]} onPress={showEndDatePicker}>
+              <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isEndDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirmEnd}
+              onCancel={hideEndDatePicker}
+            />
+
+            <View>
+              <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndTimePicker}>
+                <Text style={styles.text}>{`${moment(newEndTime).format('h:mm a')}`}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isEndTimePickerVisible}
+                mode="time"
+                onConfirm={handleConfirmEndTime}
+                onCancel={hideEndTimePicker}
+              />
+            </View>
+
+          </View>
         </View>
         <Text style={styles.modalSubtitle}>Send to</Text>
         <View style={styles.recipientSelector}>
@@ -138,7 +188,7 @@ const styles = StyleSheet.create({
     marginTop: 13,
   },
   modalContainer: {
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.backgroundIndigo,
     width: dimensions.screenWidth * 0.8,
 
     height: 550,
@@ -181,9 +231,9 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderWidth: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
     padding: 10,
-    color: colors.darkSageGreen,
     marginBottom: 4,
   },
   timeInput: {
@@ -219,6 +269,16 @@ const styles = StyleSheet.create({
   doneButtonText: {
     fontSize: fonts.large22,
     color: colors.lightGray,
+  },
+  dateTimePickerButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 4,
+  },
+  inputContainer: {
+    width: dimensions.screenWidth * 0.5,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
 

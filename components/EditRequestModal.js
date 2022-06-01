@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import {
@@ -20,9 +21,9 @@ const EditRequestModal = (props) => {
   // const [minutes, setMinutes] = useState('');
   // const [days, setDays] = useState('');
   const [open, setOpen] = useState(false);
-  const [newEndDate, setnewEndDate] = useState(new Date(end));
+  const [newEndDate, setnewEndDate] = useState(new Date(moment()));
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-  const [newEndTime, setnewEndTime] = useState(new Date(end));
+  const [newEndTime, setnewEndTime] = useState(new Date(moment()));
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
   const showEndDatePicker = () => {
     setEndDatePickerVisibility(true);
@@ -76,15 +77,10 @@ const EditRequestModal = (props) => {
           onPress={() => setShowModal(!showModal)}
         >
           <Image
-            // eslint-disable-next-line global-require
             source={require('../assets/x.png')}
           />
         </TouchableOpacity>
-        <Image
-          style={styles.logo}
-            // eslint-disable-next-line global-require
-          source={require('../assets/inactive-request.png')}
-        />
+        <Image style={{ height: 125, width: 125 }} source={require('../assets/request-modal.png')} />
         <Text style={styles.modalTitle}>Edit Request</Text>
         <Text style={styles.modalSubtitle}>Description</Text>
         <TextInput
@@ -96,7 +92,7 @@ const EditRequestModal = (props) => {
         <Text style={styles.modalSubtitle}>Expires on</Text>
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.inputContainer}>
-            <TouchableOpacity style={styles.dateTimePickerButton} onPress={showEndDatePicker}>
+            <TouchableOpacity style={[styles.dateTimePickerButton, { marginRight: 18 }]} onPress={showEndDatePicker}>
               <Text style={styles.text}>{`${moment(newEndDate).format('MMM DD')}`}</Text>
             </TouchableOpacity>
             <DateTimePickerModal
@@ -190,7 +186,7 @@ const styles = StyleSheet.create({
     marginTop: 13,
   },
   modalContainer: {
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.backgroundIndigo,
     width: dimensions.screenWidth * 0.8,
 
     height: 550,
@@ -233,9 +229,9 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderWidth: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
     padding: 10,
-    color: colors.darkSageGreen,
     marginBottom: 4,
   },
   timeInput: {
@@ -273,26 +269,27 @@ const styles = StyleSheet.create({
     color: colors.lightGray,
   },
   dateTimePickerButton: {
-    backgroundColor: colors.backgroundSageGreen,
-    marginLeft: 18,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 4,
   },
   inputContainer: {
     width: dimensions.screenWidth * 0.5,
     flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
 
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
-    // requestId: state.request.id, <- ngl I have no idea if that's right
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateUserRequest: (requestId, request) => {
-      dispatch(updateRequest(requestId, request));
+    updateUserRequest: (requestId, request, userId) => {
+      dispatch(updateRequest(requestId, request, userId));
     },
     changeEditState: (isEditing) => {
       dispatch(changeRequestEditState(isEditing));

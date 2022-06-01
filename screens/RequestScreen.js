@@ -67,9 +67,9 @@ const RequestScreen = (props) => {
         <NewRequestModal showModal={showModal} setShowModal={setShowModal} />
         <ScrollView>
           {requests?.map(({
-            id, author, description, completed, upvotes, downvotes,
+            id, author, description, completed, upvotes, downvotes, end,
           }) => {
-            return <RequestItem key={id} id={id} author={author} description={description} completed={completed} upvotes={upvotes} downvotes={downvotes} />;
+            return <RequestItem key={id} id={id} author={author} description={description} completed={completed} upvotes={upvotes} downvotes={downvotes} end={end} />;
           })}
         </ScrollView>
       </SafeAreaView>

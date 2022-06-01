@@ -42,12 +42,13 @@ export const createRequest = (request, userId) => {
   };
 };
 
-export const updateRequest = (id, userId, request) => {
+export const updateRequest = (id, request) => {
   return async (dispatch) => {
     try {
       await requestService.updateRequest(id, request);
-      const requests = await requestService.getAllRequests(userId);
+      const requests = await requestService.getAllRequests();
       dispatch({ type: ActionTypes.SET_REQUESTS, payload: requests });
+      console.log(requests);
     } catch (error) {
       dispatch({ type: ActionTypes.API_ERROR, payload: error });
     }

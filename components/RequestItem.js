@@ -26,7 +26,7 @@ const LeftActions = (id, userId, deleteRequestItem, setShowModal, showModal) => 
 };
 
 const RequestItem = ({
-  id, description, user, completed, upvotes, downvotes, author, updateRequestItem, deleteRequestItem, anonymous,
+  id, description, recipients, end, user, completed, upvotes, downvotes, author, updateRequestItem, deleteRequestItem, anonymous,
 }) => {
   const [showModal, setShowModal] = useState(false);
   // eslint-disable-next-line no-empty-pattern
